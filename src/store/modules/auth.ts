@@ -24,11 +24,11 @@ export const useAuthStore = defineStore("authStore", {
       let responseData = response.data
       try{
         if(responseData.response_code === "00")
-          this.token = response.data.token
-          this.user = response.data.user_info
-          localStorage.user = JSON.stringify(response.data.user_info)
-          localStorage.token = response.data.token
-          router.push({name:'PROFILE'})
+            this.token = response.data.token
+            this.user = response.data.user_info
+            localStorage.user = JSON.stringify(response.data.user_info)
+            localStorage.token = response.data.token
+            router.push({name:'PROFILE'})
         alert(responseData.error)
       }catch(err){
         this.loading = false
