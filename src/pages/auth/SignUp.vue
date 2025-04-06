@@ -17,7 +17,7 @@ const handleSocialSignUp = (provider: string) => {
         const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientKey}&response_type=code&scope=user.info.basic&redirect_uri=${redirectUri}&state=${csrfState}`;
         window.location.href = authUrl;
     }
-        
+    window.location.href = '/profile'        
 };
 
 onMounted(() => {

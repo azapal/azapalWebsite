@@ -11,9 +11,9 @@ export const useAuthStore = defineStore("authStore", {
 
   getters: {
     getLoading: state => state.loading,
-    getCurrentUser: state => state.user,
+    getCurrentUser: state => state.user || JSON.parse(localStorage?.user),
     getCount:state => state.count,
-    getToken:state => state.token
+    getToken:state => state.token || JSON.parse(localStorage?.token)
   },
 
   actions: {
@@ -21,11 +21,15 @@ export const useAuthStore = defineStore("authStore", {
       this.loading = true;
       const response = await Auth.tiktok(payload)
       this.loading = false
+      let responseData = response.data
       try{
-        this.token = response.data.token
-        this.user = response.data.user
-        localStorage.user = JSON.stringify(response.data)
-        router.push({name:'PROFILE'})
+        if(responseData.response_code === "00")
+          this.token = response.data.token
+          this.user = response.data.user_info
+          localStorage.user = JSON.stringify(response.data.user_info)
+          localStorage.token = response.data.token
+          router.push({name:'PROFILE'})
+        alert(responseData.error)
       }catch(err){
         this.loading = false
         console.log('error:', err)

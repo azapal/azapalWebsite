@@ -1,6 +1,10 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {baseRoute} from "./routes/base-routes.ts";
 import {RouteConstantUtil} from "../utils/constant/RouteConstantUtil.ts";
+import StoreUtils from "../utils/storeUtils.ts";
+
+const store = StoreUtils
+const token = store.get('auth', 'getToken')
 
 const router = createRouter({
     history: createWebHistory(),
@@ -27,7 +31,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
     // If auth isn't required for the route, just continue.
     if (!authRequired) return next();
     // console.log("userManagement getter info: "+StoreUtils.rootGetters(StoreUtils.getters.auth.getUserInfo))
-    if (sessionStorage?.token != null) {
+    if (token != null) {
         return next()
     }
     redirectToLogin();

@@ -7,7 +7,8 @@ export const appRoute: BaseRouteProps[] = [
         name: RouteConstantUtil.dashboard.profile,
         meta: {
           showHeader: true,
-          showBackArrow: true
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/profile/Profile.view.vue"),
@@ -17,7 +18,8 @@ export const appRoute: BaseRouteProps[] = [
         name: "BUSINESS",
         meta: {
           showHeader: true,
-          showBackArrow: true
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/dashboard/Business.view.vue"),
@@ -27,7 +29,8 @@ export const appRoute: BaseRouteProps[] = [
         name: "EDIT PROFILE",
         meta: {
           showHeader: true,
-          showBackArrow: true
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/profile/EditProfile.view.vue"),
@@ -37,7 +40,8 @@ export const appRoute: BaseRouteProps[] = [
         name: "BANK",
         meta: {
           showHeader: true,
-          showBackArrow: true
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/dashboard/Bank.view.vue"),
@@ -47,7 +51,8 @@ export const appRoute: BaseRouteProps[] = [
         name: "SUBSCRIPTION",
         meta: {
           showHeader: true,
-          showBackArrow: true
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/profile/SubscriptionPrice.view.vue"),
@@ -57,7 +62,8 @@ export const appRoute: BaseRouteProps[] = [
         name: "VERIFICATION",
         meta: {
           showHeader: true,
-          showBackArrow: true
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/profile/verification/Index.view.vue"),

@@ -8,6 +8,7 @@ import HeaderNav from '../../components/HeaderNav.vue';
 import StoreUtils from '../../utils/storeUtils'
 const store = StoreUtils
 const userBusiness = store.get('business', 'getBusiness')
+const user = store.get('auth', 'getCurrentUser')
 
 const profileTab = ref('send_money');
 </script>
@@ -38,15 +39,15 @@ const profileTab = ref('send_money');
                         <!-- Profile Image -->
                         <div class="flex justify-center -mt-16 mb-4 relative z-10">
                             <img class="h-28 w-28 sm:h-32 sm:w-32 rounded-full border-4 border-white dark:border-gray-800 object-cover shadow-md"
-                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+                                :src="user?.avatar_url"
                                 alt="Profile Picture" />
                         </div>
                         
                         <!-- Profile Name and Handle -->
                         <div class="text-center mb-6">
-                            <h2 class="text-gray-800 dark:text-white text-xl font-bold">Mohit Dhiman</h2>
+                            <h2 class="text-gray-800 dark:text-white text-xl font-bold">{{user?.display_name}}</h2>
                             <a class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                                href="https://www.instagram.com/immohitdhiman/" target="_blank">@immohitdhiman</a>
+                                href="https://www.instagram.com/immohitdhiman/" target="_blank">@{{user.display_name}}</a>
                         </div>
                     </div>
 
@@ -67,7 +68,7 @@ const profileTab = ref('send_money');
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
-                            Create Business
+                            {{userBusiness ? 'Manage Business' : 'Create Business'}}
                         </router-link>
                     </div>
                 </div>
