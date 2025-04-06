@@ -1,6 +1,7 @@
 <script setup>
 import CreateBusiness from "../../components/forms/CreateBusiness.form.vue"
 // import BusinessDetails from "../../components/BusinessDetails.vue"
+import BusinessProfile from "../../components/BusinessProfile.vue";
 
 // import StoreUtils from '@/utils/storeUtils'
 
@@ -10,7 +11,7 @@ import CreateBusiness from "../../components/forms/CreateBusiness.form.vue"
 </script>
 <template>
     
-    <CreateBusiness />
-    <!-- <BusinessDetails v-else /> -->
+    <!-- <CreateBusiness /> -->
+    <BusinessProfile />
 </template>
 <style></style>

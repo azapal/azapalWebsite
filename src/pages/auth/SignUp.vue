@@ -1,21 +1,28 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Button from "../../components/ui/button.vue";
 import router from "../../router";
+import StoreUtils from '../../utils/storeUtils'
 
-let loading = ref(false)
+const current_route = router.currentRoute.value.query
+const store = StoreUtils
+const loading = ref(store.get('auth', 'getLoading'))
+const clientKey = "sbaw37v8xwwou3v490"; // Replace with your actual client key
+const redirectUri = "https://number1fans.vercel.app/create-account"; // Your redirect URI
 
 const handleSocialSignUp = (provider: string) => {
-    loading.value = true;
-
-    // Simulate social media authentication
-    console.log(`Signing up with ${provider}`);
-    setTimeout(() => {
-        loading.value = false;
-        router.replace('/profile')
-
-    }, 1000);
+    const csrfState = Math.random().toString(36).substring(2); // CSRF protection
+    localStorage.setItem("csrfState", csrfState);
+    if(provider === 'Tiktok'){
+        const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientKey}&response_type=code&scope=user.info.basic&redirect_uri=${redirectUri}&state=${csrfState}`;
+        window.location.href = authUrl;
+    }
+        
 };
+
+onMounted(() => {
+  if (current_route.code) return store.dispatch('auth', 'tictokLogin_', { access_token: current_route?.code });
+})
 
 </script>
 <template>
@@ -47,7 +54,7 @@ const handleSocialSignUp = (provider: string) => {
                     </Button>
 
                     <Button variant="outline" class="w-full justify-center gap-2 font-medium border-gray-300"
-                        @click="() => handleSocialSignUp('Google')" :disabled="loading" v-slot:child>
+                        @click="() => handleSocialSignUp('Tiktok')" :disabled="loading" v-slot:child>
                         <img src="../../assets/icons/icons8-tiktok.svg" class="w-5 h-5" />
                         <span>Continue with TikTok</span>
                     </Button>

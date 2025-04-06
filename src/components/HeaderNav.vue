@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ArrowLeft } from 'lucide-vue-next';
 import router from '../router';
 
@@ -6,9 +6,13 @@ let currentRoute;
 
 currentRoute = router?.currentRoute?.value?.name
 
+const props = defineProps({
+    lg:Boolean
+})
+
 </script>
 <template>
-    <div class="w-full sticky top-0 z-[40] shadow mb-3">
+    <div class="w-full sticky top-0 z-[40] shadow-sm">
 
         <!--light mode - text and icons-->
         <div class="p-2 text-gray-900 bg-white flex justify-between items-center font-medium capitalize">
@@ -17,7 +21,7 @@ currentRoute = router?.currentRoute?.value?.name
                 <span class="font-bold"> {{currentRoute}}</span>
             </div>
 
-            <div>
+            <div :class="`${props.lg ? 'flex' : 'hidden'}`">
                 <slot name="others"></slot>
             </div>
         </div>

@@ -4,10 +4,7 @@ import Button from '../../components/ui/button.vue';
 import { Camera, ArrowRightCircle } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-// Business type selection
-const selectedType = ref(null); // null, 'seller', or 'dispatch'
-
-// Base business model (common fields)
+const selectedType = ref(null);
 const createBusinessModel = ref({
   name: "",
   phone_number: "",
@@ -16,20 +13,18 @@ const createBusinessModel = ref({
   website: ""
 });
 
-// Additional fields for dispatch business
 const dispatchModel = ref({
   deliveryAreas: [
     {
       area: "",
       charge: "",
-      deliveryOption: "interstate", // Default value
+      deliveryOption: "interstate",
       discount: "",
       additionalInfo: ""
     }
   ]
 });
 
-// Add a new delivery area
 const addDeliveryArea = () => {
   dispatchModel.value.deliveryAreas.push({
     area: "",
@@ -40,13 +35,11 @@ const addDeliveryArea = () => {
   });
 };
 
-// Remove a delivery area
 const removeDeliveryArea = (index) => {
   dispatchModel.value.deliveryAreas.splice(index, 1);
 };
 
 const createBusiness = () => {
-  // Combine the base model with type-specific fields if needed
   const finalModel = {
     ...createBusinessModel.value,
     businessType: selectedType.value,
@@ -54,7 +47,7 @@ const createBusiness = () => {
   };
   
   console.log('Submitting business data:', finalModel);
-  // Add your API call or business logic here
+  // API call here
 };
 </script>
 
@@ -63,15 +56,7 @@ const createBusiness = () => {
     <form @submit.prevent="createBusiness">
       <HeaderNav>
         <template v-slot:others>
-          <Button 
-            variant="outline" 
-            class="w-[100px]" 
-            type="submit"
-            v-if="selectedType"
-            v-slot:child
-          >
-            Save
-          </Button>
+          <Button variant="outline" class="w-[100px]" type="submit" v-if="selectedType" v-slot:child>Save</Button>
         </template>
       </HeaderNav>
 
@@ -108,180 +93,81 @@ const createBusiness = () => {
         <!-- Business Information Form -->
         <div v-else>
           <div class="mb-6">
-            <h2 class="text-xl font-bold mb-2">
-              {{ selectedType === 'seller' ? 'Seller' : 'Dispatch' }} Registration
-            </h2>
-            <p class="text-gray-500">
-              Please provide your business details below
-            </p>
-            <button 
-              @click="selectedType = null" 
-              class="text-blue-600 text-sm mt-2 flex items-center"
-            >
-              ← Back to selection
-            </button>
+            <h2 class="text-xl font-bold mb-2">{{ selectedType === 'seller' ? 'Seller' : 'Dispatch' }} Registration</h2>
+            <button @click="selectedType = null" class="text-blue-600 text-sm mt-2 flex items-center">← Back to selection</button>
           </div>
 
           <!-- Common Fields -->
-          <label for="businessName"
-            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-            <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Business name</span>
-            <input 
-              type="text" 
-              v-model="createBusinessModel.name" 
-              id="businessName" 
-              placeholder="Enter business name"
-              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-            />
+          <label class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Business name</span>
+            <input type="text" v-model="createBusinessModel.name" placeholder="Enter business name" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
           </label>
 
-          <label for="phoneNumber"
-            class="block overflow-hidden mb-5 rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-            <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Phone number</span>
-            <input 
-              type="tel" 
-              v-model="createBusinessModel.phone_number" 
-              id="phoneNumber" 
-              placeholder="Enter phone number"
-              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-            />
+          <label class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Phone number</span>
+            <input type="tel" v-model="createBusinessModel.phone_number" placeholder="Enter phone number" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
           </label>
 
-          <label for="description"
-            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-            <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Description</span>
-            <textarea 
-              v-model="createBusinessModel.description" 
-              id="description" 
-              placeholder="Describe your business"
-              class="mt-1 w-full border-none bg-transparent p-0 h-[100px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white"
-            ></textarea>
+          <label class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Description</span>
+            <textarea v-model="createBusinessModel.description" placeholder="Describe your business" class="mt-1 w-full border-none bg-transparent p-0 h-[100px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm"></textarea>
           </label>
 
-          <label for="address"
-            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-            <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Address</span>
-            <input 
-              v-model="createBusinessModel.address" 
-              type="text" 
-              id="address" 
-              placeholder="Enter business address"
-              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-            />
+          <label class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Address</span>
+            <input v-model="createBusinessModel.address" type="text" placeholder="Enter business address" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
           </label>
 
-          <label for="website"
-            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-            <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Website</span>
-            <input 
-              v-model="createBusinessModel.website" 
-              type="url" 
-              id="website" 
-              placeholder="https://yourwebsite.com"
-              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-            />
+          <label class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Website</span>
+            <input v-model="createBusinessModel.website" type="url" placeholder="https://yourwebsite.com" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
           </label>
 
           <!-- Dispatch-specific Fields -->
           <div v-if="selectedType === 'dispatch'" class="mt-8">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold">Delivery Areas</h3>
-              <Button 
-                @click="addDeliveryArea" 
-                variant="outline" 
-                type="button" 
-                class="text-sm"
-                v-slot:child
-              >
-                Add Area
-              </Button>
+              <Button @click="addDeliveryArea" variant="outline" type="button" class="text-sm" v-slot:child>Add Area</Button>
             </div>
 
-            <div 
-              v-for="(area, index) in dispatchModel.deliveryAreas" 
-              :key="index"
-              class="mb-6 p-4 border rounded-lg bg-gray-50"
-            >
+            <div v-for="(area, index) in dispatchModel.deliveryAreas" :key="index" class="mb-6 p-4 border rounded-lg bg-gray-50">
               <div class="flex justify-between mb-3">
                 <h4 class="font-medium">Area #{{ index + 1 }}</h4>
-                <button 
-                  v-if="dispatchModel.deliveryAreas.length > 1"
-                  @click="removeDeliveryArea(index)" 
-                  type="button"
-                  class="text-red-500 text-sm"
-                  
-                >
-                  Remove
-                </button>
+                <button v-if="dispatchModel.deliveryAreas.length > 1" @click="removeDeliveryArea(index)" type="button" class="text-red-500 text-sm">Remove</button>
               </div>
               
-              <label for="area" class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Area Name</span>
-                <input 
-                  v-model="area.area" 
-                  type="text" 
-                  :id="`area-${index}`" 
-                  placeholder="e.g., New York City"
-                  class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-                />
+              <label class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <span class="text-xs font-medium text-gray-700">Area Name</span>
+                <input v-model="area.area" type="text" placeholder="e.g., New York City" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
               </label>
               
-              <label for="charge" class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Delivery Charge</span>
-                <input 
-                  v-model="area.charge" 
-                  type="text" 
-                  :id="`charge-${index}`" 
-                  placeholder="e.g., $15.00"
-                  class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-                />
+              <label class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <span class="text-xs font-medium text-gray-700">Delivery Charge</span>
+                <input v-model="area.charge" type="text" placeholder="e.g., $15.00" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
               </label>
               
-              <div class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Delivery Option</span>
+              <div class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <span class="text-xs font-medium text-gray-700">Delivery Option</span>
                 <div class="mt-2">
                   <div class="flex items-center space-x-2 mb-2">
-                    <input 
-                      type="radio" 
-                      :id="`interstate-${index}`" 
-                      v-model="area.deliveryOption" 
-                      value="interstate" 
-                      class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
+                    <input type="radio" :id="`interstate-${index}`" v-model="area.deliveryOption" value="interstate" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" />
                     <label :for="`interstate-${index}`" class="text-sm text-gray-700">Interstate</label>
                   </div>
                   <div class="flex items-center space-x-2">
-                    <input 
-                      type="radio" 
-                      :id="`international-${index}`" 
-                      v-model="area.deliveryOption" 
-                      value="international" 
-                      class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
+                    <input type="radio" :id="`international-${index}`" v-model="area.deliveryOption" value="international" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500" />
                     <label :for="`international-${index}`" class="text-sm text-gray-700">International</label>
                   </div>
                 </div>
               </div>
               
-              <label for="discount" class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Discount (optional)</span>
-                <input 
-                  v-model="area.discount" 
-                  type="text" 
-                  :id="`discount-${index}`" 
-                  placeholder="e.g., 10%"
-                  class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" 
-                />
+              <label class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <span class="text-xs font-medium text-gray-700">Discount (optional)</span>
+                <input v-model="area.discount" type="text" placeholder="e.g., 10%" class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
               </label>
               
-              <label for="additionalInfo" class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Additional Information</span>
-                <textarea 
-                  v-model="area.additionalInfo" 
-                  :id="`additionalInfo-${index}`" 
-                  placeholder="Any additional details about delivery to this area"
-                  class="mt-1 w-full border-none bg-transparent p-0 h-[60px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white"
-                ></textarea>
+              <label class="block mb-4 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                <span class="text-xs font-medium text-gray-700">Additional Information</span>
+                <textarea v-model="area.additionalInfo" placeholder="Any additional details about delivery to this area" class="mt-1 w-full border-none bg-transparent p-0 h-[60px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm"></textarea>
               </label>
             </div>
           </div>
@@ -294,7 +180,3 @@ const createBusiness = () => {
     </form>
   </div>
 </template>
-
-<style>
-/* Add any custom styles here */
-</style>
