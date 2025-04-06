@@ -33,7 +33,7 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
     redirectToLogin();
     // eslint-disable-next-line no-unused-vars
     function redirectToLogin() {
-        next({ name: RouteConstantUtil.auth.login, query: { redirectFrom: routeTo.fullPath } });
+        next({ name: RouteConstantUtil.auth.register, query: { redirectFrom: routeTo.fullPath } });
     }
 });
 

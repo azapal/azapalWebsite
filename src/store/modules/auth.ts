@@ -11,7 +11,7 @@ export const useAuthStore = defineStore("authStore", {
 
   getters: {
     getLoading: state => state.loading,
-    getCurrentUser: state => state.user || JSON.parse(localStorage?.user),
+    getCurrentUser: state => state.user || localStorage.user ? JSON.parse(localStorage?.user) : null,
     getCount:state => state.count,
     getToken:state => state.token || JSON.parse(localStorage?.token)
   },
@@ -23,13 +23,15 @@ export const useAuthStore = defineStore("authStore", {
       this.loading = false
       let responseData = response.data
       try{
-        if(responseData.response_code === "00")
-            this.token = response.data.token
-            this.user = response.data.user_info
-            localStorage.user = JSON.stringify(response.data.user_info)
-            localStorage.token = response.data.token
-            router.push({name:'PROFILE'})
-        alert(responseData.error)
+        if(responseData.response_code === "00"){
+          this.token = response.data.token
+          this.user = response.data.user_info
+          localStorage.user = JSON.stringify(response.data.user_info)
+          localStorage.token = response.data.token
+          router.push({name:'PROFILE'})
+        }else{
+          alert(responseData.error)
+        }
       }catch(err){
         this.loading = false
         console.log('error:', err)

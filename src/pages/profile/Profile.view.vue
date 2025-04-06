@@ -1,6 +1,6 @@
 <script setup>
 import { ArrowLeft } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import SendMoney from '../../components/forms/SendMoney.vue';
 import HeaderNav from '../../components/HeaderNav.vue';
 
@@ -11,6 +11,10 @@ const userBusiness = store.get('business', 'getBusiness')
 const user = store.get('auth', 'getCurrentUser')
 
 const profileTab = ref('send_money');
+
+onMounted(() => {
+    store.dispatch('business', 'readBusiness')
+})
 </script>
 
 <template>
@@ -47,7 +51,7 @@ const profileTab = ref('send_money');
                         <div class="text-center mb-6">
                             <h2 class="text-gray-800 dark:text-white text-xl font-bold">{{user?.display_name}}</h2>
                             <a class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                                href="https://www.instagram.com/immohitdhiman/" target="_blank">@{{user.display_name}}</a>
+                                href="https://www.instagram.com/immohitdhiman/" target="_blank">@{{user?.display_name}}</a>
                         </div>
                     </div>
 
