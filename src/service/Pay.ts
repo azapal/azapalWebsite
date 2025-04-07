@@ -27,8 +27,8 @@ export default {
         return apiClient.businessClient.post('lookup', payload)
     },
 
-    getInitiatedPayment(payload:any){
-        return apiClient.businessClient.get('initialize_payment', payload)
+    getInitiatedPayment(){
+        return apiClient.businessClient.get('initialize_payment')
     },
 
     verifyPayment(payload:any){

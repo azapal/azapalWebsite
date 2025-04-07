@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 import HeaderNav from '../../components/HeaderNav.vue';
 import Button from '../../components/ui/button.vue';
 import { Check, Trash, ArrowLeft, ChevronsUpDown, Loader2 } from 'lucide-vue-next';
