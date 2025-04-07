@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import Auth from "../../service/Auth";
 import router from "../../router"
+
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
     loading: false,

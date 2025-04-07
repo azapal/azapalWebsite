@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/paystack__inline-js": "^1.0.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.7.2",

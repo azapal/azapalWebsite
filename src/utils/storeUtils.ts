@@ -6,7 +6,7 @@ const storeInstance:any = stores
 
 class StoreUtils {
 
-  static dispatch(store:any, action:any, data:any) {
+  static dispatch(store:any, action:any, data?:any) {
     return storeInstance[store]()[action](data);
   }
 
