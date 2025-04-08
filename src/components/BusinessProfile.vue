@@ -4,6 +4,7 @@ import { ref, onMounted, computed } from 'vue';
 import SendMoney from '../components/forms/SendMoney.vue';
 import HeaderNav from '../components/HeaderNav.vue';
 // import { LineChart, BarChart, PieChart, AreaChart } from 'recharts';
+import Dispatch from './Dispatch.vue';
 
 // Store utilities
 import StoreUtils from '../utils/storeUtils'
@@ -17,20 +18,6 @@ const profileTab = ref('dashboard');
 const currentPage = ref(1);
 const itemsPerPage = ref(5);
 const searchQuery = ref('');
-
-// Dummy data for business profile
-const businessData = ref({
-    name: "Quantum Solutions LLC",
-    handle: "@quantum_solutions",
-    description: "Innovative payment solutions for modern businesses",
-    analytics: {
-        totalAmount: 258750.45,
-        successfulTransactions: 1247,
-        failedTransactions: 36,
-        pendingTransactions: 12,
-        conversionRate: 97.2
-    }
-});
 
 // Dummy transactions data
 const transactionsData = ref([
@@ -52,6 +39,32 @@ const transactionsData = ref([
     { id: 'TX12360', date: '2025-03-29', amount: 399.99, status: 'failed', customer: 'Sandra Miller', method: 'Credit Card' },
     { id: 'TX12361', date: '2025-03-28', amount: 1750.00, status: 'success', customer: 'Tech Solutions Group', method: 'ACH' },
 ]);
+
+const activeTab = ref('ongoing');
+
+// Mock business data - in a real app, this might come from props or API
+const businessData = {
+    name: "Acme Corporation",
+    balance: 24850.75,
+    logo: "https://kwik.delivery/wp-content/uploads/2023/05/kwick_secondary_logo_RGB_green_transparent_background-e1685121401616.png", // Replace with your actual logo path
+    handle: "@quantum_solutions",
+    description: "Innovative payment solutions for modern businesses",
+    analytics: {
+        totalAmount: 258750.45,
+        successfulTransactions: 1247,
+        failedTransactions: 36,
+        pendingTransactions: 12,
+        conversionRate: 97.2
+    }
+};
+
+// Format currency with commas and two decimal places
+const formatCurrency = (value) => {
+    return value.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+};
 
 // Chart data for monthly transactions
 const monthlyData = ref([
@@ -123,82 +136,95 @@ const getStatusColor = (status) => {
 
 <template>
     <HeaderNav />
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 lg:pt-2">
+            
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 pt-2 ">
         <!-- Main container with responsive width -->
         <div class="w-full flex flex-col gap-4 max-w-7xl mx-auto dark:bg-gray-800 overflow-hidden px-4 md:px-6 pb-8">
             <!-- Business Profile Card -->
-            <div class="shadow-sm bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
-                <!-- Profile header with banner -->
-                <div class="relative h-36 sm:h-48 md:h-56 overflow-hidden">
-                    <div class="absolute inset-0 bg-black/60"></div>
-                    <img class="w-full h-full object-cover"
-                        src="https://images.unsplash.com/photo-1605379399642-870262d3d051?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-                        alt="Business Banner" />
-                </div>
-
-                <!-- Profile content section -->
-                <div class="flex flex-col md:flex-row w-full">
-                    <!-- Business Info Column -->
-                    <div class="w-full md:w-64 flex flex-col items-center px-4">
-                        <!-- Business Logo -->
-                        <div class="flex justify-center -mt-16 mb-4 relative z-10">
-                            <img class="h-28 w-28 sm:h-32 sm:w-32 rounded-full border-4 border-white dark:border-gray-800 object-cover shadow-md"
-                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-                                alt="Business Logo" />
-                        </div>
-
-                        <!-- Business Name and Handle -->
-                        <div class="text-center mb-6">
-                            <h2 class="text-gray-800 dark:text-white text-xl font-bold">{{ businessData.name }}</h2>
-                            <a class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                                href="#" target="_blank">{{ businessData.handle }}</a>
-                            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">{{ businessData.description }}</p>
-                        </div>
+            <div class="shadow-sm bg-white dark:bg-gray-800 rounded-lg overflow-hidden p-6">
+                <!-- Business Info Section - Logo, Name and Balance -->
+                <div class="flex flex-col items-center mb-8">
+                    <!-- Business Logo -->
+                    <div class="mb-4">
+                        <img class="h-24 w-24 rounded-full border-4 border-white dark:border-gray-700 object-cover shadow-md"
+                            :src="businessData.logo" alt="Business Logo" />
                     </div>
 
-                    <!-- Actions Column -->
-                    <div class="w-full md:flex-1 px-4 md:px-6 py-2 md:py-4 flex flex-col gap-3">
-                        <!-- Action Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <router-link to="/edit-business"
-                                class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-sm font-medium">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5">
-                                    <path fill="currentColor"
-                                        d="M21.32,9.55l-1.89-.63.89-1.78A1,1,0,0,0,20.13,6L18,3.87a1,1,0,0,0-1.15-.19l-1.78.89-.63-1.89A1,1,0,0,0,13.5,2h-3a1,1,0,0,0-.95.68L8.92,4.57,7.14,3.68A1,1,0,0,0,6,3.87L3.87,6a1,1,0,0,0-.19,1.15l.89,1.78-1.89.63A1,1,0,0,0,2,10.5v3a1,1,0,0,0,.68.95l1.89.63-.89,1.78A1,1,0,0,0,3.87,18L6,20.13a1,1,0,0,0,1.15.19l1.78-.89.63,1.89a1,1,0,0,0,.95.68h3a1,1,0,0,0,.95-.68l.63-1.89,1.78.89A1,1,0,0,0,18,20.13L20.13,18a1,1,0,0,0,.19-1.15l-.89-1.78,1.89-.63A1,1,0,0,0,22,13.5v-3A1,1,0,0,0,21.32,9.55Z">
-                                    </path>
-                                </svg>
-                                Edit Business
-                            </router-link>
+                    <!-- Business Name -->
+                    <h2 class="text-gray-800 dark:text-white text-xl font-bold mb-2">
+                        {{ businessData.name }}
+                    </h2>
 
-                            <router-link to="/business-settings"
-                                class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors text-sm font-medium">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                Settings
-                            </router-link>
+                    <!-- Account Balance -->
+                    <div class="flex items-center gap-2">
+                    
+                        <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg">
+                        <span class="text-gray-800 dark:text-white font-semibold">
+                            ₦{{ formatCurrency(businessData.balance) }}
+                        </span>
+                        </div>
+                        
+                        <router-link to="/business/users"
+                    class="flex items-center justify-center gap-2 px-4 py-2.5 border hover:text-white border-gray-300 hover:bg-green-700 rounded-lg transition-colors text-sm font-medium">
+                    
+                    manage users
+                </router-link>
+                    </div>
+                </div>
 
-                            <router-link to="/send-money"
-                                class="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                                </svg>
-                                Send Money
-                            </router-link>
+                <!-- Tabs Section -->
+                <div class="w-full">
+                    <!-- Tab Headers -->
+                    <div class="flex border-b border-gray-200 dark:border-gray-700">
+                        <button @click="activeTab = 'ongoing'" :class="[
+                            'px-4 py-2 font-medium text-sm',
+                            activeTab === 'ongoing'
+                                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
+                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                        ]">
+                            Ongoing
+                        </button>
+                        <button @click="activeTab = 'completed'" :class="[
+                            'px-4 py-2 font-medium text-sm',
+                            activeTab === 'completed'
+                                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
+                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                        ]">
+                            Completed
+                        </button>
+                        <button @click="activeTab = 'dispute'" :class="[
+                            'px-4 py-2 font-medium text-sm',
+                            activeTab === 'dispute'
+                                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
+                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                        ]">
+                            Dispute
+                        </button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="py-4">
+                        <div v-if="activeTab === 'ongoing'" class="text-gray-600 dark:text-gray-300">
+                            <!-- Ongoing tab content would go here -->
+                            <p class="text-center text-sm">Ongoing transactions will appear here</p>
+                        </div>
+                        <div v-else-if="activeTab === 'completed'" class="text-gray-600 dark:text-gray-300">
+                            <!-- Completed tab content would go here -->
+                            <p class="text-center text-sm">Completed transactions will appear here</p>
+                        </div>
+                        <div v-else-if="activeTab === 'dispute'" class="text-gray-600 dark:text-gray-300">
+                            <!-- Dispute tab content would go here -->
+                            <p class="text-center text-sm">Disputes will appear here</p>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <Dispatch />
+
             <!-- Tab Navigation -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-               
+
 
                 <!-- Tab Content -->
                 <div class="p-4">

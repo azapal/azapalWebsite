@@ -3,15 +3,15 @@ import type {BaseRouteProps} from "./base-routes.ts";
 export const appRoute: BaseRouteProps[] = [
 
     {
-        path: '/profile',
-        name: RouteConstantUtil.dashboard.profile,
+        path: '/dashboard',
+        name: RouteConstantUtil.dashboard.homePage,
         meta: {
           showHeader: true,
-          showBackArrow: true,
+          showBackArrow: false,
           authRequired:RouteConstantUtil.dashboard.authRequired
         },
         component: () =>
-          import(/* webpackChunkName: "about" */ "../../pages/profile/Profile.view.vue"),
+          import(/* webpackChunkName: "about" */ "../../pages/dashboard/Dashboard.view.vue"),
       },
       {
         path: "/create-business",
@@ -34,6 +34,28 @@ export const appRoute: BaseRouteProps[] = [
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/profile/EditProfile.view.vue"),
+      },
+      {
+        path: "/business/users",
+        name: RouteConstantUtil.dashboard.usersManagement,
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
+        },
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../../components/UserManagement.vue"),
+      },
+      {
+        path: "/success",
+        name: RouteConstantUtil.payment.success,
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
+        },
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../../components/SuccessModal.vue"),
       },
       {
         path: "/bank",
