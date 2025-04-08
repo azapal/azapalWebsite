@@ -29,7 +29,7 @@ export const useAuthStore = defineStore("authStore", {
           this.user = response.data.user_info
           localStorage.user = JSON.stringify(response.data.user_info)
           localStorage.token = response.data.token
-          router.push({name:'PROFILE'})
+          router.push({name:'Dashboard'})
         }else{
           alert(responseData.error)
         }
