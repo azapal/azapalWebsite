@@ -9,12 +9,7 @@ const isDashboardRoute = currentRoute === 'Dashboard';
 const store = StoreUtils;
 
 const user = store.get('auth', 'getCurrentUser');
-const userBusiness = store.get('business', 'getBusiness');
-const isBusiness = Object?.keys(userBusiness)?.length === 0;
 
-const props = defineProps({
-    lg: Boolean
-});
 
 const goBack = () => {
     router.go(-1);
