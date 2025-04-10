@@ -115,6 +115,7 @@
   </template>
   
   <script>
+  import Bolt from '../assets/images/bolt.svg'
   export default {
     name: 'DispatchSubscription',
     data() {
@@ -139,7 +140,7 @@
           {
             id: 2,
             name: 'Express Connect',
-            logoUrl: 'https://kwik.delivery/wp-content/uploads/2023/05/kwick_secondary_logo_RGB_green_transparent_background-e1685121401616.png',
+            logoUrl: 'https://cdn.prod.website-files.com/5e8785b1f99d7c2b576740dd/60e8af113bb9b8511a979c75_gokada-logo-hor.svg',
             shortDescription: 'Fast regional service with competitive rates',
             description: 'Express Connect specializes in regional dispatch services with industry-leading delivery times and competitive pricing for businesses of all sizes.',
             location: 'Chicago, IL',
@@ -155,7 +156,7 @@
           {
             id: 3,
             name: 'Global Dispatch Solutions',
-            logoUrl: 'https://kwik.delivery/wp-content/uploads/2023/05/kwick_secondary_logo_RGB_green_transparent_background-e1685121401616.png',
+            logoUrl: 'https://cdn.prod.website-files.com/630c89e33df16d6893e94a91/630d07362115daab7eefe2a9_Full%20Logo.svg',
             shortDescription: 'International shipping and logistics experts',
             description: 'Global Dispatch Solutions is your partner for international freight and logistics. We handle customs, regulations, and international shipping requirements.',
             location: 'Miami, FL',
@@ -171,7 +172,7 @@
           {
             id: 4,
             name: 'Urban Fleet',
-            logoUrl: 'https://kwik.delivery/wp-content/uploads/2023/05/kwick_secondary_logo_RGB_green_transparent_background-e1685121401616.png',
+            logoUrl: Bolt,
             shortDescription: 'Specialized in urban and last-mile delivery',
             description: 'Urban Fleet focuses on metropolitan areas with eco-friendly vehicles and specialized solutions for urban logistics challenges.',
             location: 'Seattle, WA',

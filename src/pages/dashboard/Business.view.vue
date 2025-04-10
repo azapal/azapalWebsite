@@ -12,7 +12,7 @@ const isBusiness = Object?.keys(userBusiness)?.length === 0
 
 </script>
 <template>
-    <BusinessProfile v-if="!isBusiness" />
+    <BusinessProfile v-if="isBusiness" />
     <CreateBusiness  v-else />
 </template>
 <style></style>
