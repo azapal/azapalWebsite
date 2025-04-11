@@ -5,7 +5,7 @@ import SendMoney from '../components/forms/SendMoney.vue';
 import HeaderNav from '../components/HeaderNav.vue';
 // import { LineChart, BarChart, PieChart, AreaChart } from 'recharts';
 import Dispatch from './Dispatch.vue';
-
+import formatAmount from '../utils/formatAmount';
 // Store utilities
 import StoreUtils from '../utils/storeUtils'
 const store = StoreUtils
@@ -56,14 +56,6 @@ const businessData = {
         pendingTransactions: 12,
         conversionRate: 97.2
     }
-};
-
-// Format currency with commas and two decimal places
-const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
 };
 
 // Chart data for monthly transactions
@@ -132,12 +124,16 @@ const getStatusColor = (status) => {
     if (status === 'pending') return 'bg-yellow-100 text-yellow-800';
     return 'bg-gray-100 text-gray-800';
 };
+
+onMounted(() => {
+    store.dispatch('business', 'readSubscribe')
+})
 </script>
 
 <template>
     <HeaderNav />
-            
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 pt-2 ">
+
+    <div v-if="userBusiness" class="min-h-screen bg-gray-100 dark:bg-gray-900 pt-2 ">
         <!-- Main container with responsive width -->
         <div class="w-full flex flex-col gap-4 max-w-7xl mx-auto dark:bg-gray-800 overflow-hidden px-4 md:px-6 pb-8">
             <!-- Business Profile Card -->
@@ -152,23 +148,24 @@ const getStatusColor = (status) => {
 
                     <!-- Business Name -->
                     <h2 class="text-gray-800 dark:text-white text-xl font-bold mb-2">
-                        {{ businessData.name }}
+                        {{ userBusiness?.name }}
                     </h2>
 
                     <!-- Account Balance -->
                     <div class="flex items-center gap-2">
-                    
+
                         <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg">
-                        <span class="text-gray-800 dark:text-white font-semibold">
-                            ₦{{ formatCurrency(businessData.balance) }}
-                        </span>
+                            <span class="text-gray-800 dark:text-white font-semibold">
+                                ₦{{ formatAmount(userBusiness?.balance) }}
+                            </span>
                         </div>
-                        
+
                         <router-link to="/business/users"
-                    class="flex items-center justify-center gap-2 px-4 py-2.5 border hover:text-white border-gray-300 hover:bg-green-700 rounded-lg transition-colors text-sm font-medium">
-                    
-                    manage users
-                </router-link>
+                            v-if="userBusiness?.category == 'dispatch'"
+                            class="flex items-center justify-center gap-2 px-4 py-2.5 border hover:text-white border-gray-300 hover:bg-green-700 rounded-lg transition-colors text-sm font-medium">
+
+                            manage users
+                        </router-link>
                     </div>
                 </div>
 
@@ -220,7 +217,7 @@ const getStatusColor = (status) => {
                 </div>
             </div>
 
-            <Dispatch />
+            <Dispatch  v-if="userBusiness?.category == 'seller'" />
 
             <!-- Tab Navigation -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -237,9 +234,9 @@ const getStatusColor = (status) => {
                                 class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Amount</p>
+                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Amount Received</p>
                                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                                            ${{ businessData.analytics.totalAmount.toLocaleString() }}
+                                            ₦{{ businessData.analytics.totalAmount.toLocaleString() }}
                                         </h3>
                                         <p class="text-sm text-green-600 dark:text-green-400 mt-2">+12.5% from last
                                             month</p>
@@ -263,7 +260,7 @@ const getStatusColor = (status) => {
                                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Successful
                                             Transactions</p>
                                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                                            {{ businessData.analytics.successfulTransactions.toLocaleString() }}
+                                            {{ userBusiness?.success_transation_rate_count }}
                                         </h3>
                                         <p class="text-sm text-green-600 dark:text-green-400 mt-2">+8.3% from last month
                                         </p>
@@ -287,7 +284,7 @@ const getStatusColor = (status) => {
                                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Failed
                                             Transactions</p>
                                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                                            {{ businessData.analytics.failedTransactions }}
+                                            {{ userBusiness?.failed_transaction_rate_count }}
                                         </h3>
                                         <p class="text-sm text-red-600 dark:text-red-400 mt-2">-2.1% from last month</p>
                                     </div>
@@ -376,7 +373,7 @@ const getStatusColor = (status) => {
                         </div>
 
                         <!-- Recent Transactions -->
-                        <div
+                        <!-- <div
                             class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent Transactions</h3>
@@ -396,7 +393,7 @@ const getStatusColor = (status) => {
                                     </thead>
                                 </table>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

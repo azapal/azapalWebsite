@@ -5,20 +5,22 @@ import { Camera, ArrowRightCircle } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { app } from '../../../firebase'
-
+import OtpValidation from './OtpValidation.vue';
+import StoreUtils from '../../utils/storeUtils';
+import { SendOtpRequest } from '../../model/request/auth/authenticationRequest';
+import Uploader from '../Uploader.vue';
+import { CreateBusinessRequest } from '../../model/request/business/businessRequest';
 const auth = getAuth(app);
 const selectedType = ref(null);
 const verificationSent = ref(false);
 const verificationCode = ref('');
 const recaptchaRendered = ref(false);
+const store = StoreUtils
 
-const createBusinessModel = ref({
-  name: "",
-  phone_number: "",
-  description: "",
-  address: "",
-  website: ""
-});
+const loading = ref(false)
+let showOtpScreen = store.get('auth', 'getShowOtpScreen')
+
+const createBusinessModel = ref(CreateBusinessRequest);
 
 const dispatchModel = ref({
   deliveryAreas: [
@@ -48,15 +50,42 @@ const removeDeliveryArea = (index) => {
 
 // Set up reCAPTCHA verifier
 const setupRecaptcha = () => {
-  if (!recaptchaRendered.value) {
+  console.log('Setting up reCAPTCHA...');
+  
+  // Check if the container exists
+  const recaptchaContainer = document.getElementById('recaptcha-container');
+  if (!recaptchaContainer) {
+    console.error('recaptcha-container element not found!');
+    return;
+  }
+  
+  try {
+    // Clear any existing reCAPTCHA if it exists
+    if (window.recaptchaVerifier) {
+      window.recaptchaVerifier.clear();
+    }
+    
+    // Create new reCAPTCHA verifier
     window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      'size': 'normal',
+      'size': 'normal', // You can also try 'invisible'
       'callback': (response) => {
-        // reCAPTCHA solved, now send verification code
+        console.log('reCAPTCHA verified!', response);
         sendVerificationCode();
+      },
+      'expired-callback': () => {
+        console.log('reCAPTCHA expired');
+        // Handle expiration
       }
     });
-    recaptchaRendered.value = true;
+    
+    // Force render the reCAPTCHA
+    window.recaptchaVerifier.render().then(widgetId => {
+      window.recaptchaWidgetId = widgetId;
+      recaptchaRendered.value = true;
+      console.log('reCAPTCHA rendered successfully');
+    });
+  } catch (error) {
+    console.error('Error setting up reCAPTCHA:', error);
   }
 };
 
@@ -125,8 +154,11 @@ const submitBusinessForm = () => {
 
 // Start the verification process
 const startVerification = () => {
-  setupRecaptcha();
-  // The actual send will happen in the reCAPTCHA callback
+  SendOtpRequest.phone_number = createBusinessModel.value.phone_number
+  SendOtpRequest.email = createBusinessModel.value.email
+  SendOtpRequest.platform = 'azapal'
+  SendOtpRequest.source = 'web'
+  store.dispatch('auth', 'sendOtp', SendOtpRequest)
 };
 
 onMounted(() => {
@@ -136,12 +168,15 @@ onMounted(() => {
 
 <template>
   <div>
+    <OtpValidation v-if="showOtpScreen" />
+
     <form @submit.prevent="startVerification">
       <HeaderNav>
         <template v-slot:others>
           <Button variant="outline" class="w-[100px]" type="submit" v-if="selectedType" v-slot:child>Save</Button>
         </template>
       </HeaderNav>
+
 
       <div class="container lg:w-2/6 xl:w-2/7 sm:w-full md:w-2/3 mx-auto relative p-3">
         <!-- Type Selection Screen -->
@@ -150,18 +185,18 @@ onMounted(() => {
 
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <div @click="selectedType = 'seller'"
-              class="border rounded-lg p-6 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all flex flex-col items-center">
-              <div class="bg-blue-100 p-4 rounded-full mb-4">
-                <Camera class="h-8 w-8 text-blue-600" />
+              class="border rounded-lg p-6 cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all flex flex-col items-center">
+              <div class="bg-orange-100 p-4 rounded-full mb-4">
+                <Camera class="h-8 w-8 text-orange-600" />
               </div>
               <h2 class="text-xl font-medium">Seller</h2>
               <p class="text-gray-500 mt-2">Register as a product or service seller</p>
             </div>
 
             <div @click="selectedType = 'dispatch'"
-              class="border rounded-lg p-6 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all flex flex-col items-center">
-              <div class="bg-blue-100 p-4 rounded-full mb-4">
-                <ArrowRightCircle class="h-8 w-8 text-blue-600" />
+              class="border rounded-lg p-6 cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all flex flex-col items-center">
+              <div class="bg-orange-100 p-4 rounded-full mb-4">
+                <ArrowRightCircle class="h-8 w-8 text-orange-600" />
               </div>
               <h2 class="text-xl font-medium">Dispatch</h2>
               <p class="text-gray-500 mt-2">Register as a delivery or dispatch service</p>
@@ -183,13 +218,24 @@ onMounted(() => {
             <span class="text-xs font-medium text-gray-700">Business name</span>
             <input type="text" v-model="createBusinessModel.name" placeholder="Enter business name"
               class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+              <span class="text-xs font-light" v-if="selectedType === 'dispatch'">Provide the name of your business registered on your CAC document</span>
+
+              
           </label>
 
-          <label
+          <label v-if="selectedType === 'seller'"
             class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
             <span class="text-xs font-medium text-gray-700">Phone number</span>
             <input type="tel" v-model="createBusinessModel.phone_number" placeholder="Enter phone number with country code (e.g. +1234567890)"
               class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+              <span class="text-xs font-light">Provide a phone number we can reach your business with</span>
+          </label>
+          <label v-else
+            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Company email address</span>
+            <input type="email" v-model="createBusinessModel.phone_number" placeholder="Enter phone number with country code (e.g. +1234567890)"
+              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+              <span class="text-xs font-light">Using your company email e.g support@azapal.com will fly</span>
           </label>
 
           <label
@@ -213,8 +259,10 @@ onMounted(() => {
               class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
           </label>
 
+          <!-- <Uploader /> -->
+
           <!-- Dispatch-specific Fields -->
-          <div v-if="selectedType === 'dispatch'" class="mt-8">
+          <!-- <div v-if="selectedType === 'dispatch'" class="mt-8">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold">Delivery Areas</h3>
               <Button @click="addDeliveryArea" variant="outline" type="button" class="text-sm" v-slot:child>Add
@@ -274,7 +322,7 @@ onMounted(() => {
                   class="mt-1 w-full border-none bg-transparent p-0 h-[60px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm"></textarea>
               </label>
             </div>
-          </div>
+          </div> -->
 
           <!-- Phone verification section -->
           <div class="mt-6">
@@ -288,7 +336,8 @@ onMounted(() => {
               <Button @click.prevent="verifyCode" variant="outline" class="w-full mt-2" v-slot:child>Verify Code</Button>
             </div>
             <div v-else>
-              <Button type="submit" variant="outline" class="w-full" v-slot:child>Register Business</Button>
+              <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+              <Button v-else type="submit" variant="outline" class="w-full" v-slot:child>Register Business</Button>
             </div>
           </div>
         </div>

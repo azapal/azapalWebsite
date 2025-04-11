@@ -47,9 +47,9 @@ onMounted(() => {
                 </router-link>
     </HeaderNav>
 
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 lg:pt-2">
+    <div class="min-h-screen  dark:bg-gray-900 lg:pt-2 md:pt-2">
         <!-- Main container with responsive width -->
-        <div class="flex  flex-col  gap-2  max-w-4xl mx-auto dark:bg-gray-800 overflow-hidden">
+        <div class="flex flex-col gap-2 lg:max-w-md md:max-w-xl mx-auto dark:bg-gray-800 overflow-hidden">
             <div class="shadow-sm bg-white rounded">
                 <!-- Tab Navigation -->
                 <div class="px-4 mt-4">

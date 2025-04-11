@@ -4,13 +4,15 @@ export const useBusinessStore = defineStore("businessStore", {
   state: () => ({
     loading: false,
     business: null,
-    userBank: null
+    userBank: null,
+    subscribe:[]
   }),
 
   getters: {
     getBusiness: state => state.business,
     getLoading: state => state.loading,
     getUserBank: state => state.userBank,
+    getSubscribe: state => state.subscribe
 
   },
 
@@ -23,8 +25,25 @@ export const useBusinessStore = defineStore("businessStore", {
         if (response.data.response_code === '00') {
           this.business = response.data
           alert(response.data.response_message)
+          location.reload()
         }else{
           alert(response.data.response_message)
+        }
+      } catch (err) {
+        this.loading = false
+        console.log('error:', err)
+      }
+    },
+
+    async readSubscribe() {
+      this.loading = true;
+      const response = await Business.readSubscribe()
+      this.loading = false
+      try {
+        if (response.data.response_code === '00') {
+          this.subscribe = response.data
+        }else{
+          //pass
         }
       } catch (err) {
         this.loading = false
@@ -37,8 +56,8 @@ export const useBusinessStore = defineStore("businessStore", {
       const response = await Business.readUserBusiness()
       this.loading = false
       try {
-        if (response.data.responseCode === '00') {
-          this.business = response.data
+        if (response.data.response_code === '00') {
+          this.business = response.data?.data
         } 
       } catch (err) {
         this.loading = false

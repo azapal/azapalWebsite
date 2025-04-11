@@ -22,4 +22,15 @@ export default {
     readUserBusiness(){
         return apiClient.businessClient.get(`business`)
     },
+
+    readSubscribe(){
+        return apiClient.businessClient.get(`subscribe`)
+    },
+
+    subscribe(payload:any){
+        return apiClient.businessClient.post(`subscribe`,payload)
+    },
+
+
+   
 }
