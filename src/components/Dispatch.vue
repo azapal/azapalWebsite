@@ -51,12 +51,12 @@
         <button v-else @click="subscribe"
           class="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors w-full max-w-xs"
           :disabled="selectedCompany.isSubscribed"
-          :class="{ 'opacity-50 cursor-not-allowed': !selectedCompany.isSubscribed }">
+          :class="{ 'opacity-50 cursor-not-allowed': selectedCompany.isSubscribed }">
           Subscribe
         </button>
       </div>
 
-      <div v-if="!selectedCompany.isSubscribed"
+      <div v-if="selectedCompany.isSubscribed"
         class="mb-6 p-4 bg-amber-50 rounded-lg border border-amber-100">
         <p class="text-amber-800 text-sm text-center">
           You are already subscribed to another dispatch service. Please unsubscribe first.
