@@ -11,6 +11,11 @@ export type SendOtpRequestType = {
   otp: string | null
 }
 
+export type LoginRequestType = {
+  email: string,
+  password: string
+}
+
 
 export const SendOtpRequest:SendOtpRequestType = {
   email: null,
@@ -18,4 +23,9 @@ export const SendOtpRequest:SendOtpRequestType = {
   source: "",
   platform: "",
   otp:null 
+}
+
+export const LoginRequest = {
+  email: "",
+  password: ""
 }

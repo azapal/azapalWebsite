@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import Auth from "../../service/Auth";
 import router from "../../router"
-import type { SendOtpRequestType } from "../../model/request/auth/authenticationRequest";
+import type { SendOtpRequestType, LoginRequestType } from "../../model/request/auth/authenticationRequest";
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
     loading: false,
@@ -74,7 +74,35 @@ export const useAuthStore = defineStore("authStore", {
         this.loading = false
         console.log('error:', err)
       }
-     }
+     },
+
+     async login(payload:LoginRequestType){
+      this.loading = true;
+      const response = await Auth.login(payload)
+      this.loading = false
+      let responseData = response.data
+      try{
+        if(responseData.code === "00"){
+          const currentRoute = router.currentRoute?.value?.query?.redirectFrom
+          this.token = responseData.token
+          this.user = responseData.data
+          localStorage.user = JSON.stringify(responseData.data)
+          localStorage.token = responseData.token
+          if(currentRoute){
+            router.push({path:currentRoute as string})
+          }else{
+            router.push({name:"Dashboard"})
+          }
+         
+        }else{
+          alert(responseData.message)
+        }
+      }catch(err){
+        this.loading = false
+        console.log('error:', err)
+        alert(responseData.message)
+      }
+     },
   },
 
   

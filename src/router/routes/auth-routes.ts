@@ -13,4 +13,10 @@ export const authRoute: BaseRouteProps[] = [
         component: () => import("../../pages/auth/SignUp.vue"),
         meta: {authRequired:RouteConstantUtil.auth.authRequired, layout:'auth',sub_title:''}
     },
+    {
+        name: RouteConstantUtil.auth.login,
+        path: '/login',
+        component: () => import("../../pages/auth/Login.vue"),
+        meta: {authRequired:RouteConstantUtil.auth.authRequired, layout:'auth',sub_title:''}
+    },
 ]

@@ -40,8 +40,8 @@ export const useBusinessStore = defineStore("businessStore", {
       const response = await Business.readSubscribe()
       this.loading = false
       try {
-        if (response.data.response_code === '00') {
-          this.subscribe = response.data
+        if (response.data.code === '00') {
+          this.subscribe = response.data?.dispatch
         }else{
           //pass
         }

@@ -21,6 +21,11 @@ const handleSocialSignUp = (provider: string) => {
     }
 };
 
+
+const handleSubmit  = ()=> {
+    
+}
+
 onMounted(() => {
   if (current_route.code) return store.dispatch('auth', 'tictokLogin_', { access_token: current_route?.code });
 })
@@ -61,16 +66,16 @@ onMounted(() => {
                     </Button>
                 </div>
 
-                <!-- <div class="relative mb-8">
+                <div class="relative mb-8">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-gray-300"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
                         <span class="px-2 bg-white text-gray-500">Or continue with email</span>
                     </div>
-                </div> -->
+                </div>
 
-                <!-- <form @Submit="handleSubmit()" class="space-y-5">
+                <form @Submit="handleSubmit()" class="space-y-5">
                     <label for="bank_account_name"
                         class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
                         <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> email </span>
@@ -100,7 +105,7 @@ onMounted(() => {
                         :disabled="loading" v-slot:child>
                         {{ loading ? "Creating account..." : "Create Account" }}
                     </Button>
-                </form> -->
+                </form>
 
                 <div class="text-center mt-6">
                     <p class="text-gray-600">
