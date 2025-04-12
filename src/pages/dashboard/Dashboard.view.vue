@@ -17,7 +17,6 @@ const store = StoreUtils
 const userBusiness = store.get('business', 'getBusiness')
 const user = store.get('auth', 'getCurrentUser')
 const transactions = store.get('pay', 'getTransactions')
-const sessionCode = store.get('pay', 'getSessionCode')
 
 
 

@@ -125,7 +125,7 @@ function cancelPayment() {
     </div>
 
     <!-- Delivery Area Selection -->
-    <!-- <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
       <h3 class="font-medium mb-3">Select Delivery Area</h3>
     
       
@@ -150,7 +150,7 @@ function cancelPayment() {
       <p v-if="lookedUpBusiness?.areas?.length === 0 && !isLoading" class="text-center text-gray-500 py-2">
         No delivery areas available
       </p>
-    </div> -->
+    </div>
 
     <!-- Payment Summary -->
     <div class="bg-white rounded-lg shadow-sm p-4 mb-4">

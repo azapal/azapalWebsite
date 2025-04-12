@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import Pay from "../../service/Pay";
+import router from "../../router";
 
 export const usePayStore = defineStore("payStore", {
   state: () => ({
@@ -42,7 +43,6 @@ export const usePayStore = defineStore("payStore", {
       try {
         if (response.data.response_code === '00') {
             console.log('worked')
-            this.sessionCode = response.data.session_code
             location.href = response.data.checkout_url
         }
       } catch (err) {
@@ -52,12 +52,12 @@ export const usePayStore = defineStore("payStore", {
     },
 
     async verifyTransaction(payload: any) {
-      payload.session_code = this.sessionCode
       this.loading = true;
       const response = await Pay.verifyPayment(payload)
       this.loading = false
       try {
         if (response.data.response_code === '00') {
+            await router.push({path:'/success'})
             console.log('worked')
         }
       } catch (err) {

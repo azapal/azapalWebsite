@@ -1,7 +1,18 @@
 <script setup>
 import { ref } from 'vue';
 import HeaderNav from './HeaderNav.vue';
+import StoreUtils from '../utils/storeUtils'
+import router from '../router';
 
+// const store = StoreUtils
+// const sessionCode = store.get('pay', 'getSessionCode')
+// currentRoute = router?.currentRoute?.value?.query.reference
+
+
+// onMounted(() => {
+//     console.log(currentRoute)
+//     if (currentRoute) return store.dispatch('pay', 'verifyTransaction', { reference: currentRoute, session_code:sessionCode});
+// })
 </script>
 
 <template>
