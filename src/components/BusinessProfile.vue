@@ -10,6 +10,7 @@ import formatAmount from '../utils/formatAmount';
 import StoreUtils from '../utils/storeUtils'
 const store = StoreUtils
 const userBusiness = store.get('business', 'getBusiness')
+const transactionsData = store.get('pay', 'getTransactions')
 
 // Active tab state
 const profileTab = ref('dashboard');
@@ -19,44 +20,8 @@ const currentPage = ref(1);
 const itemsPerPage = ref(5);
 const searchQuery = ref('');
 
-// Dummy transactions data
-const transactionsData = ref([
-    { id: 'TX12345', date: '2025-04-05', amount: 1250.00, status: 'success', customer: 'John Smith', method: 'Credit Card' },
-    { id: 'TX12346', date: '2025-04-05', amount: 785.50, status: 'success', customer: 'Sarah Johnson', method: 'Bank Transfer' },
-    { id: 'TX12347', date: '2025-04-04', amount: 2500.00, status: 'success', customer: 'Tech Innovations Inc.', method: 'ACH' },
-    { id: 'TX12348', date: '2025-04-04', amount: 199.99, status: 'failed', customer: 'Michael Brown', method: 'Credit Card' },
-    { id: 'TX12349', date: '2025-04-03', amount: 5000.00, status: 'success', customer: 'Enterprise Solutions', method: 'Wire Transfer' },
-    { id: 'TX12350', date: '2025-04-03', amount: 349.99, status: 'pending', customer: 'Amanda Wilson', method: 'PayPal' },
-    { id: 'TX12351', date: '2025-04-02', amount: 1800.00, status: 'success', customer: 'Global Traders Ltd', method: 'Credit Card' },
-    { id: 'TX12352', date: '2025-04-02', amount: 920.75, status: 'success', customer: 'Robert Chen', method: 'Bank Transfer' },
-    { id: 'TX12353', date: '2025-04-01', amount: 3750.00, status: 'success', customer: 'Digital Platforms Inc', method: 'ACH' },
-    { id: 'TX12354', date: '2025-04-01', amount: 250.00, status: 'failed', customer: 'Patricia Lopez', method: 'Credit Card' },
-    { id: 'TX12355', date: '2025-03-31', amount: 1275.50, status: 'success', customer: 'Emily Davis', method: 'Bank Transfer' },
-    { id: 'TX12356', date: '2025-03-31', amount: 4500.00, status: 'success', customer: 'Innovative Startups Co', method: 'Wire Transfer' },
-    { id: 'TX12357', date: '2025-03-30', amount: 899.99, status: 'pending', customer: 'Thomas Wilson', method: 'PayPal' },
-    { id: 'TX12358', date: '2025-03-30', amount: 650.25, status: 'success', customer: 'Jessica Martinez', method: 'Credit Card' },
-    { id: 'TX12359', date: '2025-03-29', amount: 2250.00, status: 'success', customer: 'David Lee', method: 'Bank Transfer' },
-    { id: 'TX12360', date: '2025-03-29', amount: 399.99, status: 'failed', customer: 'Sandra Miller', method: 'Credit Card' },
-    { id: 'TX12361', date: '2025-03-28', amount: 1750.00, status: 'success', customer: 'Tech Solutions Group', method: 'ACH' },
-]);
-
-const activeTab = ref('ongoing');
-
-// Mock business data - in a real app, this might come from props or API
-const businessData = {
-    name: "Acme Corporation",
-    balance: 24850.75,
-    logo: "https://kwik.delivery/wp-content/uploads/2023/05/kwick_secondary_logo_RGB_green_transparent_background-e1685121401616.png", // Replace with your actual logo path
-    handle: "@quantum_solutions",
-    description: "Innovative payment solutions for modern businesses",
-    analytics: {
-        totalAmount: 258750.45,
-        successfulTransactions: 1247,
-        failedTransactions: 36,
-        pendingTransactions: 12,
-        conversionRate: 97.2
-    }
-};
+const activeTab = ref('NewPayments');
+;
 
 // Chart data for monthly transactions
 const monthlyData = ref([
@@ -126,7 +91,11 @@ const getStatusColor = (status) => {
 };
 
 onMounted(() => {
-    store.dispatch('business', 'readSubscribe')
+    if(userBusiness !== 'null'){
+        store.dispatch('business', 'readSubscribe')
+        store.dispatch('pay', 'getInitializePayment')
+    }
+
 })
 </script>
 
@@ -143,7 +112,7 @@ onMounted(() => {
                     <!-- Business Logo -->
                     <div class="mb-4">
                         <img class="h-24 w-24 rounded-full border-4 border-white dark:border-gray-700 object-cover shadow-md"
-                            :src="businessData.logo" alt="Business Logo" />
+                            :src="userBusiness.logo" alt="Business Logo" />
                     </div>
 
                     <!-- Business Name -->
@@ -169,10 +138,19 @@ onMounted(() => {
                     </div>
                 </div>
 
+                {{ transactionsData }}
                 <!-- Tabs Section -->
                 <div class="w-full">
                     <!-- Tab Headers -->
                     <div class="flex border-b border-gray-200 dark:border-gray-700">
+                        <button @click="activeTab = 'NewPayments'" :class="[
+                            'px-4 py-2 font-medium text-sm',
+                            activeTab === 'NewPayments'
+                                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
+                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                        ]">
+                            NewPayments
+                        </button>
                         <button @click="activeTab = 'ongoing'" :class="[
                             'px-4 py-2 font-medium text-sm',
                             activeTab === 'ongoing'
@@ -181,6 +159,7 @@ onMounted(() => {
                         ]">
                             Ongoing
                         </button>
+                       
                         <button @click="activeTab = 'completed'" :class="[
                             'px-4 py-2 font-medium text-sm',
                             activeTab === 'completed'
@@ -189,19 +168,16 @@ onMounted(() => {
                         ]">
                             Completed
                         </button>
-                        <button @click="activeTab = 'dispute'" :class="[
-                            'px-4 py-2 font-medium text-sm',
-                            activeTab === 'dispute'
-                                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400'
-                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-                        ]">
-                            Dispute
-                        </button>
+                        
                     </div>
 
                     <!-- Tab Content -->
                     <div class="py-4">
-                        <div v-if="activeTab === 'ongoing'" class="text-gray-600 dark:text-gray-300">
+                        <div v-if="activeTab === 'NewPayments'" class="text-gray-600 dark:text-gray-300">
+                            <!-- Dispute tab content would go here -->
+                            <p class="text-center text-sm">NewPayments will appear here</p>
+                        </div>
+                        <div v-else-if="activeTab === 'ongoing'" class="text-gray-600 dark:text-gray-300">
                             <!-- Ongoing tab content would go here -->
                             <p class="text-center text-sm">Ongoing transactions will appear here</p>
                         </div>
@@ -209,10 +185,7 @@ onMounted(() => {
                             <!-- Completed tab content would go here -->
                             <p class="text-center text-sm">Completed transactions will appear here</p>
                         </div>
-                        <div v-else-if="activeTab === 'dispute'" class="text-gray-600 dark:text-gray-300">
-                            <!-- Dispute tab content would go here -->
-                            <p class="text-center text-sm">Disputes will appear here</p>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -236,7 +209,7 @@ onMounted(() => {
                                     <div>
                                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Amount Received</p>
                                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                                            ₦{{ businessData.analytics.totalAmount.toLocaleString() }}
+                                            <!-- ₦{{ businessData.analytics.totalAmount.toLocaleString() }} -->
                                         </h3>
                                         <p class="text-sm text-green-600 dark:text-green-400 mt-2">+12.5% from last
                                             month</p>
@@ -307,7 +280,7 @@ onMounted(() => {
                                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Conversion Rate
                                         </p>
                                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                                            {{ businessData.analytics.conversionRate }}%
+                                            <!-- {{ businessData.analytics.conversionRate }}% -->
                                         </h3>
                                         <p class="text-sm text-green-600 dark:text-green-400 mt-2">+0.4% from last month
                                         </p>

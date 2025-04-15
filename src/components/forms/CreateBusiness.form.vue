@@ -34,110 +34,6 @@ const dispatchModel = ref({
   ]
 });
 
-const addDeliveryArea = () => {
-  dispatchModel.value.deliveryAreas.push({
-    area: "",
-    charge: "",
-    deliveryOption: "interstate",
-    discount: "",
-    additionalInfo: ""
-  });
-};
-
-const removeDeliveryArea = (index) => {
-  dispatchModel.value.deliveryAreas.splice(index, 1);
-};
-
-// Set up reCAPTCHA verifier
-const setupRecaptcha = () => {
-  console.log('Setting up reCAPTCHA...');
-  
-  // Check if the container exists
-  const recaptchaContainer = document.getElementById('recaptcha-container');
-  if (!recaptchaContainer) {
-    console.error('recaptcha-container element not found!');
-    return;
-  }
-  
-  try {
-    // Clear any existing reCAPTCHA if it exists
-    if (window.recaptchaVerifier) {
-      window.recaptchaVerifier.clear();
-    }
-    
-    // Create new reCAPTCHA verifier
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      'size': 'normal', // You can also try 'invisible'
-      'callback': (response) => {
-        console.log('reCAPTCHA verified!', response);
-        sendVerificationCode();
-      },
-      'expired-callback': () => {
-        console.log('reCAPTCHA expired');
-        // Handle expiration
-      }
-    });
-    
-    // Force render the reCAPTCHA
-    window.recaptchaVerifier.render().then(widgetId => {
-      window.recaptchaWidgetId = widgetId;
-      recaptchaRendered.value = true;
-      console.log('reCAPTCHA rendered successfully');
-    });
-  } catch (error) {
-    console.error('Error setting up reCAPTCHA:', error);
-  }
-};
-
-// Function to send verification code
-const sendVerificationCode = () => {
-  // Ensure phone number is in E.164 format (+[country code][phone number])
-  let phoneNumber = createBusinessModel.value.phone_number;
-  
-  // Add '+' prefix if not present
-  if (!phoneNumber.startsWith('+')) {
-    phoneNumber = '+' + phoneNumber;
-  }
-  
-  const appVerifier = window.recaptchaVerifier;
-  
-  signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-    .then((confirmationResult) => {
-      // SMS sent. Prompt user to enter the code.
-      window.confirmationResult = confirmationResult;
-      verificationSent.value = true;
-      console.log("Verification code sent to", phoneNumber);
-    }).catch((error) => {
-      // Error; SMS not sent
-      console.error("Error sending verification code:", error);
-      // Reset reCAPTCHA
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-        recaptchaRendered.value = false;
-        setupRecaptcha();
-      }
-    });
-};
-
-// Function to verify code
-const verifyCode = () => {
-  if (!window.confirmationResult) {
-    console.error("No confirmation result found. Please send verification code first.");
-    return;
-  }
-  
-  window.confirmationResult.confirm(verificationCode.value)
-    .then((result) => {
-      // User signed in successfully.
-      const user = result.user;
-      console.log("User verified:", user);
-      // Now submit the business form
-      submitBusinessForm();
-    }).catch((error) => {
-      // User couldn't sign in (wrong verification code?)
-      console.error("Error verifying code:", error);
-    });
-};
 
 // Submit business form after verification
 const submitBusinessForm = () => {
@@ -161,14 +57,12 @@ const startVerification = () => {
   store.dispatch('auth', 'sendOtp', SendOtpRequest)
 };
 
-onMounted(() => {
-  // Nothing needed on mount now
-});
+
 </script>
 
 <template>
   <div>
-    <OtpValidation v-if="showOtpScreen" />
+    <OtpValidation v-if="showOtpScreen" page="business" :data="{type:selectedType}" />
 
     <form @submit.prevent="startVerification">
       <HeaderNav>
@@ -189,7 +83,7 @@ onMounted(() => {
               <div class="bg-orange-100 p-4 rounded-full mb-4">
                 <Camera class="h-8 w-8 text-orange-600" />
               </div>
-              <h2 class="text-xl font-medium">Seller</h2>
+              <h2 class="text-xl font-medium">Service Provider</h2>
               <p class="text-gray-500 mt-2">Register as a product or service seller</p>
             </div>
 
@@ -198,7 +92,7 @@ onMounted(() => {
               <div class="bg-orange-100 p-4 rounded-full mb-4">
                 <ArrowRightCircle class="h-8 w-8 text-orange-600" />
               </div>
-              <h2 class="text-xl font-medium">Dispatch</h2>
+              <h2 class="text-xl font-medium">Logistics</h2>
               <p class="text-gray-500 mt-2">Register as a delivery or dispatch service</p>
             </div>
           </div>

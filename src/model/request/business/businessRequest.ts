@@ -3,6 +3,7 @@ export type CreateBusinessRequestType = {
     phone_number: string,
     description: string,
     address: string,
+    category:string,
     website: string
 }
 
@@ -12,5 +13,6 @@ export const CreateBusinessRequest: CreateBusinessRequestType = {
     phone_number: "",
     description: "",
     address: "",
-    website: ""
+    category:"",
+    website: "",
 }

@@ -46,6 +46,7 @@ function processPayment() {
   const paymentPayload = {
     business_identification_name: lookedUpBusiness.value?.business?.business_identification_name,
     amount: totalAmount.value,
+    remarks:initiatePaymentModel.remarks
     // Add other necessary payment details
   };
   console.log(paymentPayload)
@@ -87,6 +88,15 @@ function cancelPayment() {
       <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Amount</span>
 
       <input type="tel" id="amount" :disabled="isPaid" v-model="initiatePaymentModel.amount" placeholder="" :required="!isPaid"
+        class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+
+    </label>
+
+    <label for="remarks"
+      class="block mb-1 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
+      <span class="text-xs font-medium text-gray-700 dark:text-gray-200">Remarks</span>
+
+      <input type="tel" id="remarks" v-model="initiatePaymentModel.remarks" placeholder="Payment for nike shoes limited editions 2025" required
         class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
 
     </label>

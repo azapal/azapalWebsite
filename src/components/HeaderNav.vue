@@ -86,13 +86,14 @@ const goToSettings = () => {
                             <div class="text-xs text-gray-500 truncate">{{ user?.email }}</div>
                         </div>
                         
-                        <a 
+                        <router-link
+                            to="/settings" 
                             @click="goToSettings" 
                             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                         >
                             <Settings class="mr-2 h-4 w-4" />
                             Settings
-                        </a>
+                        </router-link >
                         
                         <a 
                             @click="logout" 

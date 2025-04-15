@@ -4,9 +4,13 @@ import HeaderNav from './HeaderNav.vue';
 import StoreUtils from '../utils/storeUtils'
 import router from '../router';
 
-// const store = StoreUtils
-// const sessionCode = store.get('pay', 'getSessionCode')
+const store = StoreUtils
+const getTransactionResponse = store.get('pay', 'getTransactionResponse')
 // currentRoute = router?.currentRoute?.value?.query.reference
+
+const goBackHome =() => {
+    router.push({name:"Dashboard"})
+}
 
 
 // onMounted(() => {
@@ -16,7 +20,7 @@ import router from '../router';
 </script>
 
 <template>
-    <HeaderNav />
+    <!-- <HeaderNav /> -->
     <div class=" bg-white bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
         <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div class="flex justify-center w-full">
@@ -25,9 +29,9 @@ import router from '../router';
             <!-- Header -->
             <div class="px-6 pt-5 relative">
                 <div>
-                    <h2 class="text-2xl font-semibold text-gray-900">{{ orderName || 'Ndubuisi' }}</h2>
-                    <p class="text-gray-600 text-sm mt-1">Your Payment was completed. A dispatch again will
-                        contact you shortly</p>
+                    <h2 class="text-2xl font-semibold text-gray-900">{{ getTransactionResponse?.customer_name ||
+                        'Ndubuisi' }}</h2>
+                    <p class="text-gray-600 text-sm mt-1">{{ getTransactionResponse?.message }}</p>
                 </div>
 
                 <!-- <button 
@@ -43,7 +47,8 @@ import router from '../router';
             <div class="p-6 relative">
                 <!-- Close button -->
 
-                <h3 class="text-xl font-semibold text-gray-900">Meet your rider and say "{{ pin || '6690' }}"</h3>
+                <h3 class="text-xl font-semibold text-gray-900">Meet your rider and say "{{ getTransactionResponse?.code
+                    || '6690' }}"</h3>
                 <p class="text-gray-600 text-sm mt-1 mb-6">Here's how it works</p>
 
                 <!-- Steps -->
@@ -103,14 +108,12 @@ import router from '../router';
                 </div>
 
                 <!-- Button -->
-                <!-- <button 
-        @click="handleConfirm" 
-        class="w-full py-4 bg-green-800 hover:bg-green-900 text-white font-medium rounded-lg transition-colors"
-    >
-        I Understand
-    </button> -->
+                <button @click="goBackHome"
+                    class="w-full py-4 bg-green-800 hover:bg-green-900 text-white font-medium rounded-lg transition-colors">
+                    I Understand
+                </button>
             </div>
         </div>
     </div>
-       
+
 </template>

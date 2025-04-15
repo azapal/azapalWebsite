@@ -38,4 +38,8 @@ export default {
     payout(payload:any){
         return apiClient.businessClient.post('payout', payload)
     },
+
+    updatePayment(payload:string){
+        return apiClient.businessClient.post(`update_payment?session_code=${payload}`)
+    },
 }

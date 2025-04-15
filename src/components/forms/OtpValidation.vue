@@ -75,6 +75,12 @@
   import StoreUtils from '../../utils/storeUtils';
   import { SendOtpRequest } from '../../model/request/auth/authenticationRequest';
   import { CreateBusinessRequest } from '../../model/request/business/businessRequest';
+  import { SignupRequest } from '../../model/request/auth/authenticationRequest';
+
+  const props = defineProps({
+    page:String,
+    data:{}
+  })
   // Array to store OTP digits (6 digits)
   const otpDigits = ref(['', '', '', '', '']);
   const inputRefs = ref([]);
@@ -212,12 +218,19 @@
   };
   
   // Verify OTP function
-  const verifyOTP = () => {
+  const verifyOTP = async () => {
     if (isComplete.value) {
       const otpValue = otpDigits.value.join(''); 
-      store.dispatch('auth', 'verifyOtp', otpValue)
+      if(props.page === 'signup') await store.dispatch('auth', 'verifyInitiatingOtp', {otp:otpValue, email: props?.data?.email});
+
+      if(props.page === 'business') await store.dispatch('auth', 'verifyOtp', otpValue);
+
       if(isVerificationDone){
-        store.dispatch('business', 'createBusiness', CreateBusinessRequest)
+        if(props?.page === 'signup') await store.dispatch('auth', 'signUp', SignupRequest);
+        if(props?.page === 'business'){
+          CreateBusinessRequest.category = props?.data?.type
+          await store.dispatch('business', 'createBusiness', CreateBusinessRequest);
+        }
       }
   };
 }

@@ -10,7 +10,7 @@ export const usePayStore = defineStore("payStore", {
     business: null,
     lookup: null,
     transactions:null,
-    sessionCode:null
+    transactionResponse:null
   }),
 
   getters: {
@@ -20,7 +20,7 @@ export const usePayStore = defineStore("payStore", {
     getBanks: state => state.banks,
     getLookUp: state => state.lookup,
     getTransactions:state => state.transactions,
-    getSessionCode:state => state.sessionCode
+    getTransactionResponse:state => state.transactionResponse
   },
 
   actions: {
@@ -57,6 +57,7 @@ export const usePayStore = defineStore("payStore", {
       this.loading = false
       try {
         if (response.data.response_code === '00') {
+            this.transactionResponse = response.data.data
             await router.push({path:'/success'})
             console.log('worked')
         }

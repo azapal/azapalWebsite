@@ -3,35 +3,47 @@ import { ref, onMounted } from "vue";
 import Button from "../../components/ui/button.vue";
 import router from "../../router";
 import StoreUtils from '../../utils/storeUtils'
+import OtpValidation from "../../components/forms/OtpValidation.vue";
+import { SendOtpRequest, SignupRequest } from "../../model/request/auth/authenticationRequest";
 
 const current_route = router.currentRoute.value.query
 const store = StoreUtils
-const loading = ref(store.get('auth', 'getLoading'))
+const loading = ref(false)
 const clientKey = "sbaw37v8xwwou3v490"; // Replace with your actual client key
 const redirectUri = "https://number1fans.vercel.app/create-account"; // Your redirect URI
+let showOtpScreen = store.get('auth', 'getShowOtpScreen')
+const signUpRequestModel = ref(SignupRequest)
 
 const handleSocialSignUp = (provider: string) => {
     const csrfState = Math.random().toString(36).substring(2); // CSRF protection
     localStorage.setItem("csrfState", csrfState);
-    if(provider === 'Tiktok'){
+    if (provider === 'Tiktok') {
         const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientKey}&response_type=code&scope=user.info.basic&redirect_uri=${redirectUri}&state=${csrfState}`;
         window.location.href = authUrl;
-    }else{
-        window.location.href = '/profile'        
+    } else {
+        window.location.href = '/profile'
     }
 };
 
+// Start the verification process
+const startVerification = () => {
+    loading.value = true
+    SendOtpRequest.phone_number = signUpRequestModel.value.phone_number
+    SendOtpRequest.email = signUpRequestModel.value.email
+    SendOtpRequest.platform = 'azapal'
+    SendOtpRequest.source = 'web'
+    store.dispatch('auth', 'sendInitiatingOtp', SendOtpRequest)
+    loading.value = false
+};
 
-const handleSubmit  = ()=> {
-    
-}
 
 onMounted(() => {
-  if (current_route.code) return store.dispatch('auth', 'tictokLogin_', { access_token: current_route?.code });
+    if (current_route.code) return store.dispatch('auth', 'tictokLogin_', { access_token: current_route?.code });
 })
 
 </script>
 <template>
+    <OtpValidation v-if="showOtpScreen" page="signup" :data="signUpRequestModel" />
     <div class="min-h-screen flex flex-col bg-white">
         <div class="flex-1 flex flex-col items-center justify-center px-4 py-12">
             <div class="w-full max-w-md">
@@ -75,26 +87,37 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <form @Submit="handleSubmit()" class="space-y-5">
-                    <label for="bank_account_name"
+                <form @submit.prevent="startVerification()" class="space-y-5">
+                    <label for="email"
                         class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
                         <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> email </span>
 
-                        <input type="text" id="bank_account_name" placeholder="example@email.com"
+                        <input type="text" id="sign_up_email" v-model="signUpRequestModel.email"
+                            placeholder="example@email.com"
                             class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
                     </label>
-                    <label for="bank_account_name"
+                    <label for="password"
                         class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
                         <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> password </span>
 
-                        <input type="text" id="bank_account_name" placeholder="********"
+                        <input type="text" id="password" v-model="signUpRequestModel.password" placeholder="********"
                             class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
                     </label>
-                    <label for="bank_account_name"
+                    <label for="firstname"
                         class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> confirm password </span>
+                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200">first name</span>
 
-                        <input type="text" id="bank_account_name" placeholder="**********"
+                        <input type="text" id="firstname" v-model="signUpRequestModel.first_name"
+                            placeholder="**********"
+                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+                    </label>
+
+                    <label for="last_name"
+                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
+                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200">last name</span>
+
+                        <input type="text" id="last_name" v-model="signUpRequestModel.last_name"
+                            placeholder="**********"
                             class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
                     </label>
 

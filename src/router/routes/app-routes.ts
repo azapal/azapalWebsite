@@ -90,5 +90,17 @@ export const appRoute: BaseRouteProps[] = [
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/profile/verification/Index.view.vue"),
       },
+
+      {
+        path: "/settings",
+        name: "SETTINGS",
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
+        },
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../../pages/settings/Settings.vue"),
+      },
     
 ]

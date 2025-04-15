@@ -1,5 +1,5 @@
 import { apiClient } from "./Base"
-import type { SendOtpRequestType, LoginRequestType } from "../model/request/auth/authenticationRequest"
+import type { SendOtpRequestType, LoginRequestType, SignupRequestType } from "../model/request/auth/authenticationRequest"
 
 export default {
     tiktok(payload:any){
@@ -13,5 +13,16 @@ export default {
     },
     login(payload:LoginRequestType){
         return apiClient.accountClient.post(`authenticate-user`, payload)
-    }
+    },
+
+    signup(payload:SignupRequestType){
+        return apiClient.accountClient.post(`register-users`, payload)
+    },
+
+    verifyInitiatingOtp(otp:string, email:string){
+        return apiClient.accountClient.get(`verify/otp?otp=${otp}&email=${email}`)
+    },
+    sendInitiatingOtp(payload:SendOtpRequestType){
+        return apiClient.accountClient.post(`verify/otp`, payload)
+    },
 }
