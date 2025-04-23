@@ -65,11 +65,11 @@ onMounted(() => {
                         <span>Continue with Google</span>
                     </Button> -->
 
-                    <Button variant="outline" class="w-full justify-center gap-2 font-medium border-gray-300"
+                    <!-- <Button variant="outline" class="w-full justify-center gap-2 font-medium border-gray-300"
                         @click="() => handleSocialSignUp('Google')" :disabled="loading" v-slot:child>
                         <Instagram class="w-5 h-5" />
                         <span>Continue with Instagram</span>
-                    </Button>
+                    </Button> -->
 
                     <Button variant="outline" class="w-full justify-center gap-2 font-medium border-gray-300"
                         @click="() => handleSocialSignUp('Tiktok')" :disabled="loading" v-slot:child>

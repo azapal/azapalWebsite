@@ -47,7 +47,7 @@ const goBackHome =() => {
             <div class="p-6 relative">
                 <!-- Close button -->
 
-                <h3 class="text-xl font-semibold text-gray-900">Meet your rider and say "{{ getTransactionResponse?.code
+                <h3 class="text-xl font-semibold text-gray-900">When your Delivery lands, meet your rider and say "{{ getTransactionResponse?.code
                     || '6690' }}"</h3>
                 <p class="text-gray-600 text-sm mt-1 mb-6">Here's how it works</p>
 
@@ -56,7 +56,7 @@ const goBackHome =() => {
                     <!-- Step 1 -->
                     <div class="flex items-center bg-gray-50 rounded-xl p-4">
                         <div
-                            class="w-8 h-8 rounded-full bg-green-800 text-white flex items-center justify-center mr-4 flex-shrink-0">
+                            class="w-8 h-8 rounded-full bg-orange-800 text-white flex items-center justify-center mr-4 flex-shrink-0">
                             1
                         </div>
                         <div class="flex justify-between items-center w-full">
@@ -67,7 +67,7 @@ const goBackHome =() => {
                     <!-- Step 2 -->
                     <div class="flex items-center bg-gray-50 rounded-xl p-4">
                         <div
-                            class="w-8 h-8 rounded-full bg-green-800 text-white flex items-center justify-center mr-4 flex-shrink-0">
+                            class="w-8 h-8 rounded-full bg-orange-800 text-white flex items-center justify-center mr-4 flex-shrink-0">
                             2
                         </div>
                         <div class="flex justify-between items-center w-full">
@@ -78,7 +78,7 @@ const goBackHome =() => {
                     <!-- Step 3 -->
                     <div class="flex items-center bg-gray-50 rounded-xl p-4">
                         <div
-                            class="w-8 h-8 rounded-full bg-green-800 text-white flex items-center justify-center mr-4 flex-shrink-0">
+                            class="w-8 h-8 rounded-full bg-orange-800 text-white flex items-center justify-center mr-4 flex-shrink-0">
                             3
                         </div>
                         <div class="flex justify-between items-center w-full">
@@ -99,17 +99,16 @@ const goBackHome =() => {
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-medium text-gray-900 dark:text-white">Bank Account Security</h3>
+                        <h3 class="text-sm font-medium text-gray-900 dark:text-white">Security Note</h3>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Your bank account details are securely encrypted and protected. We comply with
-                            financial industry standards to ensure your data remains safe.
+                            Azapal will never request for your 4 digit code. do not give out your code without seeing or recieving your delivery
                         </p>
                     </div>
                 </div>
 
                 <!-- Button -->
                 <button @click="goBackHome"
-                    class="w-full py-4 bg-green-800 hover:bg-green-900 text-white font-medium rounded-lg transition-colors">
+                    class="w-full mt-3 py-4 bg-orange-800 hover:bg-orange-900 text-white font-medium rounded-lg transition-colors">
                     I Understand
                 </button>
             </div>

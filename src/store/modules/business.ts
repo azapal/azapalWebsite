@@ -5,14 +5,16 @@ export const useBusinessStore = defineStore("businessStore", {
     loading: false,
     business: null,
     userBank: null,
-    subscribe:[]
+    subscribe:[],
+    transactions:null
   }),
 
   getters: {
     getBusiness: state => state.business,
     getLoading: state => state.loading,
     getUserBank: state => state.userBank,
-    getSubscribe: state => state.subscribe
+    getSubscribe: state => state.subscribe,
+    getTransactions: state => state.transactions
 
   },
 
@@ -58,6 +60,20 @@ export const useBusinessStore = defineStore("businessStore", {
       try {
         if (response.data.response_code === '00') {
           this.business = response.data?.data
+        } 
+      } catch (err) {
+        this.loading = false
+        console.log('error:', err)
+      }
+    },
+
+    async readUserTransactions() {
+      this.loading = true;
+      const response = await Business.readUserTransactions()
+      this.loading = false
+      try {
+        if (response.data.response_code === '00') {
+          this.transactions = response.data?.data
         } 
       } catch (err) {
         this.loading = false

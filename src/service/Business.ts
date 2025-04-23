@@ -23,6 +23,10 @@ export default {
         return apiClient.businessClient.get(`business`)
     },
 
+    readUserTransactions(){
+        return apiClient.businessClient.get(`transactions/?page=2&page_size=20`)
+    },
+
     readSubscribe(){
         return apiClient.businessClient.get(`subscribe`)
     },
