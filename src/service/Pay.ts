@@ -28,7 +28,7 @@ export default {
     },
 
     getInitiatedPayment(){
-        return apiClient.businessClient.get('initialize_payment/?page=2&page_size=20')
+        return apiClient.businessClient.get('initialize_payment')
     },
 
     verifyPayment(payload:any){

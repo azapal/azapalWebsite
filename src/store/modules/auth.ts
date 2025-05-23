@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import Auth from "../../service/Auth";
 import router from "../../router"
 import type { SendOtpRequestType, LoginRequestType, SignupRequestType } from "../../model/request/auth/authenticationRequest";
+
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
     loading: false,
@@ -33,7 +34,7 @@ export const useAuthStore = defineStore("authStore", {
           this.user = response.data.user_info
           localStorage.user = JSON.stringify(response.data.user_info)
           localStorage.token = response.data.token
-          router.push({name:'Dashboard'})
+          await router.push({name: 'Dashboard'})
         }else{
           alert(responseData.error)
         }
@@ -76,33 +77,9 @@ export const useAuthStore = defineStore("authStore", {
       }
      },
 
-     async login(payload:LoginRequestType){
-      this.loading = true;
-      const response = await Auth.login(payload)
-      this.loading = false
-      let responseData = response.data
-      try{
-        if(responseData.code === "00"){
-          const currentRoute = router.currentRoute?.value?.query?.redirectFrom
-          this.token = responseData.token
-          this.user = responseData.data
-          localStorage.user = JSON.stringify(responseData.data)
-          localStorage.token = responseData.token
-          if(currentRoute){
-            router.push({path:currentRoute as string})
-          }else{
-            router.push({name:"Dashboard"})
-          }
-         
-        }else{
-          alert(responseData.message)
-        }
-      }catch(err){
-        this.loading = false
-        console.log('error:', err)
-        alert(responseData.message)
-      }
-     },
+      login(payload:LoginRequestType){
+         return Auth.login(payload)
+      },
 
      async signUp(payload:SignupRequestType){
       this.loading = true;
@@ -115,7 +92,7 @@ export const useAuthStore = defineStore("authStore", {
           this.user = responseData.data
           localStorage.user = JSON.stringify(responseData.data)
           localStorage.token = responseData.token
-          router.push({name:"Dashboard"})
+          await router.push({name: "Dashboard"})
         }else{
           alert(responseData.message)
         }

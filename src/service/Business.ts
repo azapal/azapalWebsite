@@ -35,6 +35,28 @@ export default {
         return apiClient.businessClient.post(`subscribe`,payload)
     },
 
+    createCooperative(payload:any){
+        return apiClient.businessClient.post(`cooperative/`,payload)
+    },
 
+    readCooperativeByUserId(user_id:string){
+        return apiClient.businessClient.get(`cooperative/${user_id}/`)
+    },
+
+    createVerification(payload:any){
+        return apiClient.businessClient.post(`cooperative_verifications/`,payload)
+    },
+
+    readVerificationByCooperativeId(cooperative_id:string){
+        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}`)
+    },
+
+    updateVerificationByCooperativeId(payload:any, cooperative_id:string){
+        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}`,payload)
+    },
+
+    deleteVerificationByCooperativeId(cooperative_id:string){
+        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}`)
+    }
    
 }

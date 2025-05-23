@@ -73,8 +73,9 @@ export const usePayStore = defineStore("payStore", {
       const response = await Pay.getInitiatedPayment()
       this.loading = false
       try {
-        if (response.data.response_code === '00') {
-            this.transactions = response.data.data
+        if (response.data.results.response_code === '00') {
+          console.log(response?.data?.results?.data)
+            this.transactions = response?.data?.results?.data
         }
       } catch (err) {
         this.loading = false

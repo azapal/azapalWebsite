@@ -6,7 +6,8 @@ export const useBusinessStore = defineStore("businessStore", {
     business: null,
     userBank: null,
     subscribe:[],
-    transactions:null
+    transactions:null,
+    cooperative:null,
   }),
 
   getters: {
@@ -14,7 +15,8 @@ export const useBusinessStore = defineStore("businessStore", {
     getLoading: state => state.loading,
     getUserBank: state => state.userBank,
     getSubscribe: state => state.subscribe,
-    getTransactions: state => state.transactions
+    getTransactions: state => state.transactions,
+    getUserCooperative:state => state.cooperative
 
   },
 
@@ -36,6 +38,15 @@ export const useBusinessStore = defineStore("businessStore", {
         console.log('error:', err)
       }
     },
+
+    createCooperative(payload: any) {
+      return Business.createCooperative(payload)
+    },
+
+    readCooperativeByUserId(payload: any) {
+      return Business.readCooperativeByUserId(payload)
+    },
+
 
     async readSubscribe() {
       this.loading = true;
@@ -73,7 +84,7 @@ export const useBusinessStore = defineStore("businessStore", {
       this.loading = false
       try {
         if (response.data.response_code === '00') {
-          this.transactions = response.data?.data
+          this.transactions = response.data?.results?.data
         } 
       } catch (err) {
         this.loading = false

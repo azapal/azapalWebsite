@@ -1,5 +1,10 @@
 
 export const RouteConstantUtil = {
+    layout:{
+        auth:"auth",
+        dashboard:"dashboard",
+        settings:"settings"
+    },
     auth: {
         login: "Login",
         initiateForgotPassword: "InitiateForgotPassword",

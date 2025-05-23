@@ -6,7 +6,7 @@ import StoreUtils from '../utils/storeUtils';
 
 // Get current route name
 const currentRoute = router?.currentRoute?.value?.name;
-const isDashboardRoute = currentRoute === 'Dashboard';
+const isDashboardRoute = currentRoute === 'SETTINGS';
 const store = StoreUtils;
 
 const user = store.get('auth', 'getCurrentUser');
@@ -43,19 +43,19 @@ const goToSettings = () => {
         <div class="p-2 text-gray-900 bg-white flex justify-between items-center font-medium capitalize">
             <div class="px-2 py-2 mr-2 flex items-center gap-3">
                 <!-- Show back arrow and route name only when not on dashboard -->
-                <template v-if="!isDashboardRoute">
+                <template v-if="isDashboardRoute">
                     <ArrowLeft class="cursor-pointer" @click="goBack" />
                     <span class="font-bold">{{ currentRoute }}</span>
                 </template>
 
                 <!-- Always show company logo -->
-                <div v-if="isDashboardRoute"
+                <div v-else
                     class="text-2xl h-8 font-bold bg-gradient-to-r from-[#EA580C] to-[#2563EB] text-transparent bg-clip-text">
                     Azapal
                 </div>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center  gap-2">
                 <slot name="el"></slot>
                 
                 <!-- User dropdown menu -->

@@ -18,8 +18,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    <HeaderNav />
-
     <div class="w-full">
 
         <div v-if="loading" class="flex justify-center items-center h-[40vh]">

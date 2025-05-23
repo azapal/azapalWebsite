@@ -5,10 +5,11 @@ import router from "../../router";
 import StoreUtils from '../../utils/storeUtils'
 import { LoginRequest } from "../../model/request/auth/authenticationRequest";
 import {Eye, EyeClosed} from 'lucide-vue-next'
+import {notify} from "../../utils/toast.ts";
 
 const current_route = router.currentRoute.value.query
 const store = StoreUtils
-const loading = ref(store.get('auth', 'getLoading'))
+const loading = ref(false)
 const clientKey = "sbaw37v8xwwou3v490"; // Replace with your actual client key
 const redirectUri = "https://number1fans.vercel.app/create-account"; // Your redirect URI
 
@@ -27,8 +28,35 @@ const loginRequestModel = ref(LoginRequest)
 const passwordVisible = ref(false)
 
 
-const handleSubmit  = ()=> {
-    store.dispatch('auth', 'login', loginRequestModel.value)
+const handleSubmit  = async () => {
+      loading.value = true;
+      try{
+
+        const response = await store.dispatch('auth', 'login', loginRequestModel.value)
+        console.log(response)
+        let responseData = response.data
+        loading.value = false;
+
+        if(responseData.code === "00"){
+          const currentRoute = router.currentRoute?.value?.query?.redirectFrom
+          store.commit('auth', 'token', responseData.token)
+          store.commit('auth', 'user', responseData.data)
+          localStorage.user = JSON.stringify(responseData.data)
+          localStorage.token = responseData.token
+          if(currentRoute){
+            await router.push({path: currentRoute as string})
+          }else{
+            await router.push({name: "Dashboard"})
+          }
+
+        }else{
+          notify(responseData.message)
+        }
+      }catch(err){
+        loading.value = false
+        console.log('error:', err)
+        notify(responseData.message)
+      }
     
 }
 
