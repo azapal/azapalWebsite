@@ -55,7 +55,7 @@ const handleSubmit  = async () => {
       }catch(err){
         loading.value = false
         console.log('error:', err)
-        notify(responseData.message)
+        notify(String(err))
       }
     
 }
