@@ -46,7 +46,7 @@ const handleSubmit  = async () => {
           if(currentRoute){
             await router.push({path: currentRoute as string})
           }else{
-            await router.push({name: "Dashboard"})
+            await router.push({path: "/business/vendor"})
           }
 
         }else{

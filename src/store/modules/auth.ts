@@ -34,7 +34,7 @@ export const useAuthStore = defineStore("authStore", {
           this.user = response.data.user_info
           localStorage.user = JSON.stringify(response.data.user_info)
           localStorage.token = response.data.token
-          await router.push({name: 'Dashboard'})
+          await router.push({path:'/business/vendor'})
         }else{
           alert(responseData.error)
         }
@@ -43,6 +43,7 @@ export const useAuthStore = defineStore("authStore", {
         console.log('error:', err)
       }
      },
+
      async sendOtp(payload:SendOtpRequestType){
       this.loading = true;
       const response = await Auth.sendOtp(payload)
@@ -59,6 +60,7 @@ export const useAuthStore = defineStore("authStore", {
         console.log('error:', err)
       }
      },
+
      async verifyOtp(payload:string){
       this.loading = true;
       const response = await Auth.verifyOtp(payload)
@@ -119,6 +121,7 @@ export const useAuthStore = defineStore("authStore", {
         console.log('error:', err)
       }
      },
+
      async verifyInitiatingOtp(payload:{otp:"", email:""}){
       this.loading = true;
       const response = await Auth.verifyInitiatingOtp(payload?.otp, payload?.email)

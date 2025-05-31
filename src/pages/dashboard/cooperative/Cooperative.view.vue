@@ -3,7 +3,7 @@ import StoreUtils from '../../../utils/storeUtils.js'
 import {onMounted, ref} from "vue";
 import CooperativeProductDescriptionPage from "../../../components/productDescription/CooperativeProductDescriptionPage.vue";
 import DashboardLayout from "../layout/DashboardLayout.vue";
-import CooperativeProfile from "../../../components/CooperativeProfile.vue";
+import CooperativeProfile from "./CooperativeProfile.vue";
 import {notify} from "../../../utils/toast.js";
 
 const store = StoreUtils
@@ -19,7 +19,17 @@ const getCooperative = async () => {
     let responseData = await response.data;
     loading.value = false
     if(responseData.code === "00"){
-      store.commit('business', 'cooperative', responseData.data);
+      await store.commit('business', 'cooperative', responseData.data);
+      console.log(responseData);
+      try{
+        const response2 = await  store.dispatch('business', 'readMembersByCooperativeId', responseData?.data.id)
+        let responseData2 = await response2.data;
+        if(responseData2.code === "00"){
+          await store.commit('business', 'cooperativeMembers', responseData2.data);
+        }
+      }catch(e){
+        console.log(e)
+      }
     }
   }catch(err){
     loading.value = false

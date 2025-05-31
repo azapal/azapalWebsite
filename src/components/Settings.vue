@@ -1,15 +1,29 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import HeaderNav from './HeaderNav.vue'
 import ContactEmailManagement from './ContactEmailManagement.vue'
 import ApiConfiguration from './ApiConfiguration.vue'
+import StoreUtils from "../utils/storeUtils.js";
+import Uploader from "./Uploader.vue";
+
+const store = StoreUtils
+const user = store.get('auth', 'getCurrentUser')
+const cacRef = ref()
+const memorandomRef = ref()
+const files = ref([])
+const isDragging = ref(false)
+const isUploading = ref(false)
+const uploadProgress = ref(0)
+const uploadSuccess = ref(false)
+const errorMessage = ref('')
+
 // Tabs state
 const activeTab = ref('profile')
 const tabs = [
   { id: 'profile', label: 'Profile' },
-  { id: 'contact', label: 'Contact' },
+  // { id: 'contact', label: 'Contact' },
   { id: 'compliance', label: 'Compliance' },
-  { id: 'api', label: 'API Keys & Webhooks' }
+  // { id: 'api', label: 'API Keys & Webhooks' }
 ]
 
 // Switch tab function
@@ -18,14 +32,11 @@ const switchTab = (tabId) => {
 }
 
 // Personal Information
-const firstName = ref('chibuike')
-const lastName = ref('ukonu')
-const email = ref('ndubisjnr@gmail.com')
-const phoneNumber = ref('9049929256')
-const isDeveloper = ref(true)
+const userProfile = ref(user)
+
 
 // Authentication
-const twoFactorEnabled = ref(true)
+const twoFactorEnabled = ref(false)
 
 // Methods
 const saveChanges = () => {
@@ -47,6 +58,107 @@ const generateBackupCodes = () => {
   // Logic to generate backup codes
   console.log('Generating backup codes...')
 }
+
+const addFiles = (newFiles) => {
+  errorMessage.value = '';
+  uploadSuccess.value = false;
+
+  // Add new files to the existing array
+  files.value = [...files.value, ...newFiles];
+}
+function removeFile(index) {
+  files.value.splice(index, 1);
+  errorMessage.value = '';
+  uploadSuccess.value = false;
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function uploadFiles() {
+  if (!this.files.length) return;
+
+  this.isUploading = true;
+  this.uploadProgress = 0;
+  this.errorMessage = '';
+  this.uploadSuccess = false;
+
+  // Simulate upload progress
+  const interval = setInterval(() => {
+    this.uploadProgress += 5;
+
+    if (this.uploadProgress >= 100) {
+      clearInterval(interval);
+      this.handleUploadCompletion();
+    }
+  }, 100);
+
+  // In a real implementation, you would use something like this:
+  /*
+  const formData = new FormData();
+  this.files.forEach(file => {
+    formData.append('files', file);
+  });
+
+  axios.post('your-cloud-upload-endpoint', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    onUploadProgress: (progressEvent) => {
+      this.uploadProgress = Math.round(
+        (progressEvent.loaded * 100) / progressEvent.total
+      );
+    }
+  })
+  .then(response => {
+    this.handleUploadCompletion(true);
+    // Handle success response
+  })
+  .catch(error => {
+    this.isUploading = false;
+    this.errorMessage = 'Upload failed. Please try again.';
+    // Handle error
+  });
+  */
+}
+
+function handleUploadCompletion(success = true) {
+  this.isUploading = false;
+
+  if (success) {
+    this.uploadSuccess = true;
+    this.files = [];
+  } else {
+    this.errorMessage = 'Upload failed. Please try again.';
+  }
+}
+
+
+function triggerFileInput() {
+  cacRef.value.click();
+}
+function handleFileSelection(event) {
+  console.log(event);
+  const newFiles = event.target.files;
+  addFiles(newFiles);
+
+  // Reset the input so the same file can be selected again if removed
+  event.target.value = null;
+}
+// function handleFileDrop(event) {
+//   this.isDragging = false;
+//   const newFiles = Array.from(event.dataTransfer.files);
+//   addFiles(newFiles);
+// }
+
+onMounted(() => {
+  store.dispatch('business', 'readBank')
+})
 </script>
 
 <template>
@@ -60,7 +172,7 @@ const generateBackupCodes = () => {
             v-for="tab in tabs" 
             :key="tab.id"
             @click="switchTab(tab.id)"
-            class="py-4 px-1 relative text-xs"
+            class="py-4 px-1 relative text-sm"
             :class="[
               activeTab === tab.id 
                 ? 'text-orange-500 font-medium' 
@@ -81,40 +193,40 @@ const generateBackupCodes = () => {
       <div v-if="activeTab === 'profile'">
         <!-- Personal Information Section -->
         <div class="bg-white rounded-md shadow-sm p-6 mb-6">
-          <h2 class="text-xs font-medium text-gray-700 mb-6">Personal Information</h2>
+          <h2 class="text-sm font-medium text-gray-700 mb-6">Personal Information</h2>
 
           <div class="mb-4">
-            <label class="block text-xs font-medium text-gray-700 mb-2">Full Name</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
             <div class="flex gap-4">
               <input 
                 type="text" 
-                v-model="firstName" 
+                v-model="userProfile.first_name"
                 placeholder="First name"
-                class="w-full px-3 py-2 border border-gray-300 text-xs rounded-md" 
+                class="w-full px-3 py-2 border border-gray-300 text-sm rounded-md" 
               />
               <input 
                 type="text" 
-                v-model="lastName" 
+                v-model="userProfile.last_name"
                 placeholder="Last name"
-                class="w-full px-3 py-2 border border-gray-300 text-xs  rounded-md" 
+                class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md" 
               />
             </div>
           </div>
 
           <div class="mb-4">
-            <label class="block text-xs font-medium text-gray-700 mb-2">Email</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <input 
               type="email" 
-              v-model="email" 
-              class="w-full px-3 py-2 border border-gray-300 text-xs  rounded-md" 
+              v-model="userProfile.email"
+              class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md" 
             />
           </div>
 
           <div class="mb-4">
-            <label class="block text-xs font-medium text-gray-700  mb-2">Phone Number</label>
+            <label class="block text-sm font-medium text-gray-700  mb-2">Phone Number</label>
             <div class="flex gap-2">
               <div class="relative">
-                <select class="appearance-none px-3 text-xs  py-2 pr-8 border border-gray-300 rounded-md bg-white">
+                <select class="appearance-none px-3 text-sm  py-2 pr-8 border border-gray-300 rounded-md bg-white">
                   <option>+234</option>
                 </select>
                 <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -129,15 +241,15 @@ const generateBackupCodes = () => {
               </div>
               <input 
                 type="tel" 
-                v-model="phoneNumber"
-                class="w-full px-3 py-2 text-xs  border border-gray-300 rounded-md" 
+                v-model="userProfile.phone_number"
+                class="w-full px-3 py-2 text-sm  border border-gray-300 rounded-md" 
               />
             </div>
           </div>
 
           <div class="flex justify-end">
             <button 
-              class="px-4 py-2 bg-gray-100 text-gray-600 text-xs rounded-md hover:bg-gray-200"
+              class="px-4 py-2 bg-gray-100 text-gray-600 cursor-pointer text-sm rounded-md hover:bg-gray-200"
               @click="saveChanges"
             >
               Save Changes
@@ -147,13 +259,13 @@ const generateBackupCodes = () => {
 
         <!-- Authentication Section -->
         <div class="bg-white rounded-md shadow-sm p-6">
-          <h2 class="text-xs font-medium text-gray-700 mb-6">Authentication</h2>
+          <h2 class="text-sm font-medium text-gray-700 mb-6">Authentication</h2>
 
           <div class="mb-4">
             <div class="flex justify-between items-center">
-              <label class="block text-xs font-medium text-gray-700">Password</label>
+              <label class="block text-sm font-medium text-gray-700">Password</label>
               <button 
-                class="px-4 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                class="px-4 py-2 cursor-pointer text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
                 @click="changePassword"
               >
                 Change Password
@@ -164,7 +276,7 @@ const generateBackupCodes = () => {
           <div class="mb-4">
             <div class="flex justify-between items-center">
               <div class="flex items-center gap-1">
-                <label class="block text-xs font-medium text-gray-700">Two-factor Auth</label>
+                <label class="block text-sm font-medium text-gray-700">Two-factor Auth</label>
                 <button class="text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path 
@@ -177,19 +289,24 @@ const generateBackupCodes = () => {
                 </button>
               </div>
               <div class="flex items-center">
-                <span class="mr-2 text-xs">Enabled</span>
-                <div class="w-12 h-6 bg-green-500 rounded-full flex items-center p-1">
-                  <div class="w-4 h-4 bg-white rounded-full ml-auto"></div>
-                </div>
+<!--                <span class="mr-2 text-sm">Enabled</span>-->
+                <input type="checkbox" class="w-5 h-5"/>
+<!--                <div class="w-12 h-6 bg-green-500 rounded-full flex items-center p-1">-->
+<!--                  <div class="w-4 h-4 bg-white rounded-full ml-auto"></div>-->
+<!--                </div>-->
               </div>
             </div>
           </div>
 
-          <p class="text-xs text-gray-600 mb-4">
-            You cannot disable two-factor authentication because you belong to a business that requires it.
+<!--          <p class="text-sm text-gray-600 mb-4">-->
+<!--            You cannot disable two-factor authentication because you belong to a business that requires it.-->
+<!--          </p> -->
+
+          <p class="text-sm text-gray-600 mb-4">
+            this feature will soon be avaliable.
           </p>
 
-          <!-- <p class="text-xs text-gray-600">
+          <!-- <p class="text-sm text-gray-600">
             If you lose access to your authentication device, use any of your backup codes to login to your account.
             <button class="text-blue-500 hover:underline" @click="generateBackupCodes">
               Generate new backup codes.
@@ -205,26 +322,139 @@ const generateBackupCodes = () => {
       </div>
 
       <!-- Compliance Tab -->
-      <div v-if="activeTab === 'compliance'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-xs font-medium text-gray-700 mb-6">Compliance Settings</h2>
-        <p class="text-gray-600">Compliance tab content goes here.</p>
+      <div v-if="activeTab === 'compliance'" >
+        <div class="bg-white rounded-md shadow-sm p-6 mb-5">
+          <h2 class="text-sm font-medium text-gray-700 mb-6">Personal Information Verification</h2>
+          <div class="flex justify-between items-center">
+            <p class="text-sm text-gray-700 w-1/2">Add your ID document for verification </p>
+            <router-link to="/identity-verification" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Proceed</router-link>
+
+<!--            <div class="text-sm">-->
+<!--              <p>International Passport</p>-->
+<!--              <p>documentname.png</p>-->
+<!--            </div>-->
+<!--            <button class="text-white text-sm p-2 rounded-full cursor-pointer bg-green-500">verified</button>-->
+
+          </div>
+        </div>
+
+        <div class="bg-white rounded-md shadow-sm p-6 mb-5">
+          <h2 class="text-sm font-medium text-gray-700 mb-6">Bank Information</h2>
+          <div class="flex justify-between items-center">
+<!--            <p class="text-sm text-gray-700 w-1/2">To send and receive money you have to add your commercial bank account </p>-->
+            <div class="text-sm">
+              <p>UKONU CHIBUIKE NDUBUISI</p>
+              <p>OPAY</p>
+              <p>0233733545</p>
+            </div>
+<!--            <router-link to="/bank" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</router-link>-->
+            <button class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">update</button>
+
+          </div>
+        </div>
+
+        <div class="bg-white rounded-md shadow-sm p-6">
+          <h2 class="text-sm font-medium text-gray-700 mb-6">Business Information</h2>
+          <div class="flex  justify-between items-center mb-5 border-b pb-3 border-b-gray-300">
+            <div class=" w-1/2">
+              <p class="text-sm font-bold mb-3 text-gray-700">CAC</p>
+              <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
+              <input
+                  type="file"
+                  ref="cacRef"
+                  @change="handleFileSelection"
+                  multiple
+                  class="hidden"
+              />
+              <div v-if="files.length" class="mt-6">
+                <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
+                <ul class="space-y-2">
+                  <li v-for="(file, index) in files" :key="index" class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                    <div class="flex items-center">
+                      <div class="text-gray-400 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ file.name }}</div>
+                        <div class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</div>
+                      </div>
+                    </div>
+                    <button
+                        @click.prevent="removeFile(index)"
+                        class="text-red-500 hover:text-red-700"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+            <button @click="triggerFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
+          </div>
+
+          <div class="flex  justify-between items-center mb-5">
+            <div class=" w-1/2">
+              <p class="text-sm font-bold mb-3 text-gray-700">TAX IDENTIFICATION DOCUMENT</p>
+              <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
+              <input
+                  type="file"
+                  ref="memorandomRef"
+                  @change="handleFileSelection"
+                  multiple
+                  class="hidden"
+              />
+              <div v-if="files.length" class="mt-6">
+                <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
+                <ul class="space-y-2">
+                  <li v-for="(file, index) in files" :key="index" class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                    <div class="flex items-center">
+                      <div class="text-gray-400 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ file.name }}</div>
+                        <div class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</div>
+                      </div>
+                    </div>
+                    <button
+                        @click.prevent="removeFile(index)"
+                        class="text-red-500 hover:text-red-700"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <button class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
+          </div>
+        </div>
       </div>
 
       <!-- Accounts Tab -->
       <div v-if="activeTab === 'accounts'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-xs font-medium text-gray-700 mb-6">Account Settings</h2>
-        <p class="text-gray-600">Accounts tab content goes here.</p>
+        <h2 class="text-sm font-medium text-gray-700 mb-6">Account Settings</h2>
+
       </div>
 
       <!-- Preferences Tab -->
       <div v-if="activeTab === 'preferences'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-xs font-medium text-gray-700 mb-6">User Preferences</h2>
+        <h2 class="text-sm font-medium text-gray-700 mb-6">User Preferences</h2>
         <p class="text-gray-600">Preferences tab content goes here.</p>
       </div>
 
       <!-- Team Tab -->
       <div v-if="activeTab === 'team'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-xs font-medium text-gray-700 mb-6">Team Management</h2>
+        <h2 class="text-sm font-medium text-gray-700 mb-6">Team Management</h2>
         <p class="text-gray-600">Team tab content goes here.</p>
       </div>
 

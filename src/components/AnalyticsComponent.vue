@@ -38,17 +38,17 @@ onMounted(() => {
 <template>
   <div v-if="userBusiness" class="w-full">
     <!-- Analytics Header -->
-    <div class="shadow-sm bg-white dark:bg-gray-800 rounded-lg overflow-hidden p-6 mb-4">
+    <div class="shadow-sm bg-white rounded-lg overflow-hidden p-6 mb-4">
       <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Business Analytics</h2>
+        <h2 class="text-xl font-bold text-gray-800">Business Analytics</h2>
         
         <!-- Time period selector -->
-        <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+        <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
           <button @click="activePeriod = 'week'" :class="[
             'px-3 py-1 text-sm',
             activePeriod === 'week' 
               ? 'bg-blue-600 text-white' 
-              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300'
+              : 'bg-white text-gray-600'
           ]">
             Week
           </button>
@@ -56,7 +56,7 @@ onMounted(() => {
             'px-3 py-1 text-sm',
             activePeriod === 'month' 
               ? 'bg-blue-600 text-white' 
-              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300'
+              : 'bg-white text-gray-600'
           ]">
             Month
           </button>
@@ -64,7 +64,7 @@ onMounted(() => {
             'px-3 py-1 text-sm',
             activePeriod === 'year' 
               ? 'bg-blue-600 text-white' 
-              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300'
+              : 'bg-white text-gray-600'
           ]">
             Year
           </button>
@@ -74,18 +74,18 @@ onMounted(() => {
       <!-- Analytics Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <!-- Total Amount Card -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Amount Received</p>
-              <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+              <p class="text-sm font-medium text-gray-500">Total Amount Received</p>
+              <h3 class="text-2xl font-bold text-gray-900 mt-1">
                 ₦{{ formatAmount(258750) }}
               </h3>
-              <p class="text-sm text-green-600 dark:text-green-400 mt-2">+12.5% from last month</p>
+              <p class="text-sm text-green-600 mt-2">+12.5% from last month</p>
             </div>
-            <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+            <div class="p-2 bg-blue-100 rounded-lg">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-300">
+                stroke="currentColor" class="w-6 h-6 text-blue-600">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -94,18 +94,18 @@ onMounted(() => {
         </div>
 
         <!-- Successful Transactions -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Successful Transactions</p>
-              <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+              <p class="text-sm font-medium text-gray-500">Successful Transactions</p>
+              <h3 class="text-2xl font-bold text-gray-900 mt-1">
                 {{ userBusiness?.success_transation_rate_count || '1,283' }}
               </h3>
-              <p class="text-sm text-green-600 dark:text-green-400 mt-2">+8.3% from last month</p>
+              <p class="text-sm text-green-600 mt-2">+8.3% from last month</p>
             </div>
-            <div class="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
+            <div class="p-2 bg-green-100 rounded-lg">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6 text-green-600 dark:text-green-300">
+                stroke="currentColor" class="w-6 h-6 text-green-600">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -114,18 +114,18 @@ onMounted(() => {
         </div>
 
         <!-- Failed Transactions -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Failed Transactions</p>
-              <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+              <p class="text-sm font-medium text-gray-500">Failed Transactions</p>
+              <h3 class="text-2xl font-bold text-gray-900 mt-1">
                 {{ userBusiness?.failed_transaction_rate_count || '127' }}
               </h3>
-              <p class="text-sm text-red-600 dark:text-red-400 mt-2">-2.1% from last month</p>
+              <p class="text-sm text-red-600 mt-2">-2.1% from last month</p>
             </div>
-            <div class="p-2 bg-red-100 dark:bg-red-900 rounded-lg">
+            <div class="p-2 bg-red-100 rounded-lg">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6 text-red-600 dark:text-red-300">
+                stroke="currentColor" class="w-6 h-6 text-red-600">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -134,18 +134,18 @@ onMounted(() => {
         </div>
 
         <!-- Conversion Rate -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div class="flex justify-between items-start">
             <div>
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Conversion Rate</p>
-              <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+              <p class="text-sm font-medium text-gray-500">Conversion Rate</p>
+              <h3 class="text-2xl font-bold text-gray-900 mt-1">
                 91%
               </h3>
-              <p class="text-sm text-green-600 dark:text-green-400 mt-2">+0.4% from last month</p>
+              <p class="text-sm text-green-600 mt-2">+0.4% from last month</p>
             </div>
-            <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
+            <div class="p-2 bg-purple-100 rounded-lg">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6 text-purple-600 dark:text-purple-300">
+                stroke="currentColor" class="w-6 h-6 text-purple-600">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
               </svg>
@@ -157,11 +157,11 @@ onMounted(() => {
       <!-- Charts Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
         <!-- Monthly Transactions Chart -->
-        <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Monthly Transactions</h3>
+        <div class="lg:col-span-2 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Monthly Transactions</h3>
           <div class="w-full h-64">
             <!-- Chart placeholder -->
-            <div class="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+            <div class="w-full h-full flex items-center justify-center text-gray-500">
               <div class="text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="w-12 h-12 mx-auto mb-2 opacity-50">
@@ -175,11 +175,11 @@ onMounted(() => {
         </div>
 
         <!-- Payment Methods Chart -->
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Payment Methods</h3>
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">Payment Methods</h3>
           <div class="w-full h-64">
             <!-- Chart placeholder -->
-            <div class="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+            <div class="w-full h-full flex items-center justify-center text-gray-500">
               <div class="text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="w-12 h-12 mx-auto mb-2 opacity-50">
@@ -194,24 +194,24 @@ onMounted(() => {
       </div>
 
       <!-- Transaction Analysis -->
-      <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Transaction Analysis</h3>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Transaction Analysis</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Peak Transaction Times -->
           <div>
-            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Peak Transaction Times</h4>
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Peak Transaction Times</h4>
             <div class="space-y-2">
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600 dark:text-gray-400">Weekday</span>
+                <span class="text-sm text-gray-600">Weekday</span>
                 <span class="font-medium">Thursday</span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600 dark:text-gray-400">Time of Day</span>
+                <span class="text-sm text-gray-600">Time of Day</span>
                 <span class="font-medium">2PM - 4PM</span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600 dark:text-gray-400">Monthly</span>
+                <span class="text-sm text-gray-600">Monthly</span>
                 <span class="font-medium">End of Month</span>
               </div>
             </div>
@@ -219,18 +219,18 @@ onMounted(() => {
           
           <!-- Popular Products/Services -->
           <div>
-            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Top Transaction Sources</h4>
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Top Transaction Sources</h4>
             <div class="space-y-2">
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600 dark:text-gray-400">Mobile App</span>
+                <span class="text-sm text-gray-600">Mobile App</span>
                 <span class="font-medium">64%</span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600 dark:text-gray-400">Website</span>
+                <span class="text-sm text-gray-600">Website</span>
                 <span class="font-medium">28%</span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600 dark:text-gray-400">In-Store</span>
+                <span class="text-sm text-gray-600">In-Store</span>
                 <span class="font-medium">8%</span>
               </div>
             </div>

@@ -1,16 +1,14 @@
 <script setup>
 import HeaderNav from '../../../components/HeaderNav.vue';
 import Button from '../../../components/ui/button.vue';
-import {Camera, ArrowRightCircle, ChevronsUpDown, Check} from 'lucide-vue-next';
-import { onMounted, ref } from 'vue';
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { app } from '../../../../firebase.js'
-import OtpValidation from '../../../components/forms/OtpValidation.vue';
+import {Check, ChevronsUpDown} from 'lucide-vue-next';
+import {ref} from 'vue';
+import {getAuth} from "firebase/auth";
+import {app} from '../../../../firebase.js'
 import StoreUtils from '../../../utils/storeUtils.js';
-import { SendOtpRequest } from '../../../model/request/auth/authenticationRequest.js';
-import Uploader from '../../../components/Uploader.vue';
-import { CreateCooperative } from '../../../model/request/business/businessRequest.js';
-import CooperativeProfile from "../../../components/CooperativeProfile.vue";
+import {CreateBusinessRequest} from '../../../model/request/business/businessRequest.js';
+import {getUserLocation} from "../../../utils/getUserLocation.js";
+import {notify} from "../../../utils/toast.js";
 
 const auth = getAuth(app);
 const selectedType = ref(null);
@@ -20,12 +18,15 @@ const loading = ref(false)
 let user = store.get('auth', 'getCurrentUser');
 const showBankDropdown = ref(false);
 
-const createCooperativeModel = ref(CreateCooperative);
+const createBusinessModel = ref(CreateBusinessRequest);
 
 const timelineOptions = [
-  {key:"Monthly", value: "monthly"},
-  {key:"Annual", value: "annual"},
+  {key:"Shoes/Wears", value: "shoes_wears"},
+  {key:"Stationaries", value: "stationaries"},
+  {key:"Food/Bakeries", value: "food_bakeries"},
 ]
+
+const creatingIsSuccess=ref(false)
 
 
 
@@ -33,29 +34,37 @@ const timelineOptions = [
 // Submit business form after verification
 const submitBusinessForm = async () => {
   loading.value = true;
-  createCooperativeModel.value.user_id = user?.value?.id
 
-  const finalModel = {
-    ...createCooperativeModel.value,
-  };
+  const  {latitude, longitude} =  await getUserLocation({enableHighAccuracy: true, timeout: 5000})
+  createBusinessModel.value.location = `${latitude}, ${longitude}`
 
-  try{
-    const response  = await store.dispatch('business', 'createCooperative', finalModel);
+  if(createBusinessModel.value.location){
+    const finalModel = {
+      ...createBusinessModel.value,
+    };
+    try{
+      const response  = await store.dispatch('business', 'createBusiness', finalModel);
+      let responseData = response.data;
+      if(responseData.code === "00"){
+        creatingIsSuccess.value = true
+      }
+      loading.value = false;
+      console.log(response)
+    }catch(error){
+      loading.value = false;
+      console.log(error);
+    }
+  }else{
     loading.value = false;
-    console.log(response)
-  }catch(error){
-    loading.value = false;
-    console.log(error);
+    notify('your location is required to smoother operative, please be where your products are most likely to be.')
   }
 
-  console.log('Submitting verified business data:', finalModel);
-  // Call your API to submit the business data
-  // apiService.submitBusiness(finalModel).then(...)
+
 };
 const selectTimeline = (value) => {
-  createCooperativeModel.value.interest_timeline = value;
+  createBusinessModel.value.product_category = value;
   showBankDropdown.value = false;
-  console.log(createCooperativeModel.value)
+  console.log(createBusinessModel.value)
 };
 
 
@@ -63,8 +72,25 @@ const selectTimeline = (value) => {
 
 <template>
   <div>
+    <div v-if="creatingIsSuccess" class="bg-white bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
+      <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-center w-full">
+        </div>
+        <!-- Header -->
+        <div class="px-6 pt-5 relative flex flex-col items-center gap-5">
+          <img src="../../../assets/images/success.png" class="w-38" alt="success-img" />
+          <section class="text-center">
+            <h2 class="text-2xl font-semibold text-gray-900">Hey!</h2>
+            <h3 class="text-xl font-semibold text-gray-900">That was a success.</h3>
+          </section>
+          <router-link to="/business/vendor"  class="w-full bg-[#F97316] text-white rounded-[18px] p-3 text-center">Go to business dashboard</router-link>
 
-    <form @submit.prevent="submitBusinessForm">
+        </div>
+
+      </div>
+    </div>
+
+    <form v-else @submit.prevent="submitBusinessForm">
       <HeaderNav>
         <template v-slot:others>
           <Button variant="outline" class="w-[100px]" type="submit" v-if="selectedType" v-slot:child>Save</Button>
@@ -75,7 +101,7 @@ const selectTimeline = (value) => {
       <div class="container lg:w-2/6 xl:w-2/7 sm:w-full md:w-2/3 mx-auto relative p-3">
         <!-- Type Selection Screen -->
         <div>
-          <h1 class="text-2xl font-bold mb-8">Cooperatives has one goal, <em class="p">to help people and businesses grow.</em></h1>
+          <h1 class="text-2xl font-bold mb-8">Let's start simple</h1>
 
         </div>
 
@@ -85,58 +111,82 @@ const selectTimeline = (value) => {
           <!-- Common Fields -->
           <label
             class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
-            <span class="text-xs font-medium text-gray-700">Cooperative name</span>
-            <input type="text" v-model="createCooperativeModel.corporative_name" placeholder="Enter Cooperative name"
+            <span class="text-xs font-medium text-gray-700">Business name</span>
+            <input type="text" v-model="createBusinessModel.name" placeholder="Enter Business name"
               class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
 
           </label>
 
           <label
             class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
-            <span class="text-xs font-medium text-gray-700">Description</span>
-            <textarea v-model="createCooperativeModel.description" placeholder="Describe your Cooperative"
+            <span class="text-xs font-medium text-gray-700">Business description</span>
+            <textarea v-model="createBusinessModel.description" placeholder="Tell us what you sell or do"
               class="mt-1 w-full border-none bg-transparent p-0 h-[100px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm"></textarea>
           </label>
 
-          <label
-            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
-            <span class="text-xs font-medium text-gray-700">Interest</span>
-            <input v-model="createCooperativeModel.saving_plan_interest" type="text" placeholder="1.0"
-              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
-          </label>
-
-
-          <div class="space-y-2">
-            <label for="bank" class="block text-sm font-medium ">Select Timeline for interest</label>
+          <div class="space-y-2 mb-5">
+            <label for="bank" class="block text-sm font-medium ">Select Business Category</label>
             <div class="relative">
               <div
                   @click="showBankDropdown = !showBankDropdown"
-                  class="flex items-center justify-between w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 cursor-pointer">
-                <span :class="createCooperativeModel.interest_timeline ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'">
-                  {{ createCooperativeModel.interest_timeline || 'Timeline' }}
+                  class="flex items-center justify-between w-full p-3 border border-gray-300 rounded-lg bg-white  cursor-pointer">
+                <span :class="createBusinessModel.product_category ? 'text-gray-900 ' : 'text-gray-500 '">
+                  {{ createBusinessModel.product_category.toLocaleUpperCase()  }}
                 </span>
                 <ChevronsUpDown class="w-4 h-4 text-gray-500" />
               </div>
 
               <!-- Dropdown -->
-              <div v-if="showBankDropdown" class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div v-if="showBankDropdown" class="absolute z-10 w-full mt-1 bg-white  border border-gray-200  rounded-lg shadow-lg max-h-60 overflow-y-auto">
 
                 <div class="py-1">
                   <button
                       v-for="item in timelineOptions"
                       :key="item.value"
                       @click.prevent="selectTimeline(item.value)"
-                      class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between"
-                      :class="{'text-blue-600 dark:text-blue-400 font-medium': item.value === createCooperativeModel.interest_timeline}"
+                      class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100  flex items-center justify-between"
+                      :class="{'text-blue-600 dark:text-blue-400 font-medium': item.value === createBusinessModel.product_category}"
                   >
                     {{ item.key }}
-                    <Check v-if="item.value === createCooperativeModel.interest_timeline" class="w-4 h-4" />
+                    <Check v-if="item.value === createBusinessModel.product_category" class="w-4 h-4" />
                   </button>
 
                 </div>
               </div>
             </div>
           </div>
+
+          <label
+            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Business email</span>
+            <input v-model="createBusinessModel.email" type="text" placeholder="@yourbusiness.com"
+              class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+          </label>
+
+          <label
+              class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Business address</span>
+            <input v-model="createBusinessModel.address" type="text" placeholder="business address"
+                   class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+          </label>
+
+          <label
+              class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Business Phone</span>
+            <input v-model="createBusinessModel.phone_number" type="text" placeholder="09039939453"
+                   class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+          </label>
+
+          <label
+              class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <span class="text-xs font-medium text-gray-700">Business Website(optional)</span>
+            <input v-model="createBusinessModel.website" type="url" placeholder="https://mywebsit.com"
+                   class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
+          </label>
+
+
+
+
 
 <!--          <label-->
 <!--            class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">-->
@@ -149,7 +199,7 @@ const selectTimeline = (value) => {
           <div class="mt-6">
             <div>
               <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-              <Button v-else type="submit" variant="outline" class="w-full" v-slot:child>Create Cooperative</Button>
+              <Button v-else type="submit" variant="outline" class="w-full" v-slot:child>Create Business</Button>
             </div>
           </div>
         </div>

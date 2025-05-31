@@ -8,6 +8,7 @@ export const useBusinessStore = defineStore("businessStore", {
     subscribe:[],
     transactions:null,
     cooperative:null,
+    cooperativeMembers:null,
   }),
 
   getters: {
@@ -16,27 +17,15 @@ export const useBusinessStore = defineStore("businessStore", {
     getUserBank: state => state.userBank,
     getSubscribe: state => state.subscribe,
     getTransactions: state => state.transactions,
-    getUserCooperative:state => state.cooperative
+    getUserCooperative:state => state.cooperative,
+    getCooperativeMembers:state => state.cooperativeMembers
 
   },
 
   actions: {
-    async createBusiness(payload: any) {
-      this.loading = true;
-      const response = await Business.addUserBusiness(payload)
-      this.loading = false
-      try {
-        if (response.data.response_code === '00') {
-          this.business = response.data
-          alert(response.data.response_message)
-          location.reload()
-        }else{
-          alert(response.data.response_message)
-        }
-      } catch (err) {
-        this.loading = false
-        console.log('error:', err)
-      }
+     createBusiness(payload: any) {
+      return Business.addUserBusiness(payload)
+
     },
 
     createCooperative(payload: any) {
@@ -45,6 +34,14 @@ export const useBusinessStore = defineStore("businessStore", {
 
     readCooperativeByUserId(payload: any) {
       return Business.readCooperativeByUserId(payload)
+    },
+
+    readMembersByCooperativeId(payload: any) {
+      return Business.readMembersByCooperativeId(payload)
+    },
+
+    readBank(payload: any) {
+      return Business.readUserBank(payload)
     },
 
 
@@ -69,7 +66,7 @@ export const useBusinessStore = defineStore("businessStore", {
       const response = await Business.readUserBusiness()
       this.loading = false
       try {
-        if (response.data.response_code === '00') {
+        if (response.data.code === '00') {
           this.business = response.data?.data
         } 
       } catch (err) {
@@ -92,20 +89,8 @@ export const useBusinessStore = defineStore("businessStore", {
       }
     },
 
-    async addBank(payload: any) {
-      this.loading = true;
-      const response = await Business.addUserBank(payload)
-      this.loading = false
-      try {
-        if (response.data.response_code === '00') {
-          this.userBank = response.data
-          alert(response.data.response_message)
-        }
-        alert(response.data.response_message)
-      } catch (err) {
-        this.loading = false
-        console.log('error:', err)
-      }
+    addBank(payload: any) {
+      return Business.addUserBank(payload)
     }
   }
 });

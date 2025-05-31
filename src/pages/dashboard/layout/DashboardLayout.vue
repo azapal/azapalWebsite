@@ -1,15 +1,24 @@
 <template>
-  <div class="max-h-screen">
+  <div class="max-h-screen text-sm">
     <HeaderNav />
-
+    <div class="lg:hidden md:hidden z-50 flex items-center p-2 ">
+      <button @click="toggleMobileSidebar" class="m-1  rounded-lg border hover:bg-[#2563EB] hover:text-[#fff] cursor-pointer focus:outline-none">
+        <ChevronLeftIcon
+            class="h-6 w-6  transition-transform duration-200"
+            :class="{ 'rotate-180': collapsed }"
+        />
+      </button>
+      <h1 class="font-bold transition-opacity duration-200">
+        {{ route?.name }}
+      </h1>
+    </div>
     <div class="flex">
-      <!-- DashboardLayout -->
+    <!-- DashboardLayout -->
       <div
-          class="relative flex flex-col transition-all duration-300  bg-white"
-          :class="[collapsed ? 'w-16' : 'w-64']"
-      >
+          class="relative flex flex-col transition-all duration-300  bg-white  lg:block md:block"
+        :class="`transition-all duration-300 ${openOnMobile ? (collapsed ? 'hidden' : 'block w-full') : (collapsed ? 'hidden lg:w-16 lg:block md:w-16 md:block' : 'hidden lg:block lg:w-64 md:block md:w-64')}`">
         <!-- DashboardLayout Header -->
-        <div class="flex items-center justify-between p-4">
+        <div class="items-center justify-between p-4 hidden lg:flex md:flex">
           <h1 class="font-bold transition-opacity duration-200" :class="{ 'hidden': collapsed }">
             {{ route?.name }}
           </h1>
@@ -19,6 +28,8 @@
                 :class="{ 'rotate-180': collapsed }"
             />
           </button>
+
+
 
         </div>
 
@@ -31,13 +42,13 @@
                 <!-- Main Link -->
                 <div
                     @click="item.hasSubItems ? toggleSubMenu(index) : routeTo(item.link)"
-                    :class="`flex items-center p-2 rounded-md cursor-pointer hover:bg-[#2563EB] hover:text-[#fff]
-                    ${route?.fullPath?.includes(item.name.toLowerCase()) && ('bg-[#F97316] text-white')} ${collapsed && !item.hasSubItems && ('justify-center')}`">
+                    :class="`flex items-center p-2 rounded-full cursor-pointer hover:bg-[#2563EB] hover:text-[#fff]
+                    ${route?.fullPath?.includes(item.name.toLowerCase()) && ('bg-[#F97316]/50 text-black')} ${collapsed && !item.hasSubItems && ('justify-center items-center')}`">
                   <div class="flex items-center flex-1">
-                    <div :class="[collapsed ? '' : 'mr-3']">
+                    <div :class="[collapsed ? 'items-center flex w-full justify-center h-full' : 'mr-3']">
                       <component :is="item.icon" class="w-5 h-5" />
                     </div>
-                    <span class="transition-opacity duration-200 text-[14px]" :class="{ 'hidden': collapsed }">
+                    <span class="transition-opacity duration-200" :class="{ 'hidden': collapsed }">
                     {{ item.name }}
                   </span>
                   </div>
@@ -61,8 +72,8 @@
                   <li v-for="(subItem, subIndex) in item.subItems" :key="subIndex">
                     <router-link
                         :to="subItem.link"
-                        :class="`flex items-center p-2 text-sm rounded-md hover:bg-gray-700 hover:text-white
-                    ${route?.name?.toLowerCase() === subItem.name.toLowerCase()  && ('bg-[#F97316] text-white')} ${collapsed && !item.hasSubItems && ('justify-center')}`"
+                        :class="`flex items-center p-2 text-sm rounded-full hover:bg-gray-700 hover:text-white
+                    ${route?.name?.toLowerCase() === subItem.name.toLowerCase()  && ('bg-[#F97316]/30 text-black')} ${collapsed && !item.hasSubItems && ('justify-center')}`"
 
                     >
                       <div :class="`w-1 h-1 rounded-full bg-green-600 ${route?.name?.toLowerCase() === subItem.name.toLowerCase() && ('bg-white')} mr-3 text-[13px]`"></div>
@@ -90,7 +101,7 @@
       </div>
 
       <!-- Main Content -->
-      <div class="flex-1 h-[100vh] overflow-auto">
+      <div class="flex-1 h-[100vh] overflow-auto ">
 
         <slot name="content" />
 
@@ -119,20 +130,26 @@ import Dashboard from "../Dashboard.view.vue";
 import Bank from "../Bank.view.vue";
 
 const route = ref(router?.currentRoute?._value);
+const openOnMobile = ref(false);
 // DashboardLayout state
-const collapsed = ref(false);
+const collapsed = ref(true);
 const toggleSidebar = () => {
   collapsed.value = !collapsed.value;
 };
 
+const toggleMobileSidebar = () => {
+  collapsed.value = !collapsed.value;
+  openOnMobile.value = !openOnMobile.value;
+};
+
 // Navigation items with subitems
 const navigationItems = ref([
-  {
-    name: 'Dashboard',
-    icon: HomeIcon,
-    hasSubItems: false,
-    link:'/dashboard',
-  },
+  // {
+  //   name: 'Dashboard',
+  //   icon: HomeIcon,
+  //   hasSubItems: false,
+  //   link:'/dashboard',
+  // },
   {
     name: 'Business',
     icon: BuildingIcon,

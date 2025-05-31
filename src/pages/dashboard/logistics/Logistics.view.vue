@@ -2,7 +2,7 @@
 import CreateBusiness from "../../../components/forms/CreateBusiness.form.vue"
 // import BusinessDetails from "../../components/BusinessDetails.vue"
 import LogisticsDescriptionPage from "../../../components/productDescription/LogisticsDescriptionPage.vue";
-import BusinessProfile from "../../../components/BusinessProfile.vue";
+import LogisticsProfile from "./LogisticsProfile.vue";
 import DashboardLayout from "../layout/DashboardLayout.vue";
 import StoreUtils from '../../../utils/storeUtils.js'
 import { onMounted } from "vue";
@@ -19,8 +19,8 @@ onMounted(() => {
 <template>
    
        <DashboardLayout v-slot:content>
-         <LogisticsDescriptionPage v-if="userBusiness === 'null'" />
-         <BusinessProfile v-else />
+         <LogisticsDescriptionPage v-if="!userBusiness ||  userBusiness === 'null' || userBusiness?.category !== 'logistics'" />
+         <LogisticsProfile v-else />
        </DashboardLayout>
 
 

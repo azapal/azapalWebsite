@@ -22,7 +22,7 @@
           <div class="bg-white rounded-lg p-6 text-gray-800 text-sm">
             <h3 class="text-xl font-semibold mb-4">Get started</h3>
             <p class="mb-6">Create an {{ product.name }} to get started.</p>
-            <router-link to="/business/cooperative/create"
+            <router-link to="/business/logistics/create"
                 class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
             >
               Get started

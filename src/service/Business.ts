@@ -48,15 +48,19 @@ export default {
     },
 
     readVerificationByCooperativeId(cooperative_id:string){
-        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}`)
+        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}/`)
+    },
+
+    readMembersByCooperativeId(cooperative_id:string){
+        return apiClient.businessClient.get(`cooperative/users/${cooperative_id}/`)
     },
 
     updateVerificationByCooperativeId(payload:any, cooperative_id:string){
-        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}`,payload)
+        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}/`,payload)
     },
 
     deleteVerificationByCooperativeId(cooperative_id:string){
-        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}`)
+        return apiClient.businessClient.get(`cooperative_verifications/${cooperative_id}/`)
     }
    
 }
