@@ -73,7 +73,7 @@ export const useAuthStore = defineStore("authStore", {
         }else{
           notify(responseData.response_message)
         }
-      }catch(err){
+      }catch(err:any){
           notify(err)
           console.log('error:', err)
       }

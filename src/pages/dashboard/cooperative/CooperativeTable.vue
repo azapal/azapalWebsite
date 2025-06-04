@@ -2,20 +2,20 @@
 import {ref, computed} from 'vue'
 
 
-const sortField = ref('');
-const sortDirection = ref('asc');
-const searchTerm = ref('');
-const selectedItems = ref([]);
-const selectAll = ref(false);
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const sortField:any = ref('');
+const sortDirection:any = ref('asc');
+const searchTerm:any = ref('');
+const selectedItems:any = ref([]);
+const selectAll:any = ref(false);
+const currentPage:any = ref(1);
+const itemsPerPage:any = ref(10);
 import StoreUtils from '../../../utils/storeUtils.ts';
 
 const store = StoreUtils;
 const cooperativeMembers = ref(store.get('business', 'getCooperativeMembers'));
 
 // Format date helper
-const formatDate = (dateString) => {
+const formatDate = (dateString:any) => {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -24,7 +24,7 @@ const formatDate = (dateString) => {
 };
 
 // Handle sorting
-const handleSort = (field) => {
+const handleSort = (field:any) => {
   if (sortField.value === field) {
     sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
   } else {
@@ -35,18 +35,18 @@ const handleSort = (field) => {
 
 // Filter and sort data
 const filteredAndSortedData = computed(() => {
-  let filtered = cooperativeMembers.value?.filter(item => {
+  let filtered = cooperativeMembers.value?.filter((item:any) => {
     const searchLower = searchTerm.value.toLowerCase();
     return (
         (item.full_name || '').toLowerCase().includes(searchLower) ||
         item.cooperative_id.cooperative_name.toLowerCase().includes(searchLower) ||
         item.joining_as.toLowerCase().includes(searchLower) ||
-        item.interest_id.some(interest => interest.name.toLowerCase().includes(searchLower))
+        item.interest_id.some((interest:any) => interest.name.toLowerCase().includes(searchLower))
     );
   });
 
   if (sortField.value) {
-    filtered.sort((a, b) => {
+    filtered.sort((a:any, b:any) => {
       let aValue, bValue;
 
       switch (sortField.value) {
@@ -96,21 +96,21 @@ const handleSelectAll = () => {
   if (selectAll.value) {
     selectedItems.value = [];
   } else {
-    selectedItems.value = paginatedData.value?.map(item => item.id);
+    selectedItems.value = paginatedData.value?.map((item:any) => item.id);
   }
   selectAll.value = !selectAll.value;
 };
 
-const handleSelectItem = (id) => {
+const handleSelectItem = (id:any) => {
   if (selectedItems.value.includes(id)) {
-    selectedItems.value = selectedItems.value.filter(item => item !== id);
+    selectedItems.value = selectedItems.value.filter((item:any) => item !== id);
   } else {
     selectedItems.value = [...selectedItems.value, id];
   }
 };
 
 // Render sort icon
-const getSortIconClass = (field) => {
+const getSortIconClass = (field:any) => {
   if (sortField.value !== field) {
     return 'w-4 h-4 text-gray-400';
   }
@@ -119,7 +119,7 @@ const getSortIconClass = (field) => {
       : 'w-4 h-4 text-blue-600';
 };
 
-const getSortIcon = (field) => {
+const getSortIcon = (field:any) => {
   if (sortField.value !== field) {
     return 'chevron-up';
   }
