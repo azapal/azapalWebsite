@@ -70,7 +70,7 @@ onMounted( () => {
           </div>
         </div>
 
-        <div class="w-full flex flex-col gap-4 max-w-7xl mx-auto overflow-hidden px-4 md:px-6 pb-20">
+        <div class="w-full flex flex-col gap-4 max-w-7xl mx-auto overflow-hidden px-4 md:px-6 pb-20 mt-5">
           <!-- Render the active component based on tab selection -->
           <BusinessDashboard v-if="activeTab === 'dashboard'" />
           <DispatchServices v-else-if="activeTab === 'dispatch'" />

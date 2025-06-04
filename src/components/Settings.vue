@@ -8,17 +8,22 @@ import Uploader from "./Uploader.vue";
 
 const store = StoreUtils
 const user = store.get('auth', 'getCurrentUser')
+const userBank = store.get('business', 'getUserBank')
 const cacRef = ref()
-const memorandomRef = ref()
-const files = ref([])
+const tinRef = ref()
+const files = ref()
+const tinFile = ref()
 const isDragging = ref(false)
 const isUploading = ref(false)
 const uploadProgress = ref(0)
-const uploadSuccess = ref(false)
-const errorMessage = ref('')
+const uploadCacSuccess = ref(false)
+const uploadTinSuccess = ref(false)
+const errorCacMessage = ref('')
+const errorTinMessage = ref('')
 
 // Tabs state
 const activeTab = ref('profile')
+
 const tabs = [
   { id: 'profile', label: 'Profile' },
   // { id: 'contact', label: 'Contact' },
@@ -59,17 +64,19 @@ const generateBackupCodes = () => {
   console.log('Generating backup codes...')
 }
 
-const addFiles = (newFiles) => {
-  errorMessage.value = '';
-  uploadSuccess.value = false;
+function removeFile(index, type) {
 
-  // Add new files to the existing array
-  files.value = [...files.value, ...newFiles];
-}
-function removeFile(index) {
-  files.value.splice(index, 1);
-  errorMessage.value = '';
-  uploadSuccess.value = false;
+  if(type === 'cac') {
+    files.value = null;
+    errorCacMessage.value = '';
+    uploadTinSuccess.value = false;
+  }
+
+  if(type === 'tin') {
+    tinFile.value = null;
+    errorTinMessage.value = '';
+    uploadTinSuccess.value = false;
+  }
 }
 
 function formatFileSize(bytes) {
@@ -138,23 +145,34 @@ function handleUploadCompletion(success = true) {
   }
 }
 
-
 function triggerFileInput() {
   cacRef.value.click();
 }
-function handleFileSelection(event) {
-  console.log(event);
-  const newFiles = event.target.files;
-  addFiles(newFiles);
+
+function triggerTinFileInput() {
+  tinRef.value.click();
+}
+
+function handleCacFileSelection(event) {
+  files.value =  event.target.files[0];
 
   // Reset the input so the same file can be selected again if removed
   event.target.value = null;
 }
+
+function handleTinFileSelection(event) {
+  tinFile.value =  event.target.files[0];
+  console.log(tinFile.value);
+  // Reset the input so the same file can be selected again if removed
+  event.target.value = null;
+}
+
 // function handleFileDrop(event) {
 //   this.isDragging = false;
 //   const newFiles = Array.from(event.dataTransfer.files);
 //   addFiles(newFiles);
 // }
+
 
 onMounted(() => {
   store.dispatch('business', 'readBank')
@@ -218,7 +236,9 @@ onMounted(() => {
             <input 
               type="email" 
               v-model="userProfile.email"
-              class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md" 
+              class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md"
+              readonly
+              disabled
             />
           </div>
 
@@ -338,16 +358,19 @@ onMounted(() => {
           </div>
         </div>
 
+
         <div class="bg-white rounded-md shadow-sm p-6 mb-5">
           <h2 class="text-sm font-medium text-gray-700 mb-6">Bank Information</h2>
-          <div class="flex justify-between items-center">
-<!--            <p class="text-sm text-gray-700 w-1/2">To send and receive money you have to add your commercial bank account </p>-->
+          <div v-if="!userBank" class="flex justify-between items-center">
+            <p class="text-sm text-gray-700 w-1/2">To send and receive money you have to add your commercial bank account </p>
+            <router-link to="/bank" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</router-link>
+
+          </div>
+          <div v-else class="flex justify-between items-center">
             <div class="text-sm">
-              <p>UKONU CHIBUIKE NDUBUISI</p>
-              <p>OPAY</p>
-              <p>0233733545</p>
+              <p>{{ userBank.bank_account_name }}</p>
+              <p>{{ userBank.bank_name }}</p>
             </div>
-<!--            <router-link to="/bank" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</router-link>-->
             <button class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">update</button>
 
           </div>
@@ -362,14 +385,13 @@ onMounted(() => {
               <input
                   type="file"
                   ref="cacRef"
-                  @change="handleFileSelection"
-                  multiple
+                  @change="handleCacFileSelection"
                   class="hidden"
               />
-              <div v-if="files.length" class="mt-6">
+              <div v-if="files" class="mt-6">
                 <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
                 <ul class="space-y-2">
-                  <li v-for="(file, index) in files" :key="index" class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                  <li  class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
                     <div class="flex items-center">
                       <div class="text-gray-400 mr-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -377,12 +399,12 @@ onMounted(() => {
                         </svg>
                       </div>
                       <div>
-                        <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ file.name }}</div>
-                        <div class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</div>
+                        <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ files.name }}</div>
+                        <div class="text-xs text-gray-500">{{ formatFileSize(files.size) }}</div>
                       </div>
                     </div>
                     <button
-                        @click.prevent="removeFile(index)"
+                        @click.prevent="removeFile(index, 'cac')"
                         class="text-red-500 hover:text-red-700"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -394,7 +416,7 @@ onMounted(() => {
               </div>
 
             </div>
-            <button @click="triggerFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
+            <button v-if="!files" @click="triggerFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
           </div>
 
           <div class="flex  justify-between items-center mb-5">
@@ -403,15 +425,15 @@ onMounted(() => {
               <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
               <input
                   type="file"
-                  ref="memorandomRef"
-                  @change="handleFileSelection"
-                  multiple
+                  ref="tinRef"
+                  @change="handleTinFileSelection"
                   class="hidden"
               />
-              <div v-if="files.length" class="mt-6">
+
+              <div v-if="tinFile" class="mt-6">
                 <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
                 <ul class="space-y-2">
-                  <li v-for="(file, index) in files" :key="index" class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                  <li  class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
                     <div class="flex items-center">
                       <div class="text-gray-400 mr-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -419,12 +441,12 @@ onMounted(() => {
                         </svg>
                       </div>
                       <div>
-                        <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ file.name }}</div>
-                        <div class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</div>
+                        <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ tinFile.name }}</div>
+                        <div class="text-xs text-gray-500">{{ formatFileSize(tinFile.size) }}</div>
                       </div>
                     </div>
                     <button
-                        @click.prevent="removeFile(index)"
+                        @click.prevent="removeFile(index, 'tin')"
                         class="text-red-500 hover:text-red-700"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -435,7 +457,11 @@ onMounted(() => {
                 </ul>
               </div>
             </div>
-            <button class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
+            <button v-if="!tinFile" @click="triggerTinFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
+          </div>
+
+          <div v-if="tinFile && files" class="justify-end flex w-full">
+            <button class="bg-orange-500 text-white w-[100px] cursor-pointer p-1 rounded">Save</button>
           </div>
         </div>
       </div>

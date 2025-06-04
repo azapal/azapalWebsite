@@ -71,7 +71,7 @@
   </template>
   
   <script setup>
-  import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
+  import {watch, ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
   import StoreUtils from '../../utils/storeUtils';
   import { SendOtpRequest } from '../../model/request/auth/authenticationRequest';
   import { CreateBusinessRequest } from '../../model/request/business/businessRequest';
@@ -79,7 +79,7 @@
 
   const props = defineProps({
     page:String,
-    data:{}
+    data:null
   })
   // Array to store OTP digits (6 digits)
   const otpDigits = ref(['', '', '', '', '']);
@@ -224,14 +224,6 @@
       if(props.page === 'signup') await store.dispatch('auth', 'verifyInitiatingOtp', {otp:otpValue, email: props?.data?.email});
 
       if(props.page === 'business') await store.dispatch('auth', 'verifyOtp', otpValue);
-
-      if(isVerificationDone){
-        if(props?.page === 'signup') await store.dispatch('auth', 'signUp', SignupRequest);
-        if(props?.page === 'business'){
-          CreateBusinessRequest.category = props?.data?.type
-          await store.dispatch('business', 'createBusiness', CreateBusinessRequest);
-        }
-      }
   };
 }
   
@@ -255,4 +247,7 @@
     // Show confirmation message
     store.dispatch('auth', 'sendOtp', SendOtpRequest)
   };
+
+
+
   </script>

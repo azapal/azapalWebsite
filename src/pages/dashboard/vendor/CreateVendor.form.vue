@@ -1,7 +1,7 @@
 <script setup>
 import HeaderNav from '../../../components/HeaderNav.vue';
 import Button from '../../../components/ui/button.vue';
-import {Check, ChevronsUpDown} from 'lucide-vue-next';
+import {Check, ChevronLeft, ChevronsUpDown} from 'lucide-vue-next';
 import {ref} from 'vue';
 import {getAuth} from "firebase/auth";
 import {app} from '../../../../firebase.js'
@@ -9,6 +9,8 @@ import StoreUtils from '../../../utils/storeUtils.js';
 import {CreateBusinessRequest} from '../../../model/request/business/businessRequest.js';
 import {getUserLocation} from "../../../utils/getUserLocation.js";
 import {notify} from "../../../utils/toast.js";
+import FormLayout from "../layout/FormLayout.vue";
+import router from "../../../router/index.js";
 
 const auth = getAuth(app);
 const selectedType = ref(null);
@@ -71,7 +73,7 @@ const selectTimeline = (value) => {
 </script>
 
 <template>
-  <div>
+  <FormLayout v-slot:form>
     <div v-if="creatingIsSuccess" class="bg-white bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
       <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="flex justify-center w-full">
@@ -90,20 +92,16 @@ const selectTimeline = (value) => {
       </div>
     </div>
 
-    <form v-else @submit.prevent="submitBusinessForm">
-      <HeaderNav>
-        <template v-slot:others>
-          <Button variant="outline" class="w-[100px]" type="submit" v-if="selectedType" v-slot:child>Save</Button>
-        </template>
-      </HeaderNav>
+    <form v-else @submit.prevent="submitBusinessForm" class="w-full">
 
 
-      <div class="container lg:w-2/6 xl:w-2/7 sm:w-full md:w-2/3 mx-auto relative p-3">
+      <div class="relative">
+        <button class="flex cursor-pointer mb-3 hover:scale-101" @click="router.back()">
+          <ChevronLeft />
+          <p>Back</p>
+        </button>
         <!-- Type Selection Screen -->
-        <div>
-          <h1 class="text-2xl font-bold mb-8">Let's start simple</h1>
-
-        </div>
+        <h1 class="text-2xl font-bold mb-8">Let's start simple.</h1>
 
         <!-- Business Information Form -->
         <div >
@@ -199,12 +197,12 @@ const selectTimeline = (value) => {
           <div class="mt-6">
             <div>
               <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-              <Button v-else type="submit" variant="outline" class="w-full" v-slot:child>Create Business</Button>
+              <button v-else type="submit" class="w-full p-2 rounded-full bg-[#2563EB] cursor-pointer text-white" >Create Business</button>
             </div>
           </div>
         </div>
       </div>
     </form>
 
-  </div>
+  </FormLayout>
 </template>

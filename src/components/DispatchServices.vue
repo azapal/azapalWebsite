@@ -27,7 +27,7 @@ const filteredUsers = computed(() => {
 <template>
   <div v-if="userBusiness" class="w-full">
 
-    <div class="shadow-sm mt-5 bg-white rounded-lg overflow-hidden p-6 mb-4">
+    <div class="shadow-sm bg-white rounded-lg overflow-hidden p-6 mb-4">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-bold text-gray-800">Dispatch Services</h2>
        
@@ -74,8 +74,9 @@ const filteredUsers = computed(() => {
         <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
       </div>
       
-      <div v-else-if="filteredUsers.length === 0" class="text-center py-8 text-gray-500">
-        No dispatch services found for this filter
+      <div v-else-if="filteredUsers.length === 0" class="text-center py-8 text-gray-500 flex flex-col items-center gap-5">
+        <img src="../assets/images/undraw_into-the-night_nd84.svg" class="w-[150px]" alt="empty" />
+        <span>No dispatch services found for this filter</span>
       </div>
       
       <div v-else class="space-y-4">

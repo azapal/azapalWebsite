@@ -40,8 +40,17 @@ export const useBusinessStore = defineStore("businessStore", {
       return Business.readMembersByCooperativeId(payload)
     },
 
-    readBank(payload: any) {
-      return Business.readUserBank(payload)
+    async readBank(payload: any) {
+      try{
+        const response = await Business.readUserBank(payload)
+        const responseData = response.data
+        if(responseData.code === "00"){
+          this.userBank = responseData.data
+        }
+
+      }catch(error){
+        console.log(error)
+      }
     },
 
 

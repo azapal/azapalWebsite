@@ -10,7 +10,6 @@ import StoreUtils from '../../../utils/storeUtils.js';
 import { SendOtpRequest } from '../../../model/request/auth/authenticationRequest.js';
 import Uploader from '../../../components/Uploader.vue';
 import { CreateCooperative } from '../../../model/request/business/businessRequest.js';
-import CooperativeProfile from "./CooperativeProfile.vue";
 import {notify} from "../../../utils/toast.js";
 import router from "../../../router/index.js";
 import FormLayout from "../layout/FormLayout.vue";
@@ -97,15 +96,15 @@ const selectTimeline = (value) => {
           <p>Back</p>
         </button>
 
-          <h1 class="text-2xl font-bold mb-8">Cooperatives has one goal, <em class="p">to help people and businesses grow.</em></h1>
+          <h1 class="text-2xl font-bold mb-8">Let's get to know what you are building.</h1>
 
 
         <div >
 
           <label
               class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
-            <span class="text-xs font-medium text-gray-700">Cooperative name</span>
-            <input type="text" required v-model="createCooperativeModel.corporative_name" placeholder="Enter Cooperative name"
+            <span class="text-xs font-medium text-gray-700">App name</span>
+            <input type="text" required v-model="createCooperativeModel.corporative_name" placeholder="What did you call your app?"
                    class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
 
           </label>
@@ -113,61 +112,15 @@ const selectTimeline = (value) => {
           <label
               class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
             <span class="text-xs font-medium text-gray-700">Description</span>
-            <textarea required v-model="createCooperativeModel.description" placeholder="Describe your Cooperative"
+            <textarea required v-model="createCooperativeModel.description" placeholder="Tell us a lot about your app"
                       class="mt-1 w-full border-none bg-transparent p-0 h-[100px] focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm"></textarea>
           </label>
 
-          <label
-              class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
-            <span class="text-xs font-medium text-gray-700">Address</span>
-            <input required v-model="createCooperativeModel.address" type="text" placeholder="enter your address"
-                   class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />
-          </label>
-
-          <!--          <label-->
-          <!--              class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">-->
-          <!--            <span class="text-xs font-medium text-gray-700">Interest</span>-->
-          <!--            <input required v-model="createCooperativeModel.saving_plan_interest" type="text" placeholder="1.0"-->
-          <!--                   class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm" />-->
-          <!--          </label>-->
-
-
-          <!--          <div class="space-y-2">-->
-          <!--            <label for="bank" class="block text-sm font-medium ">Select Timeline for interest</label>-->
-          <!--            <div class="relative">-->
-          <!--              <div-->
-          <!--                  @click="showTimelineDropdown = !showTimelineDropdown"-->
-          <!--                  class="flex items-center justify-between w-full p-3 border border-gray-300  rounded-lg bg-whitecursor-pointer">-->
-          <!--                <span :class="createCooperativeModel.interest_timeline ? 'text-gray-900 ' : 'text-gray-500 '">-->
-          <!--                  {{ createCooperativeModel.interest_timeline || 'Timeline' }}-->
-          <!--                </span>-->
-          <!--                <ChevronsUpDown class="w-4 h-4 text-gray-500" />-->
-          <!--              </div>-->
-
-          <!--              &lt;!&ndash; Dropdown &ndash;&gt;-->
-          <!--              <div v-if="showTimelineDropdown" class="absolute z-10 w-full mt-1 bg-white  border border-gray-200  rounded-lg shadow-lg max-h-60 overflow-y-auto">-->
-
-          <!--                <div class="py-1">-->
-          <!--                  <button-->
-          <!--                      v-for="item in timelineOptions"-->
-          <!--                      :key="item.value"-->
-          <!--                      @click.prevent="selectTimeline(item.value)"-->
-          <!--                      class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100  flex items-center justify-between"-->
-          <!--                      :class="{'text-blue-600  font-medium': item.value === createCooperativeModel.interest_timeline}"-->
-          <!--                  >-->
-          <!--                    {{ item.key }}-->
-          <!--                    <Check v-if="item.value === createCooperativeModel.interest_timeline" class="w-4 h-4" />-->
-          <!--                  </button>-->
-
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
 
           <div class="mt-6">
             <div>
               <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-              <Button v-else type="submit" class="w-full bg-[#2563EB] text-white rounded-[18px]" v-slot:child>Create Cooperative</Button>
+              <Button v-else type="submit" class="w-full bg-[#2563EB] text-white rounded-[18px]" v-slot:child>Create App</Button>
             </div>
           </div>
         </div>

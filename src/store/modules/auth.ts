@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import Auth from "../../service/Auth";
 import router from "../../router"
 import type { SendOtpRequestType, LoginRequestType, SignupRequestType } from "../../model/request/auth/authenticationRequest";
+import {notify} from "../../utils/toast.ts";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({
@@ -62,20 +63,19 @@ export const useAuthStore = defineStore("authStore", {
      },
 
      async verifyOtp(payload:string){
-      this.loading = true;
-      const response = await Auth.verifyOtp(payload)
-      this.loading = false
-      let responseData = response.data
+
       try{
+        const response = await Auth.verifyOtp(payload)
+        let responseData = response.data
         if(responseData.response_code === "00"){
           this.showOtpScreen = false
           this.verificationDone = true
         }else{
-          alert(responseData.error)
+          notify(responseData.response_message)
         }
       }catch(err){
-        this.loading = false
-        console.log('error:', err)
+          notify(err)
+          console.log('error:', err)
       }
      },
 

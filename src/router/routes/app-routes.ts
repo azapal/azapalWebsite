@@ -14,17 +14,6 @@ export const appRoute: BaseRouteProps[] = [
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/dashboard/Dashboard.view.vue"),
       },
-      {
-        path: "/create-business",
-        name: "BUSINESS",
-        meta: {
-          showHeader: true,
-          showBackArrow: true,
-          authRequired:RouteConstantUtil.dashboard.authRequired
-        },
-        component: () =>
-          import(/* webpackChunkName: "about" */ "../../pages/dashboard/vendor/Vendor.view.vue"),
-      },
 
       {
         path: "/business/cooperative",
@@ -51,6 +40,18 @@ export const appRoute: BaseRouteProps[] = [
       },
 
       {
+        path: "/business/escrow",
+        name: "ESCROW",
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
+        },
+        component: () =>
+            import(/* webpackChunkName: "about" */ "../../pages/dashboard/escrow/Escrow.view.vue"),
+      },
+
+      {
         path: "/business/vendor",
         name: "VENDOR",
         meta: {
@@ -72,6 +73,18 @@ export const appRoute: BaseRouteProps[] = [
         },
         component: () =>
             import(/* webpackChunkName: "about" */ "../../pages/dashboard/cooperative/CreateCooperative.form.vue"),
+      },
+
+      {
+        path: "/business/escrow/create",
+        name: "CREATE ESCROW APP",
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
+        },
+        component: () =>
+            import(/* webpackChunkName: "about" */ "../../pages/dashboard/escrow/CreateEscrowBusiness.form.vue"),
       },
 
       {

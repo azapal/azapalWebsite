@@ -156,42 +156,43 @@ const navigationItems = ref([
     hasSubItems: true,
     expanded: false,
     subItems: [
-      { name: 'online vendor', link:'/business/vendor' },
-      { name: 'logistics', link:'/business/logistics' },
-      { name: 'cooperative', link:'/business/cooperative' }
+      { name: 'Vendor', link:'/business/vendor' },
+      { name: 'Logistics', link:'/business/logistics' },
+      { name: 'Cooperative', link:'/business/cooperative' },
+      { name: 'Escrow', link:'/business/escrow' }
     ]
   },
-  {
-    name: 'Services',
-    icon: WorkflowIcon,
-    hasSubItems: true,
-    expanded: false,
-    subItems: [
-      { name: 'Escrow' },
-    ]
-  },
-  {
-    name: 'Users',
-    icon: UsersIcon,
-    hasSubItems: true,
-    expanded: false,
-    subItems: [
-      { name: 'User Management' },
-      { name: 'Permissions' },
-      { name: 'Roles' }
-    ]
-  },
-  {
-    name: 'Analytics',
-    icon: ChartIcon,
-    hasSubItems: true,
-    expanded: false,
-    subItems: [
-      { name: 'Reports' },
-      { name: 'Statistics' },
-      { name: 'Performance' }
-    ]
-  },
+  // {
+  //   name: 'Services',
+  //   icon: WorkflowIcon,
+  //   hasSubItems: true,
+  //   expanded: false,
+  //   subItems: [
+  //     { name: 'Escrow' },
+  //   ]
+  // },
+  // {
+  //   name: 'Users',
+  //   icon: UsersIcon,
+  //   hasSubItems: true,
+  //   expanded: false,
+  //   subItems: [
+  //     { name: 'User Management' },
+  //     { name: 'Permissions' },
+  //     { name: 'Roles' }
+  //   ]
+  // },
+  // {
+  //   name: 'Analytics',
+  //   icon: ChartIcon,
+  //   hasSubItems: true,
+  //   expanded: false,
+  //   subItems: [
+  //     { name: 'Reports' },
+  //     { name: 'Statistics' },
+  //     { name: 'Performance' }
+  //   ]
+  // },
 ]);
 
 // Toggle submenu
