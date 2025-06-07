@@ -11,6 +11,10 @@ export type SendOtpRequestType = {
   otp: string | null
 }
 
+export type SendEmailOtpRequestType = {
+  email:string
+}
+
 export type LoginRequestType = {
   email: string,
   password: string
@@ -44,4 +48,8 @@ export const SignupRequest = {
   phone_number: "",
   first_name: "",
   last_name: ""
+}
+
+export const SendEmailOtpRequest:SendEmailOtpRequestType = {
+  email:""
 }

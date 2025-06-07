@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import {ref, onMounted} from "vue";
 import Button from "../../components/ui/button.vue";
 import router from "../../router";
 import StoreUtils from '../../utils/storeUtils'
 import OtpValidation from "../../components/forms/OtpValidation.vue";
-import { SendOtpRequest, SignupRequest } from "../../model/request/auth/authenticationRequest";
+import {SendOtpRequest, SignupRequest} from "../../model/request/auth/authenticationRequest";
+import {notify} from "../../utils/toast.ts";
+import {Eye, EyeClosed} from "lucide-vue-next";
 
 const current_route = router.currentRoute.value.query
 const store = StoreUtils
@@ -12,6 +14,7 @@ const loading = ref(false)
 const clientKey = "sbaw37v8xwwou3v490"; // Replace with your actual client key
 const redirectUri = "https://number1fans.vercel.app/create-account"; // Your redirect URI
 let showOtpScreen = store.get('auth', 'getShowOtpScreen')
+const passwordVisible = ref(false)
 const signUpRequestModel = ref(SignupRequest)
 
 const handleSocialSignUp = (provider: string) => {
@@ -25,16 +28,32 @@ const handleSocialSignUp = (provider: string) => {
     }
 };
 
-// Start the verification process
-const startVerification = () => {
+
+const handleSendInitiatingOtp = async () => {
     loading.value = true
     SendOtpRequest.phone_number = signUpRequestModel.value.phone_number
     SendOtpRequest.email = signUpRequestModel.value.email
-    SendOtpRequest.platform = 'azapal'
+    SendOtpRequest.platform = 'azapal-web'
     SendOtpRequest.source = 'web'
-    store.dispatch('auth', 'sendInitiatingOtp', SendOtpRequest)
-    loading.value = false
-};
+
+   try{
+    const response = await store.dispatch('auth','sendInitiatingOtp',SendOtpRequest)
+    const responseData = response.data
+    if(responseData.response_code === "00"){
+      store.commit('auth', 'showOtpScreen', true)
+      notify(responseData.response_message, 'success');
+    }else{
+      notify(responseData.response_message, 'success');
+      loading.value = false
+
+    }
+
+  }catch(err){
+    notify(String(err), 'error');
+     loading.value = false
+
+   }
+}
 
 
 onMounted(() => {
@@ -87,41 +106,53 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <form @submit.prevent="startVerification()" class="space-y-5">
+                <form @submit.prevent="handleSendInitiatingOtp" class="space-y-5">
                     <label for="email"
-                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> email </span>
+                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 ">
+                        <span class="text-xs font-medium text-gray-700 "> email </span>
 
-                        <input type="text" id="sign_up_email" v-model="signUpRequestModel.email"
-                            placeholder="example@email.com"
-                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+                        <input type="email" id="sign_up_email" v-model="signUpRequestModel.email"
+                            placeholder="example@gmail.com or example@yourcompanyname.com"
+                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " required/>
                     </label>
-                    <label for="password"
-                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> password </span>
 
-                        <input type="text" id="password" v-model="signUpRequestModel.password" placeholder="********"
-                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+                    <label for="phone"
+                         class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 ">
+                    <span class="text-xs font-medium text-gray-700 "> phone number </span>
+
+                    <input type="tel" id="sign_up_email" v-model="signUpRequestModel.phone_number"
+                           placeholder="0x0 xxx xxxx"
+                           class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " required/>
+                  </label>
+                    <label for="password"
+                        class="block mb-5 relative overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 ">
+                        <span class="text-xs font-medium text-gray-700 "> password </span>
+
+                        <input :type="passwordVisible ? 'text': 'password'" id="password" v-model="signUpRequestModel.password" placeholder="*************"
+                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " required/>
+
+                      <div class="absolute top-8 right-5 cursor-pointer" @click="passwordVisible = !passwordVisible">
+                        <Eye v-if="passwordVisible"></Eye>
+                        <EyeClosed v-else></EyeClosed>
+                      </div>
                     </label>
                     <label for="firstname"
-                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200">first name</span>
+                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 ">
+                        <span class="text-xs font-medium text-gray-700 ">first name</span>
 
                         <input type="text" id="firstname" v-model="signUpRequestModel.first_name"
-                            placeholder="**********"
-                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+                            placeholder="your first name"
+                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " required/>
                     </label>
-
                     <label for="last_name"
-                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200">last name</span>
+                        class="block mb-5 overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 ">
+                        <span class="text-xs font-medium text-gray-700 ">last name</span>
 
                         <input type="text" id="last_name" v-model="signUpRequestModel.last_name"
-                            placeholder="**********"
-                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+                            placeholder="your last name"
+                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " required/>
                     </label>
-
-
+                  
 
 
                     <Button type="submit" class="w-full bg-[#F97316] hover:bg-[#F97316]-dark text-white"

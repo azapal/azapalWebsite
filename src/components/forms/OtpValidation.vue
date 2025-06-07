@@ -41,17 +41,19 @@
         </div>
   
         <!-- Action Buttons -->
-        <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
 
-        <div v-else class="space-y-3">
+        <div class="space-y-3">
+          <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
 
-          <button 
+
+          <button
+            v-else
             @click="verifyOTP" 
             :disabled="!isComplete"
             class="w-full py-3 bg-orange-500 text-white rounded-md font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             style="background-color: #F97316;"
           >
-            Verify
+            verify
           </button>
           
           <div class="text-center">
@@ -73,30 +75,50 @@
   <script setup>
   import {watch, ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
   import StoreUtils from '../../utils/storeUtils';
-  import { SendOtpRequest } from '../../model/request/auth/authenticationRequest';
-  import { CreateBusinessRequest } from '../../model/request/business/businessRequest';
-  import { SignupRequest } from '../../model/request/auth/authenticationRequest';
+  import {SendEmailOtpRequest, SendOtpRequest} from '../../model/request/auth/authenticationRequest';
+  import {useAuthStore} from "../../store/modules/auth.ts";
+  import {useBusinessStore} from "../../store/modules/business.ts";
+  import {storeToRefs} from "pinia";
+  import {notify} from "../../utils/toast.js";
+  import router from "../../router/index.js";
+
 
   const props = defineProps({
     page:String,
     data:null
   })
+
   // Array to store OTP digits (6 digits)
   const otpDigits = ref(['', '', '', '', '']);
+
   const inputRefs = ref([]);
+
+  const loading = ref(false);
+
   const errorMessage = ref('');
+
   const store = StoreUtils
 
-  const loading = store.get('business', 'getLoading')
-  const isVerificationDone = store.get('business', 'isVerificationDone')
+  const authStore = useAuthStore()
+
+  const businessStore = useBusinessStore()
+
+  const {isVerificationDone, getLoading} = storeToRefs(authStore);
+  const {isBusinessVerificationDone} = storeToRefs(businessStore);
+
   // Countdown timer for resend (120 seconds = 2 minutes)
   const countdown = ref(120);
   let countdownInterval = null;
-  
+
   // Check if OTP is complete (all digits filled)
   const isComplete = computed(() => {
     return otpDigits.value.every(digit => digit !== '');
   });
+
+  const handleSignUp = async () => {
+    await store.dispatch('auth', 'signUp', props.data);
+    store.commit('auth', 'showOtpScreen', false);
+  }
   
   // Format time to mm:ss
   const formatTime = (seconds) => {
@@ -190,24 +212,24 @@
     // Process only if numeric data
     if (/^\d+$/.test(pastedData)) {
       // Get first 6 digits only
-      const digits = pastedData.substring(0, 4).split('');
+      const digits = pastedData.substring(0, 5).split('');
       
       // Fill the inputs
       digits.forEach((digit, index) => {
-        if (index < 5) {
+        if (index < 6) {
           otpDigits.value[index] = digit;
         }
       });
       
       // Focus the appropriate input after paste
-      const lastIndex = Math.min(digits.length, 4) - 1;
+      const lastIndex = Math.min(digits.length, 5) - 1;
       if (lastIndex >= 0) {
         focusInput(lastIndex);
       }
       
       // If all fields are filled, focus last one
-      if (digits.length >= 5) {
-        focusInput(4);
+      if (digits.length >= 6) {
+        focusInput(5);
       }
       
       // Clear any previous error
@@ -216,14 +238,33 @@
       errorMessage.value = 'Please paste numeric digits only';
     }
   };
-  
+
   // Verify OTP function
   const verifyOTP = async () => {
+    loading.value = true;
     if (isComplete.value) {
       const otpValue = otpDigits.value.join(''); 
       if(props.page === 'signup') await store.dispatch('auth', 'verifyInitiatingOtp', {otp:otpValue, email: props?.data?.email});
 
       if(props.page === 'business') await store.dispatch('auth', 'verifyOtp', otpValue);
+
+      if(props.page === 'login'){
+        try{
+          const response = await store.dispatch('auth', 'verifyEmailOtp', {otp:otpValue, email: props?.data?.email});
+          const responseData = response.data;
+          if(responseData.response_code === "00") {
+            store.commit('auth', 'showOtpScreen', false);
+            store.commit('auth', 'verificationDone', true);
+            notify(responseData.response_message, 'success');
+          }else{
+            notify(responseData.response_message, 'error');
+          }
+        }catch(error){
+          notify(e, 'error');
+        }
+      }
+
+      loading.value = false;
   };
 }
   
@@ -247,6 +288,16 @@
     // Show confirmation message
     store.dispatch('auth', 'sendOtp', SendOtpRequest)
   };
+
+  // trigger signup function automatically
+  watch(() => [isVerificationDone.value, isBusinessVerificationDone.value],
+      ([newAuthValue, newBusinessValue], [oldAuthValue, oldBusinessValue]) => {
+        console.log(newAuthValue);
+        if(newAuthValue && props.page === 'signup') {
+          handleSignUp();
+        }
+      }
+  );
 
 
 

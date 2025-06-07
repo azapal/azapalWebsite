@@ -9,6 +9,7 @@ export const useBusinessStore = defineStore("businessStore", {
     transactions:null,
     cooperative:null,
     cooperativeMembers:null,
+    isBusinessVerificationDone:false,
   }),
 
   getters: {

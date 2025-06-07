@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
 import Auth from "../../service/Auth";
 import router from "../../router"
-import type { SendOtpRequestType, LoginRequestType, SignupRequestType } from "../../model/request/auth/authenticationRequest";
+import type {
+    SendOtpRequestType,
+    LoginRequestType,
+    SignupRequestType,
+    SendEmailOtpRequestType
+} from "../../model/request/auth/authenticationRequest";
 import {notify} from "../../utils/toast.ts";
 
 export const useAuthStore = defineStore("authStore", {
@@ -45,24 +50,20 @@ export const useAuthStore = defineStore("authStore", {
       }
      },
 
-     async sendOtp(payload:SendOtpRequestType){
-      this.loading = true;
-      const response = await Auth.sendOtp(payload)
-      this.loading = false
-      let responseData = response.data
-      try{
-        if(responseData.response_code === "00"){
-          this.showOtpScreen = true
-        }else{
-          alert(responseData.error)
-        }
-      }catch(err){
-        this.loading = false
-        console.log('error:', err)
-      }
+    sendInitiatingOtp(payload:SendOtpRequestType){
+      return  Auth.sendInitiatingOtp(payload)
      },
 
-     async verifyOtp(payload:string){
+      sendEmailOtp(payload:SendEmailOtpRequestType){
+      return  Auth.sendEmailOtp(payload)
+     },
+
+      verifyEmailOtp(payload:{otp:"", email:""}){
+          return  Auth.verifyEmailOtp(payload.otp, payload.email)
+      },
+
+
+      async verifyOtp(payload:string){
 
       try{
         const response = await Auth.verifyOtp(payload)
@@ -71,72 +72,71 @@ export const useAuthStore = defineStore("authStore", {
           this.showOtpScreen = false
           this.verificationDone = true
         }else{
-          notify(responseData.response_message)
+          notify(responseData.response_message, 'error')
         }
       }catch(err:any){
-          notify(err)
+          notify(err, 'error')
           console.log('error:', err)
       }
      },
 
-      login(payload:LoginRequestType){
+     login(payload:LoginRequestType){
          return Auth.login(payload)
       },
 
      async signUp(payload:SignupRequestType){
-      this.loading = true;
-      const response = await Auth.signup(payload)
-      this.loading = false
-      let responseData = response.data
+      this.loading = true
       try{
-        if(responseData.code === "00"){
-          this.token = responseData.token
-          this.user = responseData.data
-          localStorage.user = JSON.stringify(responseData.data)
-          localStorage.token = responseData.token
-          await router.push({name: "Dashboard"})
-        }else{
-          alert(responseData.message)
-        }
-      }catch(err){
+          const response = await Auth.signup(payload)
+          let responseData = response.data
+          this.loading = false
+          if(responseData.code === "00"){
+              this.token = responseData.token
+              this.user = responseData.data
+              localStorage.user = JSON.stringify(responseData.data)
+              localStorage.token = responseData.token
+              await router.push({path: "business/vendor"})
+            }else{
+              notify(responseData.message, 'error')
+          }
+      }catch(err:any){
         this.loading = false
         console.log('error:', err)
-        alert(responseData.message)
+        notify(err, 'error')
       }
      },
 
-     async sendInitiatingOtp(payload:SendOtpRequestType){
-      this.loading = true;
-      const response = await Auth.sendInitiatingOtp(payload)
-      this.loading = false
-      let responseData = response.data
-      try{
-        if(responseData.response_code === "00"){
-          this.showOtpScreen = true
-        }else{
-          alert(responseData.error)
-        }
-      }catch(err){
-        this.loading = false
-        console.log('error:', err)
-      }
-     },
+     // async sendInitiatingOtp(payload:SendOtpRequestType){
+     //  this.loading = true;
+     //  const response = await Auth.sendInitiatingOtp(payload)
+     //  this.loading = false
+     //  let responseData = response.data
+     //  try{
+     //    if(responseData.response_code === "00"){
+     //      this.showOtpScreen = true
+     //    }else{
+     //      alert(responseData.error)
+     //    }
+     //  }catch(err){
+     //    this.loading = false
+     //    console.log('error:', err)
+     //  }
+     // },
 
      async verifyInitiatingOtp(payload:{otp:"", email:""}){
-      this.loading = true;
+      this.loading = true
       const response = await Auth.verifyInitiatingOtp(payload?.otp, payload?.email)
-      this.loading = false
       let responseData = response.data
+      this.loading = false
       try{
         if(responseData.response_code === "00"){
-          this.showOtpScreen = false
           this.verificationDone = true
         }else{
-          alert(responseData.error)
+          notify(responseData.response_message, 'error')
         }
-      }catch(err){
+      }catch(err:any){
         this.loading = false
-        console.log('error:', err)
+        notify(err, 'error')
       }
      },
   },
