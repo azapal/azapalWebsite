@@ -9,7 +9,7 @@ export default {
         return apiClient.businessClient.post(`documents/tin/upload`, payload)
     },
     postIdDocument(payload:CreateIdDocumentRequest){
-        return apiClient.businessClient.post(`documents/tin/upload`, payload)
+        return apiClient.accountClient.post(`user/document`, payload)
     },
 
 
@@ -20,7 +20,7 @@ export default {
             return apiClient.businessClient.get(`documents/tin/${payload}`)
     },
     getIdDocument(payload:string){
-            return apiClient.businessClient.get(`documents/id/${payload}`)
+            return apiClient.accountClient.get(`user/document/${payload}`)
     },
 
 
@@ -31,7 +31,7 @@ export default {
         return apiClient.businessClient.put(`documents/tin/${payload}`)
     },
     updateIdDocument(payload:string){
-        return apiClient.businessClient.put(`documents/id/${payload}`)
+        return apiClient.accountClient.put(`user/documents/${payload}`)
     },
 
 
@@ -42,7 +42,7 @@ export default {
         return apiClient.businessClient.delete(`documents/tin/${payload}`)
     },
     deleteIdDocument(payload:string){
-        return apiClient.businessClient.delete(`documents/id/${payload}`)
+        return apiClient.accountClient.delete(`user/documents/${payload}`)
     },
 
 }

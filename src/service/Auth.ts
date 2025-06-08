@@ -17,6 +17,7 @@ export default {
     changePassword(payload:any){
         return apiClient.accountClient.post('user/change-password', payload)
     },
+
     verifyOtp(payload:string){
         return apiClient.accountClient.get(`auth/verify/otp?otp=${payload}`)
     },
@@ -43,11 +44,11 @@ export default {
         return apiClient.accountClient.post(`send-otp`, payload)
     },
     updateUser(payload:UpdateUserRequestType){
-        return apiClient.accountClient.post(`user/update`, payload)
+        return apiClient.accountClient.put(`user/update`, payload)
     },
 
     readUser(){
-        return apiClient.accountClient.post(`user/read-user`)
+        return apiClient.accountClient.get(`user/read-user`)
     },
 
     verifyEmailOtp(otp:string, email:string){

@@ -3,12 +3,14 @@ import HeaderNav from "../../../components/HeaderNav.vue"
 import Button from "../../../components/ui/button.vue";
 // import { UserBadgeCheck } from "@iconoir/vue";
 import { ref, onBeforeUnmount, onMounted } from "vue"
+import {IdDocumentRequest} from "../../../model/request/documents/documentRequest.js";
 
 let verificationStep = ref('1')
 const video = ref(null);
 const canvas = ref(null);
 let photo = ref(null);
 let stream = null; // Track the camera stream
+const idRequestModel = ref(IdDocumentRequest)
 
 // 🎧 Text-to-Speech Setup
 const speak = (text) => {
@@ -78,7 +80,6 @@ const uploadPhoto = async () => {
 };
 
 onBeforeUnmount(stopCamera)
-// onMounted(startCamera)
 
 </script>
 <template>
@@ -87,59 +88,74 @@ onBeforeUnmount(stopCamera)
     <!-- <NotificationBasic variant="success" :hasCallToAction="false" :hasSubText="false"
         msg="Verification was successfull" /> -->
 
-    <div v-if="verificationStep==='1'" class="relative flex items-center justify-center   relative items-center">
+    <div v-if="verificationStep==='1'" class="relative flex justify-center items-center">
         <!-- <div class="absolute bg-black opacity-60 inset-0 z-0"></div> -->
         <div class="sm:max-w-lg w-full p-5 bg-white rounded-xl z-10">
             <div class="text-left">
                 <h2 class="text-xl font-bold text-gray-900">
                     Document Verification
                 </h2>
-                <p class="mt-2 text-sm text-gray-400">Our system checks against inpersonations, be sure to type in your
+                <p class="mt-2 text-sm text-gray-400">Our system checks against impersonations, be sure to type in your
                     name as it appears on your verification documents. </p>
             </div>
-            <div class="mt-5 space-y-3">
+            <form @submit.prevent="startCamera" class="mt-5 space-y-3">
                 <div class="grid grid-cols-1 space-y-2">
                     <label class="text-sm font-bold text-gray-500 tracking-wide">Select Document Type</label>
-                    <select class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500">
-                        <option>Select options</option>
+                    <select v-model="idRequestModel.document_type" class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" required>
                         <option>National Identification Number(NIN)</option>
                         <option>International Passport</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-1 space-y-2">
-                    <label for="Location"
-                        class="block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 dark:border-gray-700 dark:bg-gray-800">
-                        <span class="text-xs font-medium text-gray-700 dark:text-gray-200"> Full Name </span>
+                    <label for="id_full_name"
+                        class="block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-xs focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+                        <span class="text-xs font-medium text-gray-700 "> Full Name </span>
 
-                        <input type="email" id="Location" placeholder="Your Full Name"
-                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm dark:text-white" />
+                        <input type="text" v-model="idRequestModel.full_name" id="id_full_name" placeholder="Your Full Name"
+                            class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " required/>
                     </label>
                 </div>
 
                 <div>
-                    <Button  @click="startCamera()" variant="outline" v-slot:child>Next</Button>
+                    <button  type="submit" class="w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white">Next</button>
 
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    <div class="w-full"  v-if="verificationStep==='2'">
-        <div v-if="!photo" class="flex relative flex-col justify-center items-center m-2">
-            <h2 class="py-3 px-3 text-center">Capture Selfie and Identification Document</h2>
-            <video ref="video" autoplay></video>
-            <Button @click="capture"  variant="outline" class="mt-3" v-slot:child>Capture </Button>
-            <canvas ref="canvas" style="display: none"></canvas>
+    <div class="w-full flex justify-center items-center"  v-if="verificationStep==='2'">
+      <div class="w-full flex flex-col items-center">
+        <div class="lg:w-[30%] mt-6 mb-3 w-[90%] flex items-start space-x-3 p-4 bg-white  rounded-xl border border-gray-200 ">
+          <div class="p-1 bg-blue-100  rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-900 ">Capture Selfie and Identification Document</h3>
+            <p class="mt-1 text-xs text-gray-500 ">
+              Take a selfie with your identification document on your right hand.
+            </p>
+          </div>
+        </div>
+        <div v-if="!photo" class="flex lg:w-[30%] w-full relative flex-col justify-center items-center m-2">
+
+          <video ref="video" autoplay></video>
+          <button @click="capture" class="w-[95%] m-3 bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white">Capture </button>
+          <canvas ref="canvas" style="display: none"></canvas>
         </div>
 
-        <div v-if="photo" class="h-full flex relative flex-col  justify-center items-center m-3">
-            <img :src="photo" alt="Captured Photo" />
-            <div class="flex gap-3 items-center mt-5">
-                <Button  @click="reCapture" variant="outline" v-slot:child>Retake</Button>
+        <div v-if="photo" class="h-full flex relative flex-col  justify-center items-center">
+          <img :src="photo" alt="Captured Photo" />
+          <div class="flex gap-3 items-center mt-5 w-[95%]">
+            <button  @click="reCapture" class="mt-3 w-full bg-[#2563EB] rounded-[12px] p-[8px] cursor-pointer text-white">Retake</button>
 
-                <router-link to="/bank"><Button  variant="outline" v-slot:child>Upload Photo</Button></router-link>
-            </div>
+            <button @click="" class="mt-3 w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white">Upload Photo</button>
+          </div>
         </div>
+      </div>
+
     </div>
 
 

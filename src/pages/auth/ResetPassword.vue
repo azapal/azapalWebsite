@@ -6,7 +6,6 @@ import {
   ResetPasswordRequest,
   SendEmailOtpRequest,
   LoginRequest,
-  SendOtpRequest
 } from "../../model/request/auth/authenticationRequest";
 import {notify} from "../../utils/toast.ts";
 import {Eye, EyeClosed} from "lucide-vue-next"

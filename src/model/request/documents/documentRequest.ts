@@ -9,7 +9,8 @@ export type CreateCacDocumentRequest = {
 }
 
 export type CreateIdDocumentRequest = {
-    title: string,
+    full_name: string,
+    document_type: string,
     file: File | null,
 }
 
@@ -24,6 +25,7 @@ export const CacDocumentRequest:CreateCacDocumentRequest = {
     file:null
 }
 export const IdDocumentRequest:CreateIdDocumentRequest = {
-    title:"",
+    full_name:"",
+    document_type:"",
     file:null
 }

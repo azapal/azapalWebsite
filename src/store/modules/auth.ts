@@ -62,10 +62,6 @@ export const useAuthStore = defineStore("authStore", {
          return Auth.updateUser(payload)
       },
 
-      readUser(){
-         return Auth.readUser()
-      },
-
     sendInitiatingOtp(payload:SendOtpRequestType){
       return  Auth.sendInitiatingOtp(payload)
      },
@@ -113,6 +109,25 @@ export const useAuthStore = defineStore("authStore", {
               localStorage.token = responseData.token
               await router.push({path: "business/vendor"})
             }else{
+              notify(responseData.message, 'error')
+          }
+      }catch(err:any){
+        this.loading = false
+        console.log('error:', err)
+        notify(err, 'error')
+      }
+     },
+
+     async readUser(){
+
+      try{
+          const response = await Auth.readUser()
+          let responseData = response.data
+          if(responseData.code === "00"){
+              this.user = responseData.data
+              localStorage.user = JSON.stringify(responseData.data)
+              location.reload()
+          }else{
               notify(responseData.message, 'error')
           }
       }catch(err:any){

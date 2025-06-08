@@ -113,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import {
   Home as HomeIcon,
   Users as UsersIcon,
@@ -204,5 +204,7 @@ const toggleSubMenu = (index) => {
 
 const routeTo = (route) => {
   router.push({path:route});
+
 }
+
 </script>

@@ -5,7 +5,8 @@ import ContactEmailManagement from './ContactEmailManagement.vue'
 import ApiConfiguration from './ApiConfiguration.vue'
 import StoreUtils from "../utils/storeUtils.js";
 import Uploader from "./Uploader.vue";
-
+import {UpdateUserRequest} from "../model/request/auth/authenticationRequest.js";
+import {notify} from "../utils/toast.js";
 const store = StoreUtils
 const user = store.get('auth', 'getCurrentUser')
 const userBank = store.get('business', 'getUserBank')
@@ -15,11 +16,13 @@ const files = ref()
 const tinFile = ref()
 const isDragging = ref(false)
 const isUploading = ref(false)
+const loading = ref(false)
 const uploadProgress = ref(0)
 const uploadCacSuccess = ref(false)
 const uploadTinSuccess = ref(false)
 const errorCacMessage = ref('')
 const errorTinMessage = ref('')
+const updateUserRefModel = ref(UpdateUserRequest)
 
 // Tabs state
 const activeTab = ref('profile')
@@ -77,6 +80,27 @@ function removeFile(index, type) {
     errorTinMessage.value = '';
     uploadTinSuccess.value = false;
   }
+}
+
+async function updateUser(){
+  loading.value = true
+  localStorage.removeItem('user')
+  try{
+    const response = await store.dispatch('auth', 'updateUser', updateUserRefModel.value)
+    let responseData = await response.data;
+    loading.value = false
+
+    if(responseData.code === "00"){
+      await store.dispatch('auth', 'readUser')
+    }else{
+      notify(responseData.message, 'error')
+    }
+  }catch(err){
+    notify(err, 'error')
+    loading.value = false
+
+  }
+
 }
 
 function formatFileSize(bytes) {
@@ -175,6 +199,10 @@ function handleTinFileSelection(event) {
 
 
 onMounted(() => {
+  updateUserRefModel.value.phone_number = userProfile?.value?.phone_number || "";
+  updateUserRefModel.value.first_name = userProfile?.value?.first_name || "";
+  updateUserRefModel.value.last_name = userProfile?.value?.last_name || "";
+  updateUserRefModel.value.email = userProfile?.value?.email || "";
   store.dispatch('business', 'readBank')
 })
 </script>
@@ -218,13 +246,13 @@ onMounted(() => {
             <div class="flex gap-4">
               <input 
                 type="text" 
-                v-model="userProfile.first_name"
+                v-model="updateUserRefModel.first_name"
                 placeholder="First name"
                 class="w-full px-3 py-2 border border-gray-300 text-sm rounded-md" 
               />
               <input 
                 type="text" 
-                v-model="userProfile.last_name"
+                v-model="updateUserRefModel.last_name"
                 placeholder="Last name"
                 class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md" 
               />
@@ -236,8 +264,7 @@ onMounted(() => {
             <input 
               type="email" 
               v-model="userProfile.email"
-              class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md"
-              readonly
+              class="w-full px-3 py-2 border border-gray-300 text-sm  rounded-md bg-gray-200"
               disabled
             />
           </div>
@@ -261,16 +288,20 @@ onMounted(() => {
               </div>
               <input 
                 type="tel" 
-                v-model="userProfile.phone_number"
+                v-model="updateUserRefModel.phone_number"
                 class="w-full px-3 py-2 text-sm  border border-gray-300 rounded-md" 
               />
             </div>
           </div>
 
           <div class="flex justify-end">
+            <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+
             <button 
               class="px-4 py-2 bg-gray-100 text-gray-600 cursor-pointer text-sm rounded-md hover:bg-gray-200"
-              @click="saveChanges"
+              @click="updateUser"
+              :disabled="loading"
+              v-else
             >
               Save Changes
             </button>
