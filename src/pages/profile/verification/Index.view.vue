@@ -133,16 +133,16 @@ onBeforeUnmount(stopCamera)
             </svg>
           </div>
           <div>
-            <h3 class="text-sm font-medium text-gray-900 ">Capture Selfie and Identification Document</h3>
+            <h3 class="text-sm font-medium text-gray-900 ">Touch the center of your screen to capture selfie</h3>
             <p class="mt-1 text-xs text-gray-500 ">
               Take a selfie with your identification document on your right hand.
             </p>
           </div>
         </div>
-        <div v-if="!photo" class="flex lg:w-[30%] w-full relative flex-col justify-center items-center m-2">
+        <div v-if="!photo" class="flex lg:w-[30%] relative w-full flex-col justify-center items-center m-2">
 
           <video ref="video" autoplay></video>
-          <button @click="capture" class="w-[95%] m-3 bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white">Capture </button>
+          <button @click="capture" class="w-[55%] h-[55%] m-3 absolute  rounded-[12px] p-[8px] cursor-pointer text-white"> </button>
           <canvas ref="canvas" style="display: none"></canvas>
         </div>
 
