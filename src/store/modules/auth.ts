@@ -50,15 +50,31 @@ export const useAuthStore = defineStore("authStore", {
       }
      },
 
+      resetPassword(payload:any){
+         return Auth.resetPassword(payload)
+      },
+
+      changePassword(payload:any){
+         return Auth.changePassword(payload)
+      },
+
+      updateUser(payload:any){
+         return Auth.updateUser(payload)
+      },
+
+      readUser(){
+         return Auth.readUser()
+      },
+
     sendInitiatingOtp(payload:SendOtpRequestType){
       return  Auth.sendInitiatingOtp(payload)
      },
 
-      sendEmailOtp(payload:SendEmailOtpRequestType){
+    sendEmailOtp(payload:SendEmailOtpRequestType){
       return  Auth.sendEmailOtp(payload)
      },
 
-      verifyEmailOtp(payload:{otp:"", email:""}){
+    verifyEmailOtp(payload:{otp:"", email:""}){
           return  Auth.verifyEmailOtp(payload.otp, payload.email)
       },
 
@@ -105,23 +121,6 @@ export const useAuthStore = defineStore("authStore", {
         notify(err, 'error')
       }
      },
-
-     // async sendInitiatingOtp(payload:SendOtpRequestType){
-     //  this.loading = true;
-     //  const response = await Auth.sendInitiatingOtp(payload)
-     //  this.loading = false
-     //  let responseData = response.data
-     //  try{
-     //    if(responseData.response_code === "00"){
-     //      this.showOtpScreen = true
-     //    }else{
-     //      alert(responseData.error)
-     //    }
-     //  }catch(err){
-     //    this.loading = false
-     //    console.log('error:', err)
-     //  }
-     // },
 
      async verifyInitiatingOtp(payload:{otp:"", email:""}){
       this.loading = true

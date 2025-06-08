@@ -20,9 +20,29 @@ export type LoginRequestType = {
   password: string
 }
 
+export type ResetPasswordRequestType = {
+  email: string,
+  password: string,
+  otp: string
+}
+
+export type ChangePasswordRequestType = {
+  email: string,
+  password: string,
+  old_password: string,
+  otp: string
+}
+
+
 export type SignupRequestType = {
   email:string,
   password: string,
+  phone_number: string,
+  first_name: string,
+  last_name: string
+}
+
+export type UpdateUserRequestType = {
   phone_number: string,
   first_name: string,
   last_name: string
@@ -53,3 +73,25 @@ export const SignupRequest = {
 export const SendEmailOtpRequest:SendEmailOtpRequestType = {
   email:""
 }
+
+export const ResetPasswordRequest:ResetPasswordRequestType = {
+  email: "",
+  password: "",
+  otp: ""
+}
+
+export const ChangePasswordRequest:ChangePasswordRequestType = {
+  email: "",
+  password: "",
+  old_password: "",
+  otp: ""
+}
+
+export const UpdateUserRequest:UpdateUserRequestType = {
+  phone_number: "",
+  first_name: "",
+  last_name: ""
+}
+
+
+

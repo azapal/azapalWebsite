@@ -5,7 +5,7 @@ import axios from "axios";
 // http://127.0.0.1:8000/api/v1/account 
 
 export const accountClient = axios.create({
-    baseURL: `https://accountdev.ennovatingx.com/api/v1/account/`,
+    baseURL: `https://xaccount.pythonanywhere.com/api/v1/account/`,
     withCredentials: false,
     headers: {
          Accept: "application/json",

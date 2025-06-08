@@ -69,7 +69,7 @@ onMounted(() => {
                 <div class="text-center mb-8">
                     <a href="/"
                         class="text-3xl font-bold bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text inline-block mb-4">
-                        Azapal
+                        Aza-pal
                     </a>
                     <h1 class="text-2xl font-bold text-gray-900 mb-2">Create your account</h1>
                     <p class="text-gray-600 text-sm">

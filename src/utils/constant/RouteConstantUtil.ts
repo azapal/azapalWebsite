@@ -8,6 +8,7 @@ export const RouteConstantUtil = {
     auth: {
         login: "Login",
         initiateForgotPassword: "InitiateForgotPassword",
+        initiateChangePassword: "InitiateChangePassword",
         register: "Create Account",
         landingPage: "LandingPage",
         authRequired: false

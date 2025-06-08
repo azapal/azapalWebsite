@@ -24,4 +24,20 @@ export const authRoute: BaseRouteProps[] = [
             layout:RouteConstantUtil.layout.auth
         }
     },
+    {
+        name: RouteConstantUtil.auth.initiateForgotPassword,
+        path: '/reset-password',
+        component: () => import("../../pages/auth/ResetPassword.vue"),
+        meta: {authRequired:RouteConstantUtil.auth.authRequired, sub_title:'',
+            layout:RouteConstantUtil.layout.auth
+        }
+    },
+    {
+        name: RouteConstantUtil.auth.initiateChangePassword,
+        path: '/change-password',
+        component: () => import("../../pages/auth/ChangePassword.vue"),
+        meta: {authRequired:RouteConstantUtil.dashboard.authRequired, sub_title:'',
+            layout:RouteConstantUtil.layout.auth
+        }
+    },
 ]

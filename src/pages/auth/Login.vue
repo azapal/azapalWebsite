@@ -117,18 +117,18 @@ onMounted(() => {
     <div class="min-h-screen flex flex-col bg-white">
         <div class="flex-1 flex flex-col items-center justify-center px-4 py-12">
             <div class="w-full max-w-md">
-                <div class="text-center mb-8">
+                <div class="text-center lg:mb-8 mb-4">
                     <a href="/"
-                        class="text-3xl font-bold bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text inline-block mb-4">
+                        class="lg:text-3xl text-lg font-bold bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text inline-block lg:mb-4 mb-2">
                         Aza-pal
                     </a>
-                    <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome Back.</h1>
+                    <h1 class="lg:text-2xl text-lg font-bold text-gray-900 mb-2">Welcome Back.</h1>
                     <p class="text-gray-600 text-sm">
                         Social Commerce Made Easy.
                     </p>
                 </div>
 
-                <div class="space-y-4 mb-8">
+                <div class="space-y-4 lg:mb-8 mb-4">
                     <!-- <Button variant="outline" class="w-full justify-center gap-2 font-medium  border-gray-300"
                         @click="() => handleSocialSignUp('Google')" :disabled="loading" v-slot:child>
                         <Mail class="w-5 h-5" />
@@ -148,7 +148,7 @@ onMounted(() => {
                     </Button>
                 </div>
 
-                <div class="relative mb-8">
+                <div class="relative lg:mb-8 mb-4">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-gray-300"></div>
                     </div>
@@ -172,17 +172,19 @@ onMounted(() => {
                         <input :type="passwordVisible ? 'text': 'password'" v-model="loginRequestModel.password" id="login_password" placeholder="********"
                             class="mt-1 w-full border-none bg-transparent p-0 focus:border-transparent focus:ring-0 focus:outline-hidden sm:text-sm " />
 
-                         <div class="absolute top-8 right-5 cursor-pointer" @click="passwordVisible = !passwordVisible">
+                         <span class="absolute top-8 right-5 cursor-pointer" @click="passwordVisible = !passwordVisible">
                             <Eye v-if="passwordVisible"></Eye>
                             <EyeClosed v-else></EyeClosed>
-                         </div>
+                         </span>
                     </label>
+
+                    <p  class="w-full text-right underline cursor-pointer text-sm lg:text-md"><router-link to="/reset-password">Forgot Password?</router-link></p>
                 
 
-                    <Button type="submit" class="w-full bg-[#F97316]  text-white"
-                        :disabled="loading" v-slot:child>
+                    <button type="submit" class="w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white"
+                        :disabled="loading">
                         {{ loading ? "Please chillax, it's working." : isVerificationDone ? "Login" : "Send Verification Email" }}
-                    </Button>
+                    </button>
                 </form>
 
                 <div class="text-center mt-6">

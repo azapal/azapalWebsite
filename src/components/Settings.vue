@@ -283,48 +283,48 @@ onMounted(() => {
 
           <div class="mb-4">
             <div class="flex justify-between items-center">
-              <label class="block text-sm font-medium text-gray-700">Password</label>
-              <button 
+              <label class="block text-sm font-medium text-gray-700">Password Management</label>
+              <router-link
                 class="px-4 py-2 cursor-pointer text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
-                @click="changePassword"
+                to="/change-password"
               >
                 Change Password
-              </button>
+              </router-link>
             </div>
           </div>
 
-          <div class="mb-4">
-            <div class="flex justify-between items-center">
-              <div class="flex items-center gap-1">
-                <label class="block text-sm font-medium text-gray-700">Two-factor Auth</label>
-                <button class="text-gray-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path 
-                      stroke-linecap="round" 
-                      stroke-linejoin="round" 
-                      stroke-width="2"
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div class="flex items-center">
-<!--                <span class="mr-2 text-sm">Enabled</span>-->
-                <input type="checkbox" class="w-5 h-5"/>
-<!--                <div class="w-12 h-6 bg-green-500 rounded-full flex items-center p-1">-->
-<!--                  <div class="w-4 h-4 bg-white rounded-full ml-auto"></div>-->
-<!--                </div>-->
-              </div>
-            </div>
-          </div>
+<!--          <div class="mb-4">-->
+<!--            <div class="flex justify-between items-center">-->
+<!--              <div class="flex items-center gap-1">-->
+<!--                <label class="block text-sm font-medium text-gray-700">Two-factor Auth</label>-->
+<!--                <button class="text-gray-400">-->
+<!--                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                    <path -->
+<!--                      stroke-linecap="round" -->
+<!--                      stroke-linejoin="round" -->
+<!--                      stroke-width="2"-->
+<!--                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" -->
+<!--                    />-->
+<!--                  </svg>-->
+<!--                </button>-->
+<!--              </div>-->
+<!--              <div class="flex items-center">-->
+<!--&lt;!&ndash;                <span class="mr-2 text-sm">Enabled</span>&ndash;&gt;-->
+<!--                <input type="checkbox" class="w-5 h-5"/>-->
+<!--&lt;!&ndash;                <div class="w-12 h-6 bg-green-500 rounded-full flex items-center p-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <div class="w-4 h-4 bg-white rounded-full ml-auto"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
 
 <!--          <p class="text-sm text-gray-600 mb-4">-->
 <!--            You cannot disable two-factor authentication because you belong to a business that requires it.-->
 <!--          </p> -->
 
-          <p class="text-sm text-gray-600 mb-4">
-            this feature will soon be avaliable.
-          </p>
+<!--          <p class="text-sm text-gray-600 mb-4">-->
+<!--            this feature will soon be avaliable.-->
+<!--          </p>-->
 
           <!-- <p class="text-sm text-gray-600">
             If you lose access to your authentication device, use any of your backup codes to login to your account.
