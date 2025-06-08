@@ -4,8 +4,8 @@ import HeaderNav from './HeaderNav.vue'
 import ContactEmailManagement from './ContactEmailManagement.vue'
 import ApiConfiguration from './ApiConfiguration.vue'
 import StoreUtils from "../utils/storeUtils.js";
-import Uploader from "./Uploader.vue";
 import {UpdateUserRequest} from "../model/request/auth/authenticationRequest.js";
+import {CheckCheck, FileCogIcon, FileX} from "lucide-vue-next"
 import {notify} from "../utils/toast.js";
 const store = StoreUtils
 const user = store.get('auth', 'getCurrentUser')
@@ -23,6 +23,7 @@ const uploadTinSuccess = ref(false)
 const errorCacMessage = ref('')
 const errorTinMessage = ref('')
 const updateUserRefModel = ref(UpdateUserRequest)
+const idDocument = store.get('documents', 'getIdDocument')
 
 // Tabs state
 const activeTab = ref('profile')
@@ -204,6 +205,7 @@ onMounted(() => {
   updateUserRefModel.value.last_name = userProfile?.value?.last_name || "";
   updateUserRefModel.value.email = userProfile?.value?.email || "";
   store.dispatch('business', 'readBank')
+  store.dispatch('documents', 'readId')
 })
 </script>
 
@@ -376,15 +378,26 @@ onMounted(() => {
       <div v-if="activeTab === 'compliance'" >
         <div class="bg-white rounded-md shadow-sm p-6 mb-5">
           <h2 class="text-sm font-medium text-gray-700 mb-6">Personal Information Verification</h2>
-          <div class="flex justify-between items-center">
+          <div class="flex items-center justify-between" v-if="idDocument" v-for="(i, index) in idDocument" :key="index">
+            <div class="text-sm w-full">
+              <p class="font-medium text-md mb-2">{{ i.document_type }}</p>
+              <a class="font-medium text-md underline" :href="i.file" target="blank">{{ i.full_name }}</a>
+            </div>
+            <button class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-green-500">Verified <CheckCheck /> </button>
+            <button class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-yellow-500">Pending <FileCogIcon /> </button>
+            <button class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-red-500">Declined <FileX /> </button>
+
+          </div>
+
+          <div class="flex justify-between items-center" v-else>
             <p class="text-sm text-gray-700 w-1/2">Add your ID document for verification </p>
             <router-link to="/identity-verification" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Proceed</router-link>
 
-<!--            <div class="text-sm">-->
-<!--              <p>International Passport</p>-->
-<!--              <p>documentname.png</p>-->
-<!--            </div>-->
-<!--            <button class="text-white text-sm p-2 rounded-full cursor-pointer bg-green-500">verified</button>-->
+            <div class="text-sm" v-if="idDocument">
+              <p>International Passport</p>
+              <p>documentname.png</p>
+            </div>
+            <button class="text-white text-sm p-2 rounded-full cursor-pointer bg-green-500">verified</button>
 
           </div>
         </div>

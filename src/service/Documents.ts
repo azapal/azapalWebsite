@@ -1,5 +1,5 @@
-import { apiClient } from "./Base"
-import type { CreateCacDocumentRequest, CreateIdDocumentRequest, CreateTinDocumentRequest } from "../model/request/documents/documentRequest.ts"
+import {apiClient} from "./Base"
+import type { CreateCacDocumentRequest, CreateIdDocumentRequestType, CreateTinDocumentRequest } from "../model/request/documents/documentRequest.ts"
 
 export default {
     postCacDocument(payload:CreateCacDocumentRequest){
@@ -8,8 +8,8 @@ export default {
     postTinDocument(payload:CreateTinDocumentRequest){
         return apiClient.businessClient.post(`documents/tin/upload`, payload)
     },
-    postIdDocument(payload:CreateIdDocumentRequest){
-        return apiClient.accountClient.post(`user/document`, payload)
+    postIdDocument(payload:CreateIdDocumentRequestType){
+        return apiClient.imageAccountUploadClient.post(`user/document`, payload)
     },
 
 
@@ -19,8 +19,8 @@ export default {
     getTinDocument(payload:string){
             return apiClient.businessClient.get(`documents/tin/${payload}`)
     },
-    getIdDocument(payload:string){
-            return apiClient.accountClient.get(`user/document/${payload}`)
+    getIdDocument(){
+            return apiClient.accountClient.get(`user/document`)
     },
 
 
@@ -30,8 +30,8 @@ export default {
     updateTinDocument(payload:string){
         return apiClient.businessClient.put(`documents/tin/${payload}`)
     },
-    updateIdDocument(payload:string){
-        return apiClient.accountClient.put(`user/documents/${payload}`)
+    updateIdDocument(id:string, payload:CreateIdDocumentRequestType){
+        return apiClient.imageAccountUploadClient.put(`user/documents/${id}`, payload)
     },
 
 

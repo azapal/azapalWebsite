@@ -82,6 +82,20 @@ businessClient.interceptors.response.use(response => {
     return response
 });
 
+export const imageAccountUploadClient = axios.create({
+    baseURL:"https://xaccount.pythonanywhere.com/api/v1/account/",
+    withCredentials: false,
+    headers: {
+        Accept: "application/json",
+        // "Access-Control-Allow-Origin": "*",
+        "Content-Type": "multipart/form-data",
+    }
+});
+
+imageAccountUploadClient.interceptors.request.use(config => {
+    config.headers.Authorization = localStorage.token;
+    return config
+})
 
 
 
@@ -90,6 +104,7 @@ businessClient.interceptors.response.use(response => {
 export const apiClient = {
     accountClient: accountClient,
     walletClient: walletClient,
-    businessClient:businessClient
+    businessClient:businessClient,
+    imageAccountUploadClient: imageAccountUploadClient
 }
   

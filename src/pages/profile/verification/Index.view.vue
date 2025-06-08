@@ -4,6 +4,9 @@ import Button from "../../../components/ui/button.vue";
 // import { UserBadgeCheck } from "@iconoir/vue";
 import { ref, onBeforeUnmount, onMounted } from "vue"
 import {IdDocumentRequest} from "../../../model/request/documents/documentRequest.js";
+import storeUtils from "../../../utils/storeUtils.js";
+import {notify} from "../../../utils/toast.js";
+import router from "../../../router/index.js";
 
 let verificationStep = ref('1')
 const video = ref(null);
@@ -11,6 +14,8 @@ const canvas = ref(null);
 let photo = ref(null);
 let stream = null; // Track the camera stream
 const idRequestModel = ref(IdDocumentRequest)
+const loading = ref(false);
+const store = storeUtils
 
 // 🎧 Text-to-Speech Setup
 const speak = (text) => {
@@ -46,9 +51,17 @@ const capture = () => {
     canvas.value.width = video.value.videoWidth;
     canvas.value.height = video.value.videoHeight;
     context.drawImage(video.value, 0, 0, canvas.value.width, canvas.value.height);
-
+    const documentName = idRequestModel.value.full_name+'-'+idRequestModel.value.document_type
     // Convert canvas content to a data URL (base64)
     photo.value = canvas.value.toDataURL("image/png");
+    canvas.value.toBlob((blob) => {
+      if(blob){
+        idRequestModel.value.file = new File([blob], `${documentName.replaceAll(' ', '_').toLowerCase()}.png`, {
+          type: blob.type,
+          lastModified: new Date().getTime()
+        });
+      }
+    }, "image/png");
     speak("Good!")
 
     // Stop the camera after capturing
@@ -61,22 +74,18 @@ const reCapture = () => {
 }
 
 const uploadPhoto = async () => {
+    console.log("upload photo", idRequestModel.value);
     // if (!photo.value) return;
+    loading.value = true;
+    const formData = new FormData();
+    formData.append("file", idRequestModel.value.file);
+    formData.append("full_name", idRequestModel.value.full_name);
+    formData.append("document_type", idRequestModel.value.document_type);
 
-    // const blob = await fetch(photo.value).then((res) => res.blob());
-    // const formData = new FormData();
-    // formData.append("file", blob, "photo.png");
+    await store.dispatch('documents', 'uploadId', formData)
+    loading.value = false;
+    await router.push({path:'/settings'})
 
-    // try {
-    //     const response = await fetch("/api/upload", {
-    //         method: "POST",
-    //         body: formData,
-    //     });
-    //     const result = await response.json();
-    //     console.log("Uploaded:", result);
-    // } catch (error) {
-    //     console.error("Upload failed:", error);
-    // }
 };
 
 onBeforeUnmount(stopCamera)
@@ -87,6 +96,10 @@ onBeforeUnmount(stopCamera)
     <HeaderNav />
     <!-- <NotificationBasic variant="success" :hasCallToAction="false" :hasSubText="false"
         msg="Verification was successfull" /> -->
+
+    <div v-if="loading" class="w-full h-[100%] border fixed bg-white/70 z-40 top-0 right-0 left-0 bottom-0 flex  items-center justify-center">
+      Processing.... we would redirect you once the upload is sucessfull
+    </div>
 
     <div v-if="verificationStep==='1'" class="relative flex justify-center items-center">
         <!-- <div class="absolute bg-black opacity-60 inset-0 z-0"></div> -->
@@ -151,7 +164,7 @@ onBeforeUnmount(stopCamera)
           <div class="flex gap-3 items-center mt-5 w-[95%]">
             <button  @click="reCapture" class="mt-3 w-full bg-[#2563EB] rounded-[12px] p-[8px] cursor-pointer text-white">Retake</button>
 
-            <button @click="" class="mt-3 w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white">Upload Photo</button>
+            <button @click="uploadPhoto" class="mt-3 w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white">Upload Photo</button>
           </div>
         </div>
       </div>
