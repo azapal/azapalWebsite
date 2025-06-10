@@ -43,8 +43,8 @@ const goToSettings = () => {
 </script>
 
 <template>
-    <div class="w-full sticky top-0 z-[20] shadow-sm">
-        <div class="p-2 text-gray-900 bg-white flex justify-between items-center font-medium capitalize">
+    <div class="w-full sticky top-0 z-[20]">
+        <div class="p-2 text-gray-900 bg-white flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f2f2f2] px-10 py-3">
             <div class="px-2 py-2 mr-2 flex items-center gap-3">
                 <!-- Always show company logo -->
                 <router-link to="/business/vendor"
@@ -58,7 +58,7 @@ const goToSettings = () => {
 
               <div class="relative">
 
-                <div @click="toggleNotificationDropdown" class="bg-white p-2 rounded-full relative hover:scale-105 cursor-pointer">
+                <div @click="toggleNotificationDropdown" class="bg-[#f2f2f2] p-2 rounded-lg relative hover:scale-105 cursor-pointer">
                   <span class="text-xs absolute z-40 top-0 right-0 text-white bg-[#2563EB] rounded-full w-5 h-5 flex items-center justify-center">5</span>
                   <Bell />
                 </div>

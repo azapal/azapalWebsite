@@ -141,11 +141,11 @@ onMounted(() => {
                         <span>Continue with Instagram</span>
                     </Button> -->
 
-                    <Button variant="outline" class="w-full justify-center gap-2 font-medium border-gray-300"
-                        @click="() => handleSocialSignUp('Tiktok')" :disabled="loading" v-slot:child>
-                        <img src="../../assets/icons/icons8-tiktok.svg" class="w-5 h-5" />
+                    <button class="w-full justify-center gap-2 font-medium border border-gray-300"
+                        @click="() => handleSocialSignUp('Tiktok')" :disabled="loading">
+                        <img src="../../assets/icons/icons8-tiktok.svg" class="w-5 h-5" alt="tiktok" />
                         <span>Continue with TikTok</span>
-                    </Button>
+                    </button>
                 </div>
 
                 <div class="relative lg:mb-8 mb-4">
