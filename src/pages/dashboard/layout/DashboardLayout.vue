@@ -72,12 +72,16 @@
                   <li v-for="(subItem, subIndex) in item.subItems" :key="subIndex">
                     <router-link
                         :to="subItem.link"
-                        :class="`flex items-center p-2 text-sm rounded-full hover:bg-gray-700 hover:text-white
-                    ${route?.name?.toLowerCase() === subItem.name.toLowerCase()  && ('bg-[#F97316]/30 text-black')} ${collapsed && !item.hasSubItems && ('justify-center')}`"
+                        :class="`flex items-center p-2 text-sm rounded-full hover:text-[#F97316]
+                    ${route?.name?.toLowerCase() === subItem.name.toLowerCase()  && ('text-[#F97316] ')} ${collapsed && !item.hasSubItems && ('justify-center')}`"
 
                     >
-                      <div :class="`w-1 h-1 rounded-full bg-green-600 ${route?.name?.toLowerCase() === subItem.name.toLowerCase() && ('bg-white')} mr-3 text-[13px]`"></div>
-                      {{ subItem.name }}
+                      <div :class="`w-1 h-1 rounded-full  bg-gray-600 ${route?.name?.toLowerCase() === subItem.name.toLowerCase() && ('bg-white')} mr-3 text-[13px]`"></div>
+                      <div class="flex items-center gap-1">
+                        <CheckCheckIcon class="text-green-600 w-4 h-4" v-if="route?.name?.toLowerCase() === subItem.name.toLowerCase()" />
+                        {{ subItem.name }}
+
+                      </div>
                     </router-link>
                   </li>
                 </ul>
@@ -123,6 +127,7 @@ import {
   ChevronDown as ChevronDownIcon,
   Building as BuildingIcon,
   Workflow as WorkflowIcon,
+  CheckCheck as CheckCheckIcon,
 } from 'lucide-vue-next';
 import HeaderNav from "../../../components/HeaderNav.vue";
 import router from "../../../router/index.js"

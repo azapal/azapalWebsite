@@ -189,7 +189,7 @@ onUnmounted(() => {
 
 
 
-          <button type="submit" :class="`w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white ${loading && ('cursor-pointer:not-allowed')}`"
+          <button type="submit" :class="`w-full bg-[#F97316] disabled:cursor-not-allowed hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white ${loading && ('cursor-pointer:not-allowed')}`"
                   :disabled="loading">
             {{ loading ? "Please chillax, it's working." : emailSent ? "Proceed" : "Send Verification Email" }}
           </button>

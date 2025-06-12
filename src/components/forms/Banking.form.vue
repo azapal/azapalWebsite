@@ -102,7 +102,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 ">
+  <div class="min-h-screen">
     <HeaderNav>
       <template v-slot:title>
         <div class="flex items-center gap-2">

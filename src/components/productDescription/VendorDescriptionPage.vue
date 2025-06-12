@@ -1,12 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-900 text-white">
     <!-- Header -->
-    <header class="py-4 lg:px-8 lg:px-16">
-      <div class="text-sm text-gray-400 max-w-7xl mx-auto ">Azapal Business</div>
-    </header>
+
 
     <!-- Hero Section -->
     <section class="px-8 lg:px-16 pt-6 pb-12">
+      <header class="py-4">
+        <div class="text-sm text-gray-400 max-w-7xl mx-auto ">Azapal Business</div>
+      </header>
       <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Left Column -->
         <div class="text-sm">
@@ -21,7 +22,7 @@
         <div class="mt-6 md:mt-0">
           <div class="bg-white rounded-lg p-6 text-gray-800 text-sm">
             <h3 class="text-xl font-semibold mb-4">Get started</h3>
-            <p class="mb-6">Create an {{ product.name }} organization to get started.</p>
+            <p class="mb-6">Create an {{ product.name }} account to get started.</p>
             <router-link to="/business/vendor/create"
                 class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
             >
@@ -32,7 +33,7 @@
           <div class="bg-white rounded-lg p-6 text-gray-800 mt-6 text-sm">
             <h3 class="text-xl font-semibold mb-4">Pricing</h3>
             <p class="mb-3">
-              {{ product.name }} is free for the first {{product.pricing.trial}} then {{ product.pricing.cost }} monthly
+              {{ product.name }} is free for the first {{product.pricing.trial}} then ₦{{ product.pricing.cost }} monthly
               subscription.
             </p>
 <!--            <a href="#" class="text-blue-500 hover:underline flex items-center">-->
@@ -122,12 +123,11 @@ import {
 const product = ref({
   name: 'Azapal Online Vendors (AOV)',
   tagline: 'Providing reliable and trusted social place for africa social commerce',
-  description: 'Azapal Online Vendors (AOV) Provides reliable and trusted social place for africa social commerce' +
-      'by ......',
+  description: 'Azapal Online Vendors (AOV) Provides reliable and trusted social place for africa social commerce.',
   pricing: {
-    cost: '1,000',
+    cost: '500',
     storage: null,
-    trial: '6 months',
+    trial: '2 months',
   }
 });
 
@@ -157,12 +157,13 @@ const workflowSteps = ref([
 
 const features = ref([
   {
-    title: 'locked savings/savings target for users',
-    description: 'Amazon WorkMail helps you manage your corporate email infrastructure and eliminates the need for up-front investments in licensing or on-premises servers.'
+    title: 'Owo Sure',
+    description: 'Azapal uses a secure transaction technology designed to protect the stockholders in an online transactions. Be assured to get paid on every successful transactions'
   },
   {
-    title: 'community loan access for SME',
-    description: 'Amazon WorkMail works with most major operating systems and devices. Users can access their email, calendar, and contacts with existing email clients like Microsoft Outlook, or with the Amazon WorkMail web application.'
+    title: 'Automated Logistics Service',
+    description: 'Azapal automates logistics and dispatch services for your business, by using end-to-end smart notification systems. Just plug in and lets automate logistics for your business.',
+    action:'See how it works'
   }
 ]);
 
@@ -176,4 +177,5 @@ const resourceLinks = ref([
   'Administrator Guide',
   'User Guide'
 ]);
+
 </script>

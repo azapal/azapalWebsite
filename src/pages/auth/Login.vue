@@ -141,7 +141,7 @@ onMounted(() => {
                         <span>Continue with Instagram</span>
                     </Button> -->
 
-                    <button class="w-full justify-center gap-2 font-medium border border-gray-300"
+                    <button class="w-full flex items-center p-2 rounded-[8px] cursor-pointer hover:scale-105 justify-center gap-2 font-medium border border-gray-300"
                         @click="() => handleSocialSignUp('Tiktok')" :disabled="loading">
                         <img src="../../assets/icons/icons8-tiktok.svg" class="w-5 h-5" alt="tiktok" />
                         <span>Continue with TikTok</span>
@@ -181,9 +181,9 @@ onMounted(() => {
                     <p  class="w-full text-right underline cursor-pointer text-sm lg:text-md"><router-link to="/reset-password">Forgot Password?</router-link></p>
                 
 
-                    <button type="submit" class="w-full bg-[#F97316] hover:bg-orange-400 rounded-[12px] p-[8px] cursor-pointer text-white"
+                    <button type="submit" class="w-full bg-[#F97316] disabled:cursor-not-allowed cursor-pointer hover:bg-orange-400 rounded-[12px] p-[8px] text-white"
                         :disabled="loading">
-                        {{ loading ? "Please chillax, it's working." : isVerificationDone ? "Login" : "Send Verification Email" }}
+                        {{ loading ? "Sending." : isVerificationDone ? "Login" : "Send Verification Email" }}
                     </button>
                 </form>
 

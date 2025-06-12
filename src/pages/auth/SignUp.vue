@@ -73,7 +73,7 @@ onMounted(() => {
                     </a>
                     <h1 class="text-2xl font-bold text-gray-900 mb-2">Create your account</h1>
                     <p class="text-gray-600 text-sm">
-                        Join thousands who trust Azapal for secure online transactions
+                        Join thousands who trust Aza-pal for secure online transactions
                     </p>
                 </div>
 
@@ -90,11 +90,11 @@ onMounted(() => {
                         <span>Continue with Instagram</span>
                     </Button> -->
 
-                    <Button variant="outline" class="w-full justify-center gap-2 font-medium border-gray-300"
-                        @click="() => handleSocialSignUp('Tiktok')" :disabled="loading" v-slot:child>
-                        <img src="../../assets/icons/icons8-tiktok.svg" class="w-5 h-5" />
-                        <span>Continue with TikTok</span>
-                    </Button>
+                  <button class="w-full flex items-center p-2 rounded-[8px] cursor-pointer hover:scale-105 justify-center gap-2 font-medium border border-gray-300"
+                          @click="() => handleSocialSignUp('Tiktok')" :disabled="loading">
+                    <img src="../../assets/icons/icons8-tiktok.svg" class="w-5 h-5" alt="tiktok" />
+                    <span>Continue with TikTok</span>
+                  </button>
                 </div>
 
                 <div class="relative mb-8">
@@ -155,10 +155,10 @@ onMounted(() => {
                   
 
 
-                    <Button type="submit" class="w-full bg-[#F97316] hover:bg-[#F97316]-dark text-white"
-                        :disabled="loading" v-slot:child>
+                    <button type="submit" class="w-full bg-[#F97316] disabled:cursor-not-allowed cursor-pointer hover:bg-orange-400 rounded-[12px] p-[8px] text-white"
+                        :disabled="loading">
                         {{ loading ? "Creating account..." : "Create Account" }}
-                    </Button>
+                    </button>
                 </form>
 
                 <div class="text-center mt-6">

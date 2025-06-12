@@ -390,7 +390,7 @@ onMounted(() => {
               <a class="font-medium text-md underline" :href="i.file" target="blank">{{ i.full_name }}</a>
             </div>
             <button v-if="i.status === 'verified'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-green-500">Verified <CheckCheck /> </button>
-            <button v-if="i.status === 'pending'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-yellow-500">Pending <FileCogIcon /> </button>
+            <button v-if="i.status === 'pending'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-yellow-500">Pending  <FileCogIcon /> </button>
             <button v-if="i.status === 'declined'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-red-500">Declined <FileX /> </button>
 
           </div>

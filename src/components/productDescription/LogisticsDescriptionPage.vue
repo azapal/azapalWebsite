@@ -21,7 +21,7 @@
         <div class="mt-6 md:mt-0">
           <div class="bg-white rounded-lg p-6 text-gray-800 text-sm">
             <h3 class="text-xl font-semibold mb-4">Get started</h3>
-            <p class="mb-6">Create an {{ product.name }} to get started.</p>
+            <p class="mb-6">Create an {{ product.name }} organisation to get started.</p>
             <router-link to="/business/logistics/create"
                 class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
             >
@@ -32,7 +32,7 @@
           <div class="bg-white rounded-lg p-6 text-gray-800 mt-6 text-sm">
             <h3 class="text-xl font-semibold mb-4">Pricing</h3>
             <p class="mb-3">
-              {{ product.name }} is free for the first {{product.pricing.trial}} then {{ product.pricing.cost }} per 30
+              {{ product.name }} is free for the first {{product.pricing.trial}} then ₦{{ product.pricing.cost }} per 30
               logistics service request.
             </p>
 <!--            <a href="#" class="text-blue-500 hover:underline flex items-center">-->
@@ -120,40 +120,16 @@ import {
 } from 'lucide-vue-next';
 
 const product = ref({
-  name: 'Azapal Logistics',
-  tagline: 'Providing Logistics Marketplace for social commerce is africa',
-  description: 'Azapal Logistics is a marketplace of logistics/dispatch service for local and international logistics' +
-      'services for the social commerce in africa',
+  name: 'Azapal Partnered Logistics',
+  tagline: 'Providing Logistics Marketplace for social commerce in africa',
+  description: 'Azapal Logistics is a marketplace of logistics/dispatch service for local and international logistics ' +
+      'services for social commerce in africa',
   pricing: {
     cost: '5,000',
     storage: null,
     trial: '6 months',
   }
 });
-
-const workflowSteps = ref([
-  {
-    title: 'Setup',
-    icon: SettingsIcon,
-    description: 'Create an Amazon WorkMail organization for your domain and users'
-  },
-  {
-    title: 'Integrate',
-    subtitle: '(optional)',
-    icon: PuzzleIcon,
-    description: 'Integrate with AWS services or on-premises solutions'
-  },
-  {
-    title: 'Connect',
-    icon: LaptopIcon,
-    description: 'Use existing email clients on your devices or the web'
-  },
-  {
-    title: 'Communicate',
-    icon: MailIcon,
-    description: 'Send and receive emails, access your calendar and contacts'
-  }
-]);
 
 const features = ref([
   {
