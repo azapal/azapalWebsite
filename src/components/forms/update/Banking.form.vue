@@ -1,11 +1,11 @@
   <script setup>
-import HeaderNav from '../../components/HeaderNav.vue';
-import Button from '../../components/ui/button.vue';
+import HeaderNav from '../../../components/HeaderNav.vue';
+import Button from '../../../components/ui/button.vue';
 import { Check, Trash, ArrowLeft, ChevronsUpDown, Loader2 } from 'lucide-vue-next';
 import { onMounted, ref, computed, watch } from 'vue';
-import StoreUtils from "../../utils/storeUtils";
-import {notify} from "../../utils/toast.js";
-import router from "../../router/index.js";
+import StoreUtils from "../../../utils/storeUtils";
+import {notify} from "../../../utils/toast.js";
+import router from "../../../router/index.js";
 
 const store = StoreUtils;
 const banks = store.get('pay', 'getBanks');
@@ -36,7 +36,7 @@ watch([() => createBankModel.value.bank_code, () => resolvedBank.value], () => {
   formValid.value = !!createBankModel.value.bank_code && !!resolvedBank.value;
 }, { deep: true });
 
-const createBank = async () => {
+const updateBank = async () => {
   loading.value = true;
   if (!formValid.value) return;
   
@@ -44,7 +44,7 @@ const createBank = async () => {
   createBankModel.value.bank_name = banks.value.find(it => it.code === createBankModel.value.bank_code)?.name || '';
 
   try{
-    const response = await store.dispatch('business', 'addBank', createBankModel.value);
+    const response = await store.dispatch('business', 'updateBank', createBankModel.value);
     loading.value = false;
     let responseData =  response.data;
     if (responseData.code === "00") {
@@ -113,12 +113,12 @@ onMounted(() => {
           <router-link to="/profile" class="flex items-center">
             <ArrowLeft class="w-5 h-5" />
           </router-link>
-          <h1 class="text-lg font-medium">Add Bank Account</h1>
+          <h1 class="text-lg font-medium">Update Bank Account</h1>
         </div>
       </template>
       <template v-slot:others>
         <Button 
-          @click="createBank" 
+          @click="updateBank"
           :disabled="!formValid" 
           variant="outline" 
           class="w-24 sm:w-28 lg:hidden" 
@@ -147,7 +147,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <form @submit.prevent="createBank" class="space-y-6">
+        <form @submit.prevent="updateBank" class="space-y-6">
           <!-- Bank Selection -->
           <div class="space-y-2">
             <label for="bank" class="block text-sm font-medium text-gray-700 ">Select Bank</label>
@@ -235,7 +235,7 @@ onMounted(() => {
           <!-- Submit Button (only visible on mobile) -->
           <div class="">
             <Button
-              @click="createBank" 
+              @click="updateBank"
               :disabled="!formValid" 
               variant="outline" 
               class="w-full" 

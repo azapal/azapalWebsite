@@ -159,6 +159,18 @@ export const appRoute: BaseRouteProps[] = [
           import(/* webpackChunkName: "about" */ "../../pages/dashboard/Bank.view.vue"),
       },
 
+  {
+        path: "/update/bank",
+        name: "Update BANK",
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired
+        },
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../../pages/dashboard/UpdateBank.view.vue"),
+      },
+
       {
         path: "/subscription",
         name: "SUBSCRIPTION",
@@ -185,14 +197,28 @@ export const appRoute: BaseRouteProps[] = [
 
       {
         path: "/settings",
+        hash:"#profile",
         name: "SETTINGS",
         meta: {
           showHeader: true,
           showBackArrow: true,
-          authRequired:RouteConstantUtil.dashboard.authRequired
+          authRequired:RouteConstantUtil.dashboard.authRequired,
+          hash:"#profile"
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../../pages/settings/Settings.vue"),
+      },
+
+      {
+        path: "/account-notifications",
+        name: "NOTIFICATION",
+        meta: {
+          showHeader: true,
+          showBackArrow: true,
+          authRequired:RouteConstantUtil.dashboard.authRequired,
+        },
+        component: () =>
+            import(/* webpackChunkName: "about" */ "../../pages/dashboard/AccountNotifications.vue"),
       },
     
 ]

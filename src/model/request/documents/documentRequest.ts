@@ -1,10 +1,10 @@
 export type CreateTinDocumentRequest = {
-    title: string,
+    status: string,
     file: File | null,
 }
 
 export type CreateCacDocumentRequest = {
-    title: string,
+    status: string,
     file: File | null,
 }
 
@@ -17,11 +17,11 @@ export type CreateIdDocumentRequestType = {
 
 
 export const TinDocumentRequest:CreateTinDocumentRequest = {
-    title:"",
+    status:"",
     file:null
 }
 export const CacDocumentRequest:CreateCacDocumentRequest = {
-    title:"",
+    status:"",
     file:null
 }
 export const IdDocumentRequest:CreateIdDocumentRequestType = {

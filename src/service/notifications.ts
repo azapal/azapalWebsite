@@ -1,11 +1,10 @@
-import { apiClient } from "./Base"
-import type { CreateTinDocumentRequest } from "../model/request/documents/documentRequest.ts"
-
+import { apiClient } from "./base.ts"
+import type {UpdateNotificationRequestType} from "../model/request/notifications/NotificationRequest.ts";
 export default {
-    readAccountNotification(payload:any){
-        return apiClient.accountClient.post(`user/account/notification/${payload}`)
+    readAccountNotification(){
+        return apiClient.accountClient.get(`user/account/notification`)
     },
-    updateAccountNotification(payload:CreateTinDocumentRequest){
-        return apiClient.accountClient.post(`user/account/notification`, payload)
+    updateAccountNotification(id:string, payload:UpdateNotificationRequestType){
+        return apiClient.accountClient.put(`user/account/notification/${id}`, payload)
     },
 }

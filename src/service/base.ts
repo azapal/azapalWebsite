@@ -2,10 +2,12 @@ import axios from "axios";
 // import router from "../router";
 
 // https://accountdev.ennovatingx.com/api/v1/account/
-// http://127.0.0.1:8000/api/v1/account 
+const baseAzapal =  "http://127.0.0.1:8000/api/v1"
+const baseAccount =  "http://127.0.0.1:10000/api/v1"
+const basePayment =  "http://127.0.0.1:9000/api/v1"
 
 export const accountClient = axios.create({
-    baseURL: `https://xaccount.pythonanywhere.com/api/v1/account/`,
+    baseURL: `${baseAccount}/account/`,
     withCredentials: false,
     headers: {
          Accept: "application/json",
@@ -15,7 +17,7 @@ export const accountClient = axios.create({
 });
 
 export const walletClient = axios.create({
-    baseURL: `https://accountdev.ennovatingx.com/api/v1/payment/`,
+    baseURL: `${basePayment}/payment/`,
     withCredentials: false,
     headers: {
          Accept: "application/json",
@@ -26,7 +28,7 @@ export const walletClient = axios.create({
 
 
 export const businessClient = axios.create({
-    baseURL: `https://accountdev.ennovatingx.com/api/v1/azapal/`,
+    baseURL: `${baseAzapal}/azapal/`,
     withCredentials: false,
     headers: {
          Accept: "application/json",
@@ -83,7 +85,17 @@ businessClient.interceptors.response.use(response => {
 });
 
 export const imageAccountUploadClient = axios.create({
-    baseURL:"https://xaccount.pythonanywhere.com/api/v1/account/",
+    baseURL:`${baseAccount}/account/`,
+    withCredentials: false,
+    headers: {
+        Accept: "application/json",
+        // "Access-Control-Allow-Origin": "*",
+        "Content-Type": "multipart/form-data",
+    }
+});
+
+export const businessImageUploadClient = axios.create({
+    baseURL:`${baseAzapal}/azapal/`,
     withCredentials: false,
     headers: {
         Accept: "application/json",
@@ -97,6 +109,21 @@ imageAccountUploadClient.interceptors.request.use(config => {
     return config
 })
 
+imageAccountUploadClient.interceptors.response.use(response => {
+
+    return response
+});
+
+businessImageUploadClient.interceptors.request.use(config => {
+    config.headers.Authorization = localStorage.token;
+    return config
+})
+
+businessImageUploadClient.interceptors.response.use(response => {
+
+    return response
+});
+
 
 
 
@@ -105,6 +132,7 @@ export const apiClient = {
     accountClient: accountClient,
     walletClient: walletClient,
     businessClient:businessClient,
-    imageAccountUploadClient: imageAccountUploadClient
+    imageAccountUploadClient: imageAccountUploadClient,
+    businessImageUploadClient: businessImageUploadClient
 }
   

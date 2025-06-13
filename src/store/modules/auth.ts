@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import Auth from "../../service/Auth";
+import Auth from "../../service/auth.ts";
 import router from "../../router"
 import type {
     SendOtpRequestType,

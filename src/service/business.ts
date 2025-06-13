@@ -1,14 +1,18 @@
-import { apiClient } from "./Base"
+import { apiClient } from "./base.ts"
 
 export default {
     
 
-    readUserBank(payload:any){
-        return apiClient.businessClient.get('bank', payload)
+    readUserBank(){
+        return apiClient.businessClient.get('bank')
     },
 
     addUserBank(payload:any){
         return apiClient.businessClient.post('bank', payload)
+    },
+
+    updateUserBank(payload:any){
+        return apiClient.businessClient.put('bank', payload)
     },
 
     updatePayment(payload:any){

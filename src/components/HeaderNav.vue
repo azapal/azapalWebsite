@@ -7,6 +7,7 @@ import StoreUtils from '../utils/storeUtils';
 const store = StoreUtils;
 
 const user = store.get('auth', 'getCurrentUser');
+
 const dropdownOpen = ref(false);
 const dropdownNotificationOpen = ref(false);
 
@@ -40,10 +41,15 @@ const goToSettings = () => {
     router.push('/settings');
     closeDropdown();
 };
+
+const unreadNotifications = store.get('notifications', 'getUnreadNotifications')
+
+
 </script>
 
 <template>
     <div class="w-full sticky top-0 z-[20]">
+      {{unreadCount}}
         <div class="p-2 text-gray-900 bg-white flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f2f2f2] px-10 py-3">
             <div class="px-2 py-2 mr-2 flex items-center gap-3">
                 <!-- Always show company logo -->
@@ -58,46 +64,48 @@ const goToSettings = () => {
 
               <div class="relative">
 
-                <div @click="toggleNotificationDropdown" class="bg-[#f2f2f2] p-2 rounded-lg relative hover:scale-105 cursor-pointer">
-                  <span class="text-xs absolute z-40 top-0 right-0 text-white bg-[#2563EB] rounded-full w-5 h-5 flex items-center justify-center">5</span>
+                <router-link to="/account-notifications" >
+                  <div class="bg-[#f2f2f2] p-2 rounded-lg relative hover:scale-105 cursor-pointer">
+                  <span class="text-xs absolute z-40 top-0 right-0 text-white bg-[#2563EB] rounded-full w-5 h-5 flex items-center justify-center">{{unreadNotifications?.length}}</span>
                   <Bell />
-                </div>
-                <!-- Dropdown menu -->
-                <div
-                    v-if="dropdownNotificationOpen"
-                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30"
-                >
-
-                  <router-link
-                      to="/settings"
-                      @click="goToSettings"
-                  >
-                    <div class="flex relative text-xs items-center justify-start px-4 gap-1 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                    >
-
-                      <LucideUserRoundCheck />
-                   Account Notification
-                      <span class="text-xs  z-40 top-0 right-4 text-white bg-[#EA580C] rounded-full w-4 h-4 flex items-center justify-center">2</span>
-
-                    </div>
-                  </router-link >
-
-                  <router-link
-                      to="/settings"
-                      @click="goToSettings"
-                  >
-                  <div
-
-                      class="flex relative items-center gap-1 px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer"
-                  >
-
-                    <HandCoins />
-                    Payment Notification
-                    <span class="text-xs z-40 top-0 right-4 text-white bg-[#2563EB] rounded-full w-4 h-4 flex items-center justify-center">3</span>
-
                   </div>
-                  </router-link>
-                </div>
+                </router-link>
+                <!-- Dropdown menu -->
+<!--                <div-->
+<!--                    v-if="dropdownNotificationOpen"-->
+<!--                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30"-->
+<!--                >-->
+
+<!--                  <router-link-->
+<!--                      to="/account-notifications"-->
+
+<!--                  >-->
+<!--                    <div class="flex relative text-xs items-center justify-start px-4 gap-1 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"-->
+<!--                    >-->
+
+<!--                      <LucideUserRoundCheck />-->
+<!--                   Account Notification-->
+<!--                      <span class="text-xs  z-40 top-0 right-4 text-white bg-[#EA580C] rounded-full w-4 h-4 flex items-center justify-center">{{unreadCount?.length}}</span>-->
+
+<!--                    </div>-->
+<!--                  </router-link >-->
+
+<!--                  <router-link-->
+<!--                      to="/settings"-->
+<!--                      @click="goToSettings"-->
+<!--                  >-->
+<!--                  <div-->
+
+<!--                      class="flex relative items-center gap-1 px-4 py-2 text-xs hover:bg-gray-100 cursor-pointer"-->
+<!--                  >-->
+
+<!--                    <HandCoins />-->
+<!--                    Payment Notification-->
+<!--                    <span class="text-xs z-40 top-0 right-4 text-white bg-[#2563EB] rounded-full w-4 h-4 flex items-center justify-center">3</span>-->
+
+<!--                  </div>-->
+<!--                  </router-link>-->
+<!--                </div>-->
               </div>
 
               <!-- User dropdown menu -->

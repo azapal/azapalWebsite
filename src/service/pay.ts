@@ -1,4 +1,4 @@
-import { apiClient } from "./Base"
+import { apiClient } from "./base.ts"
 
 export default {
   

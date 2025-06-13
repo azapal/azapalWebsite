@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import Business from "../../service/Business";
+import Business from "../../service/business.ts";
 export const useBusinessStore = defineStore("businessStore", {
   state: () => ({
     loading: false,
@@ -41,19 +41,17 @@ export const useBusinessStore = defineStore("businessStore", {
       return Business.readMembersByCooperativeId(payload)
     },
 
-    async readBank(payload: any) {
+    async readBank() {
       try{
-        const response = await Business.readUserBank(payload)
+        const response = await Business.readUserBank()
         const responseData = response.data
         if(responseData.code === "00"){
           this.userBank = responseData.data
         }
-
       }catch(error){
         console.log(error)
       }
     },
-
 
     async readSubscribe() {
       this.loading = true;
@@ -101,6 +99,10 @@ export const useBusinessStore = defineStore("businessStore", {
 
     addBank(payload: any) {
       return Business.addUserBank(payload)
+    },
+
+    updateBank(payload: any) {
+      return Business.updateUserBank(payload)
     }
   }
 });

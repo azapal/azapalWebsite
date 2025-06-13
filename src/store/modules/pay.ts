@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import Pay from "../../service/Pay";
+import Pay from "../../service/pay.ts";
 import router from "../../router";
 
 export const usePayStore = defineStore("payStore", {

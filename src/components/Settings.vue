@@ -1,14 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import HeaderNav from './HeaderNav.vue'
+import HeaderNav from '../components/HeaderNav.vue'
 import ContactEmailManagement from './ContactEmailManagement.vue'
 import ApiConfiguration from './ApiConfiguration.vue'
 import StoreUtils from "../utils/storeUtils.js";
 import {UpdateUserRequest} from "../model/request/auth/authenticationRequest.js";
 import {CheckCheck, FileCogIcon, FileX} from "lucide-vue-next"
 import {notify} from "../utils/toast.js";
-import Notifications from "../pages/dashboard/Notifications.vue"
-
+import AccountNotifications from "../pages/dashboard/AccountNotifications.vue"
+import {CacDocumentRequest, TinDocumentRequest} from "../model/request/documents/documentRequest.js";
+import router from "../router/index.js";
 
 
 const store = StoreUtils
@@ -28,6 +29,7 @@ const errorCacMessage = ref('')
 const errorTinMessage = ref('')
 const updateUserRefModel = ref(UpdateUserRequest)
 const idDocument = store.get('documents', 'getIdDocument')
+const businessDocument = store.get('documents', 'getDocuments')
 
 
 // Tabs state
@@ -197,6 +199,43 @@ function handleTinFileSelection(event) {
   event.target.value = null;
 }
 
+
+async function handleBusinessUpload(payload){
+  loading.value = true;
+  console.log(payload);
+
+  if(files.value){
+    // if (!photo.value) return;
+    const filesFormData = new FormData();
+    filesFormData.append("file", files.value);
+    console.log(businessDocument)
+    if(businessDocument.value.cac){
+      filesFormData.append("status", 'pending');
+      await store.dispatch('documents', 'updateCac', {id:payload.cacId, file:filesFormData})
+    }else{
+      await store.dispatch('documents', 'uploadCac', filesFormData)
+    }
+
+
+  }
+
+  if(tinFile.value){
+    // if (!photo.value) return;
+    const tinFormData = new FormData();
+    tinFormData.append("file", tinFile.value);
+    if(businessDocument.value.tin){
+      tinFormData.append("status", 'pending');
+      await store.dispatch('documents', 'updateTin', {id:payload?.tinId, file:tinFormData})
+    }else{
+      await store.dispatch('documents', 'uploadTin', tinFormData)
+    }
+  }
+
+  loading.value = false;
+  tinFile.value = null;
+  files.value = null;
+}
+
 // function handleFileDrop(event) {
 //   this.isDragging = false;
 //   const newFiles = Array.from(event.dataTransfer.files);
@@ -211,20 +250,23 @@ onMounted(() => {
   updateUserRefModel.value.email = userProfile?.value?.email || "";
   store.dispatch('business', 'readBank')
   store.dispatch('documents', 'readId')
+  store.dispatch('documents', 'readBusinessDocs')
+  activeTab.value = router?.currentRoute?.value?.hash?.replace('#','') || router.currentRoute?.value?.meta?.hash?.replace('#','');
+  console.log(router.currentRoute.value)
 })
 </script>
 
 <template>
   <HeaderNav />
-<!--  <Notifications />-->
   <div class="bg-white min-h-screen">
-    <div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="max-w-4xl mx-auto py-8 px-4 h-[100%]">
       <!-- Tabs Navigation -->
       <div class="border-b border-gray-200 mb-6">
         <nav class="flex gap-8">
-          <button 
+          <router-link
             v-for="tab in tabs" 
             :key="tab.id"
+            :to="`#${tab.label.toLowerCase()}`"
             @click="switchTab(tab.id)"
             class="py-4 px-1 relative text-sm"
             :class="[
@@ -238,13 +280,13 @@ onMounted(() => {
               v-if="activeTab === tab.id" 
               class="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500"
             ></div>
-          </button>
+          </router-link>
         </nav>
       </div>
 
       <!-- Tab Content -->
       <!-- Profile Tab -->
-      <div v-if="activeTab === 'profile'">
+      <div id="profile" class="" v-if="activeTab === 'profile'">
         <!-- Personal Information Section -->
         <div class="bg-white rounded-md shadow-sm p-6 mb-6">
           <h2 class="text-sm font-medium text-gray-700 mb-6">Personal Information</h2>
@@ -374,14 +416,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Contact Tab -->
-      <div v-if="activeTab === 'contact'" class="bg-white rounded-md shadow-sm p-6">
-        
-        <ContactEmailManagement />
-      </div>
-
       <!-- Compliance Tab -->
-      <div v-if="activeTab === 'compliance'" >
+      <div v-if="activeTab === 'compliance'"  id="compliance">
         <div class="bg-white rounded-md shadow-sm p-6 mb-5">
           <h2 class="text-sm font-medium text-gray-700 mb-6">Personal Information Verification</h2>
           <div class="flex items-center justify-between" v-if="idDocument.length" v-for="(i, index) in idDocument" :key="index">
@@ -391,7 +427,10 @@ onMounted(() => {
             </div>
             <button v-if="i.status === 'verified'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-green-500">Verified <CheckCheck /> </button>
             <button v-if="i.status === 'pending'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-yellow-500">Pending  <FileCogIcon /> </button>
-            <button v-if="i.status === 'declined'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-red-500">Declined <FileX /> </button>
+            <div v-if="i.status === 'declined'">
+              <button  class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-red-500">Declined <FileX /> </button>
+              <router-link to="/identity-verification" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Retry</router-link>
+            </div>
 
           </div>
 
@@ -404,7 +443,7 @@ onMounted(() => {
 
         <div class="bg-white rounded-md shadow-sm p-6 mb-5">
           <h2 class="text-sm font-medium text-gray-700 mb-6">Bank Information</h2>
-          <div v-if="!userBank" class="flex justify-between items-center">
+          <div v-if="userBank === 'None'" class="flex justify-between items-center">
             <p class="text-sm text-gray-700 w-1/2">To send and receive money you have to add your commercial bank account </p>
             <router-link to="/bank" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</router-link>
 
@@ -414,14 +453,14 @@ onMounted(() => {
               <p>{{ userBank.bank_account_name }}</p>
               <p>{{ userBank.bank_name }}</p>
             </div>
-            <button class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">update</button>
+            <router-link to="/update/bank" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">update</router-link>
 
           </div>
         </div>
 
         <div class="bg-white rounded-md shadow-sm p-6">
           <h2 class="text-sm font-medium text-gray-700 mb-6">Business Information</h2>
-          <div class="flex  justify-between items-center mb-5 border-b pb-3 border-b-gray-300">
+          <div v-if="businessDocument?.cac === 'None'" class="flex  justify-between items-center mb-5 border-b pb-3 border-b-gray-300">
             <div class=" w-1/2">
               <p class="text-sm font-bold mb-3 text-gray-700">CAC</p>
               <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
@@ -430,6 +469,7 @@ onMounted(() => {
                   ref="cacRef"
                   @change="handleCacFileSelection"
                   class="hidden"
+                  accept="image/png"
               />
               <div v-if="files" class="mt-6">
                 <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
@@ -462,7 +502,55 @@ onMounted(() => {
             <button v-if="!files" @click="triggerFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
           </div>
 
-          <div class="flex  justify-between items-center mb-5">
+          <div v-else class="flex items-center justify-between">
+            <input
+                type="file"
+                ref="cacRef"
+                @change="handleCacFileSelection"
+                class="hidden"
+                accept="image/png"
+            />
+            <div v-if="files" class="mt-6 w-full">
+              <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
+              <ul class="space-y-2">
+                <li  class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                  <div class="flex items-center">
+                    <div class="text-gray-400 mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ files.name }}</div>
+                      <div class="text-xs text-gray-500">{{ formatFileSize(files.size) }}</div>
+                    </div>
+                  </div>
+                  <button
+                      @click.prevent="removeFile(index, 'cac')"
+                      class="text-red-500 hover:text-red-700"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div v-else class="text-sm w-full">
+              <p class="font-medium text-md mb-2 text-green-700">cac uploaded</p>
+              <a class="font-medium text-md underline" :href="businessDocument.cac?.id" target="blank">{{ businessDocument.cac?.id }}</a>
+            </div>
+            <button v-if="businessDocument.cac?.status === 'verified'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-green-500">Verified <CheckCheck /> </button>
+            <button v-if="businessDocument.cac?.status === 'pending'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-yellow-500">Pending  <FileCogIcon /> </button>
+            <div v-if="businessDocument?.cac?.status === 'declined'">
+              <button  class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-red-500">Declined <FileX /> </button>
+              <button v-if="!files" @click="triggerFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Re-upload</button>
+            </div>
+
+          </div>
+
+
+          <div v-if="businessDocument?.tin === 'None'" class="flex  justify-between items-center mb-5">
             <div class=" w-1/2">
               <p class="text-sm font-bold mb-3 text-gray-700">TAX IDENTIFICATION DOCUMENT</p>
               <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
@@ -471,6 +559,7 @@ onMounted(() => {
                   ref="tinRef"
                   @change="handleTinFileSelection"
                   class="hidden"
+                  accept="image/png"
               />
 
               <div v-if="tinFile" class="mt-6">
@@ -503,34 +592,66 @@ onMounted(() => {
             <button v-if="!tinFile" @click="triggerTinFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Add</button>
           </div>
 
-          <div v-if="tinFile && files" class="justify-end flex w-full">
-            <button class="bg-orange-500 text-white w-[100px] cursor-pointer p-1 rounded">Save</button>
+          <div v-else class="flex items-center justify-between mt-5">
+            <input
+                type="file"
+                ref="tinRef"
+                @change="handleTinFileSelection"
+                class="hidden"
+                accept="image/png"
+            />
+            <div v-if="tinFile" class="mt-6 w-full">
+              <div class="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
+              <ul class="space-y-2">
+                <li  class="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                  <div class="flex items-center">
+                    <div class="text-gray-400 mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-sm font-medium text-gray-700 truncate max-w-xs">{{ tinFile.name }}</div>
+                      <div class="text-xs text-gray-500">{{ formatFileSize(tinFile.size) }}</div>
+                    </div>
+                  </div>
+                  <button
+                      @click.prevent="removeFile(index, 'tin')"
+                      class="text-red-500 hover:text-red-700"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div class="text-sm w-full" v-else>
+              <p class="font-medium text-md mb-2 text-green-700">tin uploaded</p>
+              <a class="font-medium text-md underline" :href="businessDocument.tin?.id" target="blank">{{ businessDocument.tin?.id }}</a>
+            </div>
+            <button v-if="businessDocument.tin?.status === 'verified'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-green-500">Verified <CheckCheck /> </button>
+            <button v-if="businessDocument.tin?.status === 'pending'" class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-yellow-500">Pending  <FileCogIcon /> </button>
+            <div v-if="businessDocument?.tin?.status === 'declined'">
+              <button  class="text-sm p-2 flex rounded-full items-center gap-2 cursor-pointer text-red-500">Declined <FileX /> </button>
+              <button v-if="!tinFile" @click="triggerTinFileInput" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">Re-upload</button>
+            </div>
+
+          </div>
+
+
+
+
+          <div v-if="tinFile || files" class="justify-end flex w-full">
+            <div v-if="loading" class="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+
+            <button v-else @click="handleBusinessUpload({cacId:businessDocument?.cac?.id, tinId:businessDocument.tin?.id})" class="bg-orange-500 text-white w-[100px] cursor-pointer p-1 rounded">Save</button>
           </div>
         </div>
       </div>
 
-      <!-- Accounts Tab -->
-      <div v-if="activeTab === 'accounts'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-sm font-medium text-gray-700 mb-6">Account Settings</h2>
 
-      </div>
 
-      <!-- Preferences Tab -->
-      <div v-if="activeTab === 'preferences'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-sm font-medium text-gray-700 mb-6">User Preferences</h2>
-        <p class="text-gray-600">Preferences tab content goes here.</p>
-      </div>
-
-      <!-- Team Tab -->
-      <div v-if="activeTab === 'team'" class="bg-white rounded-md shadow-sm p-6">
-        <h2 class="text-sm font-medium text-gray-700 mb-6">Team Management</h2>
-        <p class="text-gray-600">Team tab content goes here.</p>
-      </div>
-
-      <!-- API Keys & Webhooks Tab -->
-      <div v-if="activeTab === 'api'" class="bg-white rounded-md p-6">
-       <ApiConfiguration />
-      </div>
     </div>
   </div>
 </template>
