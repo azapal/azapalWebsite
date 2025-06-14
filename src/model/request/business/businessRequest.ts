@@ -6,7 +6,8 @@ export type CreateBusinessRequestType = {
     product_category:string,
     website: string
     email:string,
-    location: string
+    location: string,
+    category:string
 }
 
 export type CreateCooperativeType = {
@@ -63,7 +64,8 @@ export const CreateBusinessRequest: CreateBusinessRequestType = {
     address: "",
     product_category:"",
     website: "",
-    location:""
+    location:"",
+    category:""
 }
 
 export const CreateUserInterest:CreateUserInterestType = {

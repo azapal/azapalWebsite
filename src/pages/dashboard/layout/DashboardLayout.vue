@@ -1,21 +1,23 @@
 <template>
   <div class="max-h-screen text-sm">
     <HeaderNav />
-    <div class="lg:hidden md:hidden z-50 flex items-center p-2 ">
-      <button @click="toggleMobileSidebar" class="m-1  rounded-lg border hover:bg-[#2563EB] hover:text-[#fff] cursor-pointer focus:outline-none">
-        <ChevronLeftIcon
+    <div :class="`lg:hidden md:hidden z-50 flex items-center justify-end p-2 ${collapsed ? 'absolute': 'static'} right-1`">
+<!--      <h1 class="font-bold transition-opacity duration-200">-->
+<!--        {{ route?.name }}-->
+<!--      </h1>-->
+      <button @click="toggleMobileSidebar" class="m-1  rounded-lg  cursor-pointer focus:outline-none">
+
+        <MenuIcon
             class="h-6 w-6  transition-transform duration-200"
             :class="{ 'rotate-180': collapsed }"
         />
       </button>
-      <h1 class="font-bold transition-opacity duration-200">
-        {{ route?.name }}
-      </h1>
+
     </div>
     <div class="flex">
     <!-- DashboardLayout -->
       <div
-          class="relative flex flex-col transition-all duration-300  bg-white  lg:block md:block"
+          class="relative flex flex-col transition-all duration-300 bg-white  lg:block md:block"
         :class="`transition-all duration-300 ${openOnMobile ? (collapsed ? 'hidden' : 'block w-full') : (collapsed ? 'hidden lg:w-16 lg:block md:w-16 md:block' : 'hidden lg:block lg:w-64 md:block md:w-64')}`">
         <!-- DashboardLayout Header -->
         <div class="items-center justify-between p-4 hidden lg:flex md:flex">
@@ -76,11 +78,10 @@
                     ${route?.name?.toLowerCase() === subItem.name.toLowerCase()  && ('text-[#F97316] ')} ${collapsed && !item.hasSubItems && ('justify-center')}`"
 
                     >
-                      <div :class="`w-1 h-1 rounded-full  bg-gray-600 ${route?.name?.toLowerCase() === subItem.name.toLowerCase() && ('bg-white')} mr-3 text-[13px]`"></div>
+                      <div :class="`w-1 h-1 rounded-full  bg-gray-600 ${route?.name?.toLowerCase().includes(subItem.name.toLowerCase()) && ('bg-white')} mr-3 text-[13px]`"></div>
                       <div class="flex items-center gap-1">
-                        <CheckCheckIcon class="text-green-600 w-4 h-4" v-if="route?.name?.toLowerCase() === subItem.name.toLowerCase()" />
+                        <CheckCheckIcon class="text-green-600 w-4 h-4" v-if="route?.name?.toLowerCase().includes(subItem.name.toLowerCase())" />
                         {{ subItem.name }}
-
                       </div>
                     </router-link>
                   </li>
@@ -111,8 +112,6 @@
 
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -124,6 +123,7 @@ import {
   Settings as SettingsIcon,
   BarChart as ChartIcon,
   ChevronLeft as ChevronLeftIcon,
+  Menu as MenuIcon,
   ChevronDown as ChevronDownIcon,
   Building as BuildingIcon,
   Workflow as WorkflowIcon,

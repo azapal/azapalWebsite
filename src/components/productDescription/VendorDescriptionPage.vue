@@ -1,7 +1,85 @@
+
+<script setup>
+import { ref } from 'vue';
+
+import {
+  Laptop as SettingsIcon,
+  HandCoins as PuzzleIcon,
+  TruckIcon as LaptopIcon,
+  Mail as MailIcon,
+  Handshake as HandshakeIcon,
+  ExternalLink as ExternalLinkIcon
+} from 'lucide-vue-next';
+
+import AccessDeniedComponent from "../AccessDeniedComponent.vue";
+
+const product = ref({
+  name: 'Azapal Online Vendors (AOV)',
+  tagline: 'Providing reliable and trusted social place for africa social commerce',
+  description: 'Azapal Online Vendors (AOV) Provides reliable and trusted social place for africa social commerce.',
+  pricing: {
+    cost: '500',
+    storage: null,
+    trial: '2 months',
+  }
+});
+
+const workflowSteps = ref([
+  {
+    title: 'Create Account',
+    icon: SettingsIcon,
+    description: 'Create an Azapal Online Vendor (AOV) Account'
+  },
+  {
+    title: 'Instant Logistics Partnership out of the box',
+    icon: HandshakeIcon,
+    description: 'Subscribe/Follow your preferred logistic/dispatch company- this gives you instant partnership with the logistic/dispatch company'
+  },
+  {
+    title: 'Receive Payment Through Azapal ',
+    icon: PuzzleIcon,
+    description: 'Your customers sends payment to your Azapal Online Vendor (AOV) Account'
+  },
+  {
+    title: 'Sit And Lets Automate The Logistics Process For You',
+    icon: LaptopIcon,
+    description: 'We automate the delivery process using azapal end to end notification system. dispatch/logistics partner contact you to plans collection.'
+  },
+  {
+    title: 'Another Delivered Product/Services? Cash In',
+    icon: MailIcon,
+    description: 'Sit and Relax let your logistic patner '
+  }
+]);
+
+const features = ref([
+  {
+    title: 'Owo Sure',
+    description: 'Azapal uses a secure transaction technology designed to protect the stockholders in an online transactions. Be assured to get paid on every successful transactions'
+  },
+  {
+    title: 'Automated Logistics Service',
+    description: 'Azapal automates logistics and dispatch services for your business, by using end-to-end smart notification systems. Just plug in and lets automate logistics for your business.',
+    action:'See how it works'
+  }
+]);
+
+const gettingStartedLinks = ref([
+  'What is Amazon WorkMail?',
+  'Getting started with Amazon WorkMail',
+  'Working with organizations'
+]);
+
+const resourceLinks = ref([
+  'Administrator Guide',
+  'User Guide'
+]);
+
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-900 text-white">
     <!-- Header -->
-
 
     <!-- Hero Section -->
     <section class="px-8 lg:px-16 pt-6 pb-12">
@@ -20,6 +98,36 @@
 
         <!-- Right Column -->
         <div class="mt-6 md:mt-0">
+          <div class="bg-white rounded-lg p-6 text-gray-800 mb-6 text-sm">
+            <h3 class="text-xl font-semibold mb-4">Requirements</h3>
+            <p class="mb-3">
+              {{ product.name }} is making online marketplace safer, to create an AOV account you will need to
+              upload a verified goverment identification document
+            </p>
+
+            <router-link to="/business/vendor/create"
+                         class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
+            >
+              Go to compliance
+            </router-link>
+            <!--            <a href="#" class="text-blue-500 hover:underline flex items-center">-->
+            <!--              Learn more-->
+            <!--              <ExternalLinkIcon class="h-4 w-4 ml-1" />-->
+            <!--            </a>-->
+          </div>
+
+          <div class="bg-white rounded-lg p-6 text-gray-800 mb-6 text-sm">
+            <h3 class="text-xl font-semibold mb-4">Pricing</h3>
+            <p class="mb-3">
+              {{ product.name }} is free for the first {{product.pricing.trial}} then ₦{{ product.pricing.cost }} monthly
+              subscription.
+            </p>
+            <!--            <a href="#" class="text-blue-500 hover:underline flex items-center">-->
+            <!--              Learn more-->
+            <!--              <ExternalLinkIcon class="h-4 w-4 ml-1" />-->
+            <!--            </a>-->
+          </div>
+
           <div class="bg-white rounded-lg p-6 text-gray-800 text-sm">
             <h3 class="text-xl font-semibold mb-4">Get started</h3>
             <p class="mb-6">Create an {{ product.name }} account to get started.</p>
@@ -30,40 +138,26 @@
             </router-link>
           </div>
 
-          <div class="bg-white rounded-lg p-6 text-gray-800 mt-6 text-sm">
-            <h3 class="text-xl font-semibold mb-4">Pricing</h3>
-            <p class="mb-3">
-              {{ product.name }} is free for the first {{product.pricing.trial}} then ₦{{ product.pricing.cost }} monthly
-              subscription.
-            </p>
-<!--            <a href="#" class="text-blue-500 hover:underline flex items-center">-->
-<!--              Learn more-->
-<!--              <ExternalLinkIcon class="h-4 w-4 ml-1" />-->
-<!--            </a>-->
-          </div>
         </div>
       </div>
     </section>
 
     <!-- How it works -->
-<!--    <section class="px-8 lg:px-16 py-12">-->
-<!--      <div class="max-w-7xl mx-auto">-->
-<!--        <h2 class="text-2xl font-semibold mb-8">How it works</h2>-->
+    <section class="px-8 lg:px-16 py-12">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-2xl font-semibold mb-8">How it works</h2>
 
-<!--        <div class="bg-white bg-opacity-5 rounded-lg p-6">-->
-<!--          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">-->
-<!--            <div v-for="(step, index) in workflowSteps" :key="index" class="text-center p-4">-->
-<!--              <div class="h-24 flex items-center justify-center mb-4">-->
-<!--                <component :is="step.icon" class="h-16 w-16 text-gray-400" />-->
-<!--              </div>-->
-<!--              <h3 class="font-semibold">{{ step.title }}</h3>-->
-<!--              <p v-if="step.subtitle" class="text-sm text-gray-400 mb-2">{{ step.subtitle }}</p>-->
-<!--              <p class="text-sm text-gray-300">{{ step.description }}</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </section>-->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div v-for="(step, index) in workflowSteps" :key="index" class="text-center p-4 rounded shadow-md bg-white">
+            <div class="h-24 flex items-center justify-center mb-4">
+              <component :is="step.icon" class="h-16 w-16 text-black" />
+            </div>
+            <h3 class="font-semibold text-black text-left">{{ step.title }}</h3>
+            <p class="text-sm  text-black text-left">{{ step.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Benefits and features -->
     <section class="px-8 lg:px-16 py-12">
@@ -109,73 +203,3 @@
 <!--    </section>-->
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import {
-  Settings as SettingsIcon,
-  Puzzle as PuzzleIcon,
-  Laptop as LaptopIcon,
-  Mail as MailIcon,
-  ExternalLink as ExternalLinkIcon
-} from 'lucide-vue-next';
-
-const product = ref({
-  name: 'Azapal Online Vendors (AOV)',
-  tagline: 'Providing reliable and trusted social place for africa social commerce',
-  description: 'Azapal Online Vendors (AOV) Provides reliable and trusted social place for africa social commerce.',
-  pricing: {
-    cost: '500',
-    storage: null,
-    trial: '2 months',
-  }
-});
-
-const workflowSteps = ref([
-  {
-    title: 'Setup',
-    icon: SettingsIcon,
-    description: 'Create an Amazon WorkMail organization for your domain and users'
-  },
-  {
-    title: 'Integrate',
-    subtitle: '(optional)',
-    icon: PuzzleIcon,
-    description: 'Integrate with AWS services or on-premises solutions'
-  },
-  {
-    title: 'Connect',
-    icon: LaptopIcon,
-    description: 'Use existing email clients on your devices or the web'
-  },
-  {
-    title: 'Communicate',
-    icon: MailIcon,
-    description: 'Send and receive emails, access your calendar and contacts'
-  }
-]);
-
-const features = ref([
-  {
-    title: 'Owo Sure',
-    description: 'Azapal uses a secure transaction technology designed to protect the stockholders in an online transactions. Be assured to get paid on every successful transactions'
-  },
-  {
-    title: 'Automated Logistics Service',
-    description: 'Azapal automates logistics and dispatch services for your business, by using end-to-end smart notification systems. Just plug in and lets automate logistics for your business.',
-    action:'See how it works'
-  }
-]);
-
-const gettingStartedLinks = ref([
-  'What is Amazon WorkMail?',
-  'Getting started with Amazon WorkMail',
-  'Working with organizations'
-]);
-
-const resourceLinks = ref([
-  'Administrator Guide',
-  'User Guide'
-]);
-
-</script>
