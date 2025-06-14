@@ -2,9 +2,13 @@ import axios from "axios";
 // import router from "../router";
 
 // https://accountdev.ennovatingx.com/api/v1/account/
-const baseAzapal =  "http://127.0.0.1:8000/api/v1"
-const baseAccount =  "http://127.0.0.1:10000/api/v1"
-const basePayment =  "http://127.0.0.1:9000/api/v1"
+// const baseAzapal =  "http://127.0.0.1:8000/api/v1"
+// const baseAccount =  "http://127.0.0.1:10000/api/v1"
+// const basePayment =  "http://127.0.0.1:9000/api/v1"
+
+const baseAzapal =  "https://azapal.pythonanywhere.com/api/v1/"
+const baseAccount =  "https://xaccount.pythonanywhere.com/api/v1"
+const basePayment =  "https://accountdev.ennovatingx.com/api/v1/account/"
 
 export const accountClient = axios.create({
     baseURL: `${baseAccount}/account/`,
