@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import {notify} from "../../utils/toast.ts";
 import Notifications from "../../service/notifications.ts";
-import router from "../../router";
 export const useNotificationsStore = defineStore("NotificationsStore", {
     state: () => ({
         account: null,
@@ -25,7 +24,7 @@ export const useNotificationsStore = defineStore("NotificationsStore", {
                 let responseData = response.data
                 if(responseData.code === "00"){
                     this.account = responseData.data
-                    this.accountUnreadCount = responseData.data?.filter(it => !it.read_status)
+                    this.accountUnreadCount = responseData.data?.filter((it:any) => !it.read_status)
 
                 }else{
                     notify(responseData.message, "error")
@@ -36,7 +35,7 @@ export const useNotificationsStore = defineStore("NotificationsStore", {
 
         },
 
-        async updateNotificationById(payload){
+        async updateNotificationById(payload:any){
             try{
                 const response = await Notifications.updateAccountNotification(payload.id,  payload.request)
                 let responseData = response.data

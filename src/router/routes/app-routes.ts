@@ -197,7 +197,6 @@ export const appRoute: BaseRouteProps[] = [
 
       {
         path: "/settings",
-        hash:"#profile",
         name: "SETTINGS",
         meta: {
           showHeader: true,

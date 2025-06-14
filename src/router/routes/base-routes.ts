@@ -7,6 +7,7 @@ export interface BaseRouteProps {
     path: string,
     component: object,
     meta: Meta,
+
 }
 
 type Meta = {
@@ -14,7 +15,8 @@ type Meta = {
     layout?: string,
     sub_title?:string,
     showHeader?: boolean,
-    showBackArrow?: boolean
+    showBackArrow?: boolean,
+    hash?: string
 }
 
 // Variable initialRoute implicitly has type any[] in some locations where its type cannot be determined.

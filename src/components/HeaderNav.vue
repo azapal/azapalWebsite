@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Bell, Settings, LogOut, ChevronDown, LucideUserRoundCheck, HandCoins } from 'lucide-vue-next';
+import { Bell, Settings, LogOut, ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
 import router from '../router';
 import StoreUtils from '../utils/storeUtils';
@@ -20,10 +20,6 @@ const closeDropdown = () => {
     dropdownOpen.value = false;
 };
 
-const toggleNotificationDropdown = () => {
-    dropdownNotificationOpen.value = !dropdownNotificationOpen.value;
-    closeDropdown()
-};
 
 const closeNotificationDropdown = () => {
     dropdownNotificationOpen.value = false;
@@ -49,7 +45,6 @@ const unreadNotifications = store.get('notifications', 'getUnreadNotifications')
 
 <template>
     <div class="w-full sticky top-0 z-[20]">
-      {{unreadCount}}
         <div class="p-2 text-gray-900 bg-white flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f2f2f2] px-10 py-3">
             <div class="px-2 py-2 mr-2 flex items-center gap-3">
                 <!-- Always show company logo -->
@@ -66,7 +61,7 @@ const unreadNotifications = store.get('notifications', 'getUnreadNotifications')
 
                 <router-link to="/account-notifications" >
                   <div class="bg-[#f2f2f2] p-2 rounded-lg relative hover:scale-105 cursor-pointer">
-                  <span class="text-xs absolute z-40 top-0 right-0 text-white bg-[#2563EB] rounded-full w-5 h-5 flex items-center justify-center">{{unreadNotifications?.length}}</span>
+                  <span v-if="unreadNotifications?.length" class="text-xs absolute z-40 top-0 right-0 text-white bg-[#2563EB] rounded-full w-5 h-5 flex items-center justify-center">{{unreadNotifications?.length}}</span>
                   <Bell />
                   </div>
                 </router-link>

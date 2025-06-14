@@ -35,7 +35,7 @@ export const useDocumentsStore = defineStore("documentStore", {
             }
         },
 
-        async updateId(payload){
+        async updateId(payload:any){
             try{
                 const response = await Documents.updateIdDocument(payload.id, payload.file)
                 let responseData = response.data
@@ -50,19 +50,6 @@ export const useDocumentsStore = defineStore("documentStore", {
 
         },
 
-        async deleteId(payload:string){
-            try{
-                const response = await Documents.deleteIdDocument(payload)
-                let responseData = response.data
-                if(responseData.code === "00"){
-                    //
-                }else{
-                    notify(responseData.message, "error")
-                }
-            }catch(error:any){
-                notify(error, "error")
-            }
-        },
 
         async readId(){
             try{
@@ -95,7 +82,7 @@ export const useDocumentsStore = defineStore("documentStore", {
             }
         },
 
-        async updateCac(payload){
+        async updateCac(payload:any){
             try{
                 const response = await Documents.updateCacDocument(payload.id, payload.file)
                 let responseData = response.data
@@ -110,34 +97,6 @@ export const useDocumentsStore = defineStore("documentStore", {
 
         },
 
-        async deleteCac(payload:string){
-            try{
-                const response = await Documents.deleteCacDocument(payload)
-                let responseData = response.data
-                if(responseData.code === "00"){
-                    //
-                }else{
-                    notify(responseData.message, "error")
-                }
-            }catch(error:any){
-                notify(error, "error")
-            }
-        },
-
-        async readCacById(id:string){
-            try{
-                const response = await Documents.getCacDocument()
-                let responseData = response.data
-                if(responseData.code === "00"){
-                    this.cacDocument = responseData.data
-                }else{
-                    notify(responseData.message, "error")
-                }
-            }catch(error:any){
-                notify(error, "error")
-            }
-
-        },
 
 
         async uploadTin(payload:CreateTinDocumentRequest){
@@ -155,7 +114,7 @@ export const useDocumentsStore = defineStore("documentStore", {
             }
         },
 
-        async updateTin(payload){
+        async updateTin(payload:any){
             try{
                 const response = await Documents.updateTinDocument(payload.id, payload.file)
                 let responseData = response.data
@@ -170,34 +129,7 @@ export const useDocumentsStore = defineStore("documentStore", {
 
         },
 
-        async deleteTin(payload:string){
-            try{
-                const response = await Documents.deleteTinDocument(payload)
-                let responseData = response.data
-                if(responseData.code === "00"){
-                    //
-                }else{
-                    notify(responseData.message, "error")
-                }
-            }catch(error:any){
-                notify(error, "error")
-            }
-        },
 
-        async readTinById(id:string){
-            try{
-                const response = await Documents.getTinDocument()
-                let responseData = response.data
-                if(responseData.code === "00"){
-                    this.tinDocument = responseData.data
-                }else{
-                    notify(responseData.message, "error")
-                }
-            }catch(error:any){
-                notify(error, "error")
-            }
-
-        },
 
         async readBusinessDocs(){
             try{
@@ -215,4 +147,3 @@ export const useDocumentsStore = defineStore("documentStore", {
         }
     }
 });
-
