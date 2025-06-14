@@ -102,7 +102,7 @@ const resourceLinks = ref([
             <h3 class="text-xl font-semibold mb-4">Requirements</h3>
             <p class="mb-3">
               {{ product.name }} is making online marketplace safer, to create an AOV account you will need to
-              upload a verified goverment identification document
+              upload a verified government identification document
             </p>
 
             <router-link to="/settings#compliance"
