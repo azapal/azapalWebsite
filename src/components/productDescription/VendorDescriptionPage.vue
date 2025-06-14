@@ -11,8 +11,6 @@ import {
   ExternalLink as ExternalLinkIcon
 } from 'lucide-vue-next';
 
-import AccessDeniedComponent from "../AccessDeniedComponent.vue";
-
 const product = ref({
   name: 'Azapal Online Vendors (AOV)',
   tagline: 'Providing reliable and trusted social place for africa social commerce',
