@@ -105,7 +105,7 @@ const resourceLinks = ref([
               upload a verified goverment identification document
             </p>
 
-            <router-link to="/business/vendor/create"
+            <router-link to="/settings#compliance"
                          class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
             >
               Go to compliance
