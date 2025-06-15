@@ -2,7 +2,8 @@
 import { ref, computed, onMounted } from 'vue';
 import formatAmount from '../utils/formatAmount';
 import StoreUtils from '../utils/storeUtils';
-
+import {FileCheck, FileCheck2, BookCheck} from "lucide-vue-next"
+import Dispatch from "./Dispatch.vue";
 const store = StoreUtils;
 const userBusiness = store.get('business', 'getBusiness');
 const transactionsData = store.get('business', 'getTransactions');
@@ -76,104 +77,32 @@ const formatDate = (dateString) => {
 
       <!-- Tabs Section -->
       <div class="w-full">
-        <!-- Tab Headers -->
-        <div class="flex border-b border-gray-200">
-          <button @click="activePaymentTab = 'NewPayments'" :class="[
-            'px-4 py-2 font-medium text-sm',
-            activePaymentTab === 'NewPayments'
-              ? 'border-b-2 border-blue-600 text-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
-          ]">
-            New Payments
-          </button>
-          <button @click="activePaymentTab = 'ongoing'" :class="[
-            'px-4 py-2 font-medium text-sm',
-            activePaymentTab === 'ongoing'
-              ? 'border-b-2 border-blue-600 text-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
-          ]">
-            Ongoing
-          </button>
-          <button @click="activePaymentTab = 'completed'" :class="[
-            'px-4 py-2 font-medium text-sm',
-            activePaymentTab === 'completed'
-              ? 'border-b-2 border-blue-600 text-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
-          ]">
-            Completed
-          </button>
+
+      </div>
+    </div>
+
+    <Dispatch />
+
+    <div class="shadow-sm bg-white rounded-lg overflow-hidden p-6 mb-4 ">
+      <p>Tools to help your business succed</p>
+
+      <div>
+        <div>
+          <FileCheck />
+          <p>Invoice</p>
         </div>
 
-        <!-- Tab Content -->
-        <div class="py-4">
-          <div v-if="activePaymentTab === 'NewPayments'" class="text-gray-600">
-            <div v-if="newPayments?.length === 0" class="text-center text-sm">
-              No pending payments available
-            </div>
-            <div v-else class="space-y-3">
-              <div v-for="payment in newPayments" :key="payment.id"
-                class="border border-gray-200 p-3 rounded-lg">
-                <div class="flex justify-between items-center">
-                  <div>
-                    <p class="font-medium">Amount: ₦{{ formatAmount(payment.total_amount) }}</p>
-                    <p class="text-sm text-gray-500">Ref: {{ payment.reference }}</p>
-                    <p class="text-sm text-gray-500">Date: {{ formatDate(payment.created_at) }}</p>
-                    <p v-if="payment.remarks" class="text-sm">Remarks: {{ payment.remarks }}</p>
-                  </div>
-                  <div class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
-                    Pending
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div v-else-if="activePaymentTab === 'ongoing'" class="text-gray-600">
-            <div v-if="ongoing?.length === 0" class="text-center text-sm">
-              No ongoing transactions available
-            </div>
-            <div v-else class="space-y-3">
-              <div v-for="payment in ongoing" :key="payment.id"
-                class="border border-gray-200 p-3 rounded-lg">
-                <div class="flex justify-between items-center">
-                  <div>
-                    <p class="font-medium">Amount: ₦{{ formatAmount(payment.total_amount) }}</p>
-                    <p class="text-sm text-gray-500">Ref: {{ payment.reference }}</p>
-                    <p class="text-sm text-gray-500">Paid on: {{ formatDate(payment.paid_at) }}</p>
-                    <p class="text-sm text-gray-500">Channel: {{ payment.channel }}</p>
-                    <p v-if="payment.remarks" class="text-sm">Remarks: {{ payment.remarks }}</p>
-                  </div>
-                  <div class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                    Approved
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div v-else-if="activePaymentTab === 'completed'" class="text-gray-600">
-            <div v-if="completed?.length === 0" class="text-center text-sm">
-              No completed transactions available
-            </div>
-            <div v-else class="space-y-3">
-              <div v-for="payment in completed" :key="payment.id"
-                class="border border-gray-200 p-3 rounded-lg">
-                <div class="flex justify-between items-center">
-                  <div>
-                    <p class="font-medium">Amount: ₦{{ formatAmount(payment.total_amount) }}</p>
-                    <p class="text-sm text-gray-500">Ref: {{ payment.reference }}</p>
-                    <p class="text-sm text-gray-500">Date: {{ formatDate(payment.completed_at || payment.paid_at) }}</p>
-                    <p v-if="payment.remarks" class="text-sm">Remarks: {{ payment.remarks }}</p>
-                  </div>
-                  <div class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                    Completed
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div>
+          <BookCheck />
+          <p>Customer book</p>
+        </div>
+
+        <div>
+          <FileCheck2 />
+          <p>Automated Reciepts</p>
         </div>
       </div>
+
     </div>
 
   </div>

@@ -87,7 +87,7 @@ const selectTimeline = (value) => {
   <DashboardLayout v-slot:content>
     <AddressComponent v-if="vendorCreationStage === '1'" @location="handleLocation" />
     <FormLayout v-else v-slot:form>
-      <div v-if="creatingIsSuccess" class="bg-white border bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
+      <div v-if="creatingIsSuccess" class="bg-white w-full bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
         <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
           <div class="flex justify-center w-full">
           </div>
@@ -98,7 +98,7 @@ const selectTimeline = (value) => {
               <h2 class="text-2xl font-semibold text-gray-900">Hey!</h2>
               <h3 class="text-xl font-semibold text-gray-900">That was a success.</h3>
             </section>
-            <router-link to="/business/vendor"  class="w-full bg-[#F97316] text-white rounded-[18px] p-3 text-center">Go to business dashboard</router-link>
+            <router-link to="/business/vendor"  class="w-full  text-black underline rounded-[18px] p-3 text-center">Go to business dashboard</router-link>
 
           </div>
 
