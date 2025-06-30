@@ -3,7 +3,7 @@ import {notify} from "../../utils/toast.ts";
 import Notifications from "../../service/notifications.ts";
 export const useNotificationsStore = defineStore("NotificationsStore", {
     state: () => ({
-        notifications: [],
+        notifications: [] as any,
         notificationCount:0
 
     }),
@@ -24,20 +24,20 @@ export const useNotificationsStore = defineStore("NotificationsStore", {
                 if (responseData.code === "00") {
                     // Filter out new notifications
                     const newNotifications = responseData.data.filter(
-                        newItem => !this.notifications.some(item => item.id === newItem.id)
+                        (newItem:any) => !this.notifications.some((item:any) => item.id === newItem.id)
                     );
 
                     // Append new notifications
                     this.notifications = [...this.notifications, ...newNotifications];
 
                     // Update notification count (number of unread notifications in new data)
-                    const newUnreadCount = newNotifications.filter(it => !it.read_status).length;
+                    const newUnreadCount = newNotifications.filter((it:any) => !it.read_status).length;
                     this.notificationCount += newUnreadCount;
 
                 } else {
                     notify(responseData.message, "error");
                 }
-            } catch (error) {
+            } catch (error:any) {
                 notify(error?.message || error, "error");
             }
         },
@@ -64,19 +64,19 @@ export const useNotificationsStore = defineStore("NotificationsStore", {
 
                 if (responseData.code === "00") {
                     // Filter out new notifications
-                    const newNotifications = responseData.data.filter(item => !item.read_status)
+                    const newNotifications = responseData.data.filter((item:any) => !item.read_status)
 
                     // Append new notifications
                     this.notifications = newNotifications;
 
                     // Update notification count (number of unread notifications in new data)
-                    const newUnreadCount = newNotifications.filter(it => !it.read_status).length;
+                    const newUnreadCount = newNotifications.filter((it:any) => !it.read_status).length;
                     this.notificationCount = newUnreadCount;
 
                 } else {
                     notify(responseData.message, "error");
                 }
-            } catch (error) {
+            } catch (error:any) {
                 notify(error?.message || error, "error");
             }
         },
