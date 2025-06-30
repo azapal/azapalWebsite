@@ -1,12 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-900 text-white">
     <!-- Header -->
-    <header class="py-4 lg:px-8 lg:px-16">
-      <div class="text-sm text-gray-400 max-w-7xl mx-auto ">Azapal Business</div>
-    </header>
+
 
     <!-- Hero Section -->
     <section class="px-8 lg:px-16 pt-6 pb-12">
+      <header class="py-4 lg:px-8">
+        <div class="text-sm text-gray-400 max-w-7xl mx-auto ">Azapal Business</div>
+      </header>
       <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Left Column -->
         <div class="text-sm">
@@ -19,17 +20,25 @@
 
         <!-- Right Column -->
         <div class="mt-6 md:mt-0">
-          <div class="bg-white rounded-lg p-6 text-gray-800 text-sm">
-            <h3 class="text-xl font-semibold mb-4">Get started</h3>
-            <p class="mb-6">Create an {{ product.name }} organisation to get started.</p>
-            <router-link to="/business/logistics/create"
-                class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
+          <div class="bg-white rounded-lg p-6 text-gray-800 mb-6 text-sm">
+            <h3 class="text-xl font-semibold mb-4">Requirements</h3>
+            <p class="mb-3">
+              {{ product.name }} is making online marketplace safer, to be a logistic partner please
+              upload your business documents e.g CAC and TIN
+            </p>
+
+            <router-link to="/settings#compliance"
+                         class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
             >
-              Get started
+              Go to compliance
             </router-link>
+            <!--            <a href="#" class="text-blue-500 hover:underline flex items-center">-->
+            <!--              Learn more-->
+            <!--              <ExternalLinkIcon class="h-4 w-4 ml-1" />-->
+            <!--            </a>-->
           </div>
 
-          <div class="bg-white rounded-lg p-6 text-gray-800 mt-6 text-sm">
+          <div class="bg-white rounded-lg p-6 text-gray-800 mb-6 text-sm">
             <h3 class="text-xl font-semibold mb-4">Pricing</h3>
             <p class="mb-3">
               {{ product.name }} is free for the first {{product.pricing.trial}} then ₦{{ product.pricing.cost }} per 30
@@ -40,6 +49,16 @@
 <!--              <ExternalLinkIcon class="h-4 w-4 ml-1" />-->
 <!--            </a>-->
           </div>
+          <div class="bg-white rounded-lg p-6 text-gray-800 text-sm">
+            <h3 class="text-xl font-semibold mb-4">Get started</h3>
+            <p class="mb-6">Create an {{ product.name }} organisation to get started.</p>
+            <router-link to="/business/logistics/create"
+                         class="bg-[#2563EB] hover:bg-[#F97316] text-[#fff] cursor-pointer font-medium px-6 py-2 rounded-full transition-colors"
+            >
+              Get started
+            </router-link>
+          </div>
+
         </div>
       </div>
     </section>
@@ -65,18 +84,18 @@
 <!--    </section>-->
 
     <!-- Benefits and features -->
-    <section class="px-8 lg:px-16 py-12">
-      <div class="max-w-7xl mx-auto text-sm">
-        <h2 class="text-2xl font-semibold mb-8">Benefits and features</h2>
+<!--    <section class="px-8 lg:px-16 py-12">-->
+<!--      <div class="max-w-7xl mx-auto text-sm">-->
+<!--        <h2 class="text-2xl font-semibold mb-8">Benefits and features</h2>-->
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div v-for="(feature, index) in features" :key="index" class="bg-white  rounded-lg p-6">
-            <h3 class="text-xl font-semibold mb-4 text-[#000]">{{ feature.title }}</h3>
-            <p class="text-[#000]">{{ feature.description }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<!--        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">-->
+<!--          <div v-for="(feature, index) in features" :key="index" class="bg-white  rounded-lg p-6">-->
+<!--            <h3 class="text-xl font-semibold mb-4 text-[#000]">{{ feature.title }}</h3>-->
+<!--            <p class="text-[#000]">{{ feature.description }}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </section>-->
 
     <!-- Getting Started and Resources -->
 <!--    <section class="px-8 lg:px-16 py-12">-->

@@ -176,17 +176,17 @@ const navigationItems = ref([
   //     { name: 'Escrow' },
   //   ]
   // },
-  // {
-  //   name: 'Users',
-  //   icon: UsersIcon,
-  //   hasSubItems: true,
-  //   expanded: false,
-  //   subItems: [
-  //     { name: 'User Management' },
-  //     { name: 'Permissions' },
-  //     { name: 'Roles' }
-  //   ]
-  // },
+  {
+    name: 'Users',
+    icon: UsersIcon,
+    hasSubItems: true,
+    expanded: false,
+    subItems: [
+      { name: 'User Management' },
+      { name: 'Permissions' },
+      { name: 'Roles' }
+    ]
+  },
   // {
   //   name: 'Analytics',
   //   icon: ChartIcon,

@@ -8,7 +8,7 @@
           class="w-full md:w-1/4 border-r border-gray-200 overflow-y-auto"
       >
         <div
-            v-for="(notification, index) in accountNotifications"
+            v-for="(notification, index) in allNotifications"
             :key="index"
             @click="handleSelect(notification)"
             :class="[
@@ -114,7 +114,7 @@ If you have any questions, feel free to reach out to our support team.`,
 ])
 const store = StoreUtils
 
-const accountNotifications = store.get('notifications', 'getAccountNotifications')
+const allNotifications = store.get('notifications', 'getNotifications')
 const selectedNotification = ref(null)
 const showDetailOnMobile = ref(false)
 
@@ -123,11 +123,17 @@ const isDesktop = computed(() => window.innerWidth >= 768)
 async function handleSelect(notification) {
   selectedNotification.value = notification
   UpdateNotificationRequest.read_status = true
-  notification.read = true
   if (!isDesktop.value) {
     showDetailOnMobile.value = true
   }
-  await store.dispatch('notifications', 'updateNotificationById', {id:notification.id, request:UpdateNotificationRequest})
+  notification.read = true
+
+  if(notification.type) await store.dispatch('notifications', 'updateSystemNotificationById', {id:notification.id, request:UpdateNotificationRequest});
+  else await store.dispatch('notifications', 'updateNotificationById', {id:notification.id, request:UpdateNotificationRequest})
+
+
+
+
 
 }
 
@@ -145,5 +151,6 @@ function updateIsDesktop() {
 onMounted(() => {
   window.addEventListener('resize', updateIsDesktop)
   store.dispatch('notifications', 'readNotificationById')
+  store.dispatch('notifications', 'readSystemNotificationById')
 })
 </script>

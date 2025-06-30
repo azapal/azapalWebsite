@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import Business from "../../service/business.ts";
+import {notify} from "../../utils/toast.ts";
 export const useBusinessStore = defineStore("businessStore", {
   state: () => ({
     loading: false,
@@ -80,6 +81,41 @@ export const useBusinessStore = defineStore("businessStore", {
       } catch (err) {
         this.loading = false
         console.log('error:', err)
+      }
+    },
+
+    async dispatchSubscribe(payload: any) {
+      const response = await Business.dispatchSubscribe(payload)
+      try {
+        if (response.data.code === '00') {
+            notify(response.data.message, 'success')
+            await this.readSubscribe()
+            await this.readBusiness()
+        }else{
+          notify(response.data.message, 'error')
+        }
+      } catch (err:any) {
+        this.loading = false
+        console.log('error:', err)
+        notify(err, 'error')
+      }
+    },
+
+
+    async dispatchUnSubscribe(payload: any) {
+      const response = await Business.dispatchUnSubscribe(payload)
+      try {
+        if (response.data.code === '00') {
+          notify(response.data.message, 'success')
+          await this.readSubscribe()
+          await this.readBusiness()
+        }else{
+          notify(response.data.message, 'error')
+        }
+      } catch (err:any) {
+        this.loading = false
+        console.log('error:', err)
+        notify(err, 'error')
       }
     },
 

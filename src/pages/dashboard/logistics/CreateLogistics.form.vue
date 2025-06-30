@@ -2,7 +2,7 @@
 import HeaderNav from '../../../components/HeaderNav.vue';
 import Button from '../../../components/ui/button.vue';
 import {Check, ChevronLeft, ChevronsUpDown} from 'lucide-vue-next';
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {getAuth} from "firebase/auth";
 import {app} from '../../../../firebase.js'
 import StoreUtils from '../../../utils/storeUtils.js';
@@ -13,6 +13,7 @@ import FormLayout from "../layout/FormLayout.vue";
 import router from "../../../router/index.js";
 import { SendOtpRequest } from '../../../model/request/auth/authenticationRequest';
 import OtpValidation from "../../../components/forms/OtpValidation.vue";
+import DashboardLayout from "../layout/DashboardLayout.vue";
 
 const auth = getAuth(app);
 const selectedType = ref(null);
@@ -29,6 +30,17 @@ const sendOtpRequest = ref(SendOtpRequest);
 
 const creatingIsSuccess=ref(false)
 
+const logoUrl = ref('');
+const logo = ref(null);
+
+function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    logoUrl.value = URL.createObjectURL(file);
+    logo.value = file;
+  }
+}
+
 // Start the verification process
 const startVerification = () => {
   sendOtpRequest.value.phone_number = createBusinessModel.value.phone_number
@@ -38,49 +50,57 @@ const startVerification = () => {
   store.dispatch('auth', 'sendOtp', sendOtpRequest.value)
 };
 
-
 // Submit business form after verification
 const submitBusinessForm = async () => {
   loading.value = true;
+  const formData = new FormData();
+  formData.append('business_logo', logo.value);
+  formData.append('name', createBusinessModel.value.name);
+  formData.append('description', createBusinessModel.value.description);
+  formData.append('email', createBusinessModel.value.email);
+  formData.append('address', createBusinessModel.value.address);
+  formData.append('phone_number', createBusinessModel.value.phone_number);
+  formData.append('product_category', 'NA');
+  formData.append('location', 'NA');
+  formData.append('category', 'dispatch')
 
-  const  {latitude, longitude} =  await getUserLocation({enableHighAccuracy: true, timeout: 5000})
-  createBusinessModel.value.location = `${latitude}, ${longitude}`
-
-  if(createBusinessModel.value.location){
-    const finalModel = {
-      ...createBusinessModel.value,
-    };
-    try{
-      const response  = await store.dispatch('business', 'createBusiness', finalModel);
-      let responseData = response.data;
-      if(responseData.code === "00"){
-        creatingIsSuccess.value = true
-      }
-      loading.value = false;
-      console.log(response)
-    }catch(error){
-      loading.value = false;
-      console.log(error);
-    }
-  }else{
+  try{
+    const response  = await store.dispatch('business', 'createBusiness', formData);
+    let responseData = response.data;
     loading.value = false;
-    notify('your location is required to smoother operative, please be where your products are most likely to be.')
+    console.log(response)
+    if(responseData.code === "00"){
+      creatingIsSuccess.value = true
+    }else{
+      notify(responseData.message, 'error')
+    }
+
   }
 
+  catch(error){
+    loading.value = false;
+    notify(error, 'error')
+    console.log(error);
+  }
 
 };
+
+onMounted(() => {
+  store.dispatch('auth', 'readUser')
+
+})
 
 </script>
 
 <template>
   <OtpValidation v-if="showOtpScreen" page="business" :data="{type:selectedType}" />
 
+  <DashboardLayout v-slot:content>
+
   <FormLayout v-slot:form>
 
-      <div v-if="creatingIsSuccess" class="bg-white bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
-        <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-          <div class="flex justify-center w-full">
-          </div>
+      <div v-if="!creatingIsSuccess" class="bg-white w-full bg-opacity-50 flex items-start justify-center z-50 lg:p-4">
+        <div class="bg-white rounded-2xl w-full  max-h-[90vh] overflow-y-auto">
           <!-- Header -->
           <div class="px-6 pt-5 relative flex flex-col items-center gap-5">
             <img src="../../../assets/images/success.png" class="w-38" alt="success-img" />
@@ -88,26 +108,37 @@ const submitBusinessForm = async () => {
               <h2 class="text-2xl font-semibold text-gray-900">Hey!</h2>
               <h3 class="text-xl font-semibold text-gray-900">That was a success.</h3>
             </section>
-            <router-link to="/business/vendor"  class="w-full bg-[#F97316] text-white rounded-[18px] p-3 text-center">Go to business dashboard</router-link>
+            <router-link to="/business/logistics"  class="w-full underline  rounded-[18px] p-3 text-center">Go to business dashboard</router-link>
 
           </div>
 
         </div>
       </div>
 
-      <form v-else @submit.prevent="startVerification" class="w-full">
+      <form v-else @submit.prevent="submitBusinessForm" class="w-full">
 
         <div class="relative">
-          <button class="flex cursor-pointer mb-3 hover:scale-101" @click="router.back()">
+          <router-link to="/business/logistics" class="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 mb-4">
             <ChevronLeft />
-            <p>Back</p>
-          </button>
+            <span class="text-lg font-semibold">Back</span>
+          </router-link>
           <!-- Type Selection Screen -->
             <h1 class="text-2xl font-bold mb-2">Let's start simple</h1>
             <span class="text-md">Logistics partner helps in fulfilling logistics operation for azapal online vendors.</span>
 
           <!-- Business Information Form -->
           <div class="mt-2">
+
+            <div class="flex items-center gap-2">
+              <!-- Logo Upload -->
+              <input type="file" id="logoUpload" class="hidden" accept="image/*" @change="handleLogoUpload" />
+              <label for="logoUpload" class="cursor-pointer flex items-center justify-center p-4 mb-4 bg-gray-100 rounded-full hover:bg-gray-200">
+                <img v-if="logoUrl" :src="logoUrl" alt="Logo" class="w-10 h-10 rounded-full object-cover" />
+
+                <span v-else class="text-xs text-gray-500">+ upload a business logo</span>
+              </label>
+
+            </div>
 
             <!-- Common Fields -->
             <label
@@ -165,5 +196,6 @@ const submitBusinessForm = async () => {
       </form>
 
     </FormLayout>
+  </DashboardLayout>
 
 </template>

@@ -3,29 +3,51 @@ import {notify} from "../../utils/toast.ts";
 import Notifications from "../../service/notifications.ts";
 export const useNotificationsStore = defineStore("NotificationsStore", {
     state: () => ({
-        account: null,
-        payment: null,
-        accountUnreadCount:0
+        notifications: [],
+        notificationCount:0
 
     }),
 
     getters: {
-        getAccountNotifications: state => state.account,
-        getPaymentNotifications: state => state.payment,
-        getUnreadNotifications: state => state.accountUnreadCount,
+        getNotifications: state => state.notifications,
+        getUnreadNotifications: state => state.notificationCount,
 
     },
 
     actions: {
 
-        async readNotificationById(){
+        async readNotificationById() {
+            try {
+                const response = await Notifications.readAccountNotification();
+                const responseData = response.data;
+
+                if (responseData.code === "00") {
+                    // Filter out new notifications
+                    const newNotifications = responseData.data.filter(
+                        newItem => !this.notifications.some(item => item.id === newItem.id)
+                    );
+
+                    // Append new notifications
+                    this.notifications = [...this.notifications, ...newNotifications];
+
+                    // Update notification count (number of unread notifications in new data)
+                    const newUnreadCount = newNotifications.filter(it => !it.read_status).length;
+                    this.notificationCount += newUnreadCount;
+
+                } else {
+                    notify(responseData.message, "error");
+                }
+            } catch (error) {
+                notify(error?.message || error, "error");
+            }
+        },
+
+        async updateNotificationById(payload:any){
             try{
-                const response = await Notifications.readAccountNotification()
+                const response = await Notifications.updateAccountNotification(payload.id,  payload.request)
                 let responseData = response.data
                 if(responseData.code === "00"){
-                    this.account = responseData.data
-                    this.accountUnreadCount = responseData.data?.filter((it:any) => !it.read_status)
-
+                    await this.readNotificationById()
                 }else{
                     notify(responseData.message, "error")
                 }
@@ -35,12 +57,36 @@ export const useNotificationsStore = defineStore("NotificationsStore", {
 
         },
 
-        async updateNotificationById(payload:any){
+        async readSystemNotificationById() {
+            try {
+                const response = await Notifications.readSystemNotification();
+                const responseData = response.data;
+
+                if (responseData.code === "00") {
+                    // Filter out new notifications
+                    const newNotifications = responseData.data.filter(item => !item.read_status)
+
+                    // Append new notifications
+                    this.notifications = newNotifications;
+
+                    // Update notification count (number of unread notifications in new data)
+                    const newUnreadCount = newNotifications.filter(it => !it.read_status).length;
+                    this.notificationCount = newUnreadCount;
+
+                } else {
+                    notify(responseData.message, "error");
+                }
+            } catch (error) {
+                notify(error?.message || error, "error");
+            }
+        },
+
+        async updateSystemNotificationById(payload:any){
             try{
-                const response = await Notifications.updateAccountNotification(payload.id,  payload.request)
+                const response = await Notifications.updateSystemNotification(payload.id,  payload.request)
                 let responseData = response.data
                 if(responseData.code === "00"){
-                    await this.readNotificationById()
+                    await this.readSystemNotificationById()
                 }else{
                     notify(responseData.message, "error")
                 }

@@ -11,6 +11,14 @@ export default {
         return apiClient.businessClient.post('bank', payload)
     },
 
+    dispatchSubscribe(payload:any){
+        return apiClient.businessClient.post('subscribe', payload)
+    },
+
+    dispatchUnSubscribe(payload:any){
+            return apiClient.businessClient.post('unsubscribe', payload)
+     },
+
     updateUserBank(payload:any){
         return apiClient.businessClient.put('bank', payload)
     },
@@ -20,7 +28,7 @@ export default {
     },
 
     addUserBusiness(payload:any){
-        return apiClient.businessClient.post(`business`, payload)
+        return apiClient.businessImageUploadClient.post(`business`, payload)
     },
 
     readUserBusiness(){

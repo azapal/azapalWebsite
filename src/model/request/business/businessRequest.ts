@@ -7,7 +7,19 @@ export type CreateBusinessRequestType = {
     website: string
     email:string,
     location: string,
-    category:string
+    category:string,
+    business_logo:string,
+}
+
+export type DispatchSubscribeType = {
+    business_id_no:number,
+    business_dispatch_id_no:number,
+}
+
+
+export type DispatchUnSubscribeType = {
+    business_id_no:number,
+    business_dispatch_id_no:number,
 }
 
 export type CreateCooperativeType = {
@@ -65,7 +77,8 @@ export const CreateBusinessRequest: CreateBusinessRequestType = {
     product_category:"",
     website: "",
     location:"",
-    category:""
+    category:"",
+    business_logo:""
 }
 
 export const CreateUserInterest:CreateUserInterestType = {
@@ -83,4 +96,15 @@ export const CreateCooperativePackage:CreateCooperativePackageType = {
     saving_plan_interest  :"",
     interest_timeline :"",
     user_id :""
+}
+
+export const DispatchSubscribe:DispatchSubscribeType = {
+    business_id_no:0,
+    business_dispatch_id_no:0,
+}
+
+
+export const DispatchUnSubscribe:DispatchUnSubscribeType = {
+    business_id_no:0,
+    business_dispatch_id_no:0,
 }

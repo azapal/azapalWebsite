@@ -10,7 +10,7 @@ import Analytics from "../../../components/AnalyticsComponent.vue";
 
 const store = StoreUtils;
 const userBusiness = store.get('business', 'getBusiness');
-const loading = ref(true);
+const loading = ref(false);
 // Active tab state
 const activeTab = ref('dashboard');
 

@@ -19,7 +19,7 @@ onMounted(() => {
 <template>
    
        <DashboardLayout v-slot:content>
-         <LogisticsDescriptionPage v-if="!userBusiness ||  userBusiness === 'null' || userBusiness?.category !== 'logistics'" />
+         <LogisticsDescriptionPage v-if="userBusiness === 'null'" />
          <LogisticsProfile v-else />
        </DashboardLayout>
 

@@ -57,7 +57,8 @@ export const appRoute: BaseRouteProps[] = [
         meta: {
           showHeader: true,
           showBackArrow: true,
-          authRequired:RouteConstantUtil.dashboard.authRequired
+          authRequired:RouteConstantUtil.dashboard.authRequired,
+          hash:"#logistics"
         },
         component: () =>
             import(/* webpackChunkName: "about" */ "../../pages/dashboard/vendor/Vendor.view.vue"),

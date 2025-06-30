@@ -126,7 +126,6 @@ export const useAuthStore = defineStore("authStore", {
           if(responseData.code === "00"){
               this.user = responseData.data
               localStorage.user = JSON.stringify(responseData.data)
-              location.reload()
           }else{
               notify(responseData.message, 'error')
           }

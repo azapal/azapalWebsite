@@ -209,7 +209,7 @@ async function handleBusinessUpload(payload){
     const filesFormData = new FormData();
     filesFormData.append("file", files.value);
     console.log(businessDocument)
-    if(businessDocument.value.cac){
+    if(businessDocument.value.cac !== "None"){
       filesFormData.append("status", 'pending');
       await store.dispatch('documents', 'updateCac', {id:payload.cacId, file:filesFormData})
     }else{
@@ -223,7 +223,7 @@ async function handleBusinessUpload(payload){
     // if (!photo.value) return;
     const tinFormData = new FormData();
     tinFormData.append("file", tinFile.value);
-    if(businessDocument.value.tin){
+    if(businessDocument.value.tin !== "None"){
       tinFormData.append("status", 'pending');
       await store.dispatch('documents', 'updateTin', {id:payload?.tinId, file:tinFormData})
     }else{
@@ -450,8 +450,8 @@ onMounted(() => {
           </div>
           <div v-else class="flex justify-between items-center">
             <div class="text-sm">
-              <p>{{ userBank.bank_account_name }}</p>
-              <p>{{ userBank.bank_name }}</p>
+              <p>{{ userBank?.bank_account_name }}</p>
+              <p>{{ userBank?.bank_name }}</p>
             </div>
             <router-link to="/update/bank" class="underline text-gray-700 text-sm p-2 rounded-full cursor-pointer">update</router-link>
 
@@ -463,7 +463,7 @@ onMounted(() => {
           <div v-if="businessDocument?.cac === 'None'" class="flex  justify-between items-center mb-5 border-b pb-3 border-b-gray-300">
             <div class=" w-1/2">
               <p class="text-sm font-bold mb-3 text-gray-700">CAC</p>
-              <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
+              <p class="text-sm text-gray-700">To receive money you have to upload your business registration documents </p>
               <input
                   type="file"
                   ref="cacRef"
@@ -553,7 +553,7 @@ onMounted(() => {
           <div v-if="businessDocument?.tin === 'None'" class="flex  justify-between items-center mb-5">
             <div class=" w-1/2">
               <p class="text-sm font-bold mb-3 text-gray-700">TAX IDENTIFICATION DOCUMENT</p>
-              <p class="text-sm text-gray-700">To send and receive money you have to add your commercial bank account </p>
+              <p class="text-sm text-gray-700">To receive money you have to upload your business registration documents </p>
               <input
                   type="file"
                   ref="tinRef"
