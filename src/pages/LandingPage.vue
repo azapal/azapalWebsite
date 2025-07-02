@@ -9,15 +9,18 @@ import Footer from '../components/Footer.vue';
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen flex flex-col items-center ">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      <div class="absolute left-1/2 top-0 -translate-x-1/2 w-[1500px] h-[1000px] opacity-10">
+        <div class="absolute inset-0 blur-[80px] bg-gradient-to-br from-[#F97316] to-[#2563EB]"></div>
+      </div>
+    </div>
     <Navbar></Navbar>
-    <Hero />
-    <Feature />
-    <HowItWorks></HowItWorks>
-    <Security></Security>
-<!--    <CTA />-->
-    <Footer></Footer>
-
+    <div class="container">
+      <Hero />
+      <Feature />
+      <Footer></Footer>
+    </div>
   </div>
   
 </template>

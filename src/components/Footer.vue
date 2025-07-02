@@ -72,7 +72,7 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-vue-next";
 <!--      </div>-->
 <!--    </footer>-->
   <footer class="bg-gray-50 py-16 px-6">
-    <!-- Try Paystack Section -->
+    <!-- Try Azapal Section -->
     <div class="container mx-auto mb-16">
       <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
         <div>
@@ -91,11 +91,11 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-vue-next";
     <!-- Footer Links -->
     <div class="container mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-        <!-- Why Paystack -->
+        <!-- Why Azapal -->
         <div>
-          <h3 class="font-semibold text-gray-900 mb-4">Why Paystack</h3>
+          <h3 class="font-semibold text-gray-900 mb-4">Why Azapal</h3>
           <ul class="space-y-3">
-            <li><a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Why Choose Paystack</a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Why Choose Azapal</a></li>
             <li><a href="#" class="text-gray-600 hover:text-gray-900 transition-colors">Success Rates</a></li>
           </ul>
 
