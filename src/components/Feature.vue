@@ -43,7 +43,7 @@ const features = [
             Everything you need for <span class=" bg-gradient-to-r from-[#EA580C] to-[#2563EB] text-transparent bg-clip-text">safer</span> online transactions
           </h2>
           <p class="text-md text-gray-600">
-            Azapal combines payment protection, vendor verification, and delivery tracking into one seamless platform.
+            Azapal combines payment protection, vendor verification, logistics partnerships and tracking into one seamless platform.
           </p>
         </div>
 

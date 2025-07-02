@@ -25,7 +25,7 @@ onMounted(() => {
 <template>
 
     <header :class="`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-sm shadow-sm' : 'bg-transparent'}`">
-        <div class="container mx-auto px-4 md:px-6">
+        <div class="mx-auto px-4 md:px-6">
         <div class="flex items-center justify-between py-4">
           <div class="flex items-center">
             <router-link to="/" class="text-2xl font-bold  bg-gradient-to-r from-[#EA580C] to-[#2563EB] text-transparent bg-clip-text">
@@ -35,23 +35,12 @@ onMounted(() => {
 
           <!-- Desktop Menu  -->
           <nav class="hidden md:flex items-center space-x-8">
-            <a href="#features" class="text-gray-700 hover:text-[#F97316] font-medium transition-colors">
-              Features
-            </a>
-            <a href="#how-it-works" class="text-gray-700 hover:text-[#F97316] font-medium transition-colors">
-              How It Works
-            </a>
-            <a href="#security" class="text-gray-700 hover:text-[#F97316] font-medium transition-colors">
-              Security
-            </a>
             <div class="flex items-center space-x-4">
-              <Button variant="outline" class="border-[#F97316] text-[#F97316] hover:bg-[#F97316] hover:text-white" v-slot:child>
-                Log In
-              </Button>
+
               <router-link to="/signup">
-                <Button class="bg-[#F97316] hover:bg-[#F97316]-dark text-white" v-slot:child>
-                  Sign Up
-                </Button>
+                <button class="bg-[#F97316]/90 shadow-sm text-sm hover:bg-[#F97316] text-white rounded-[8px] px-8 py-3">
+                  Create a free account
+                </button>
               </router-link>
             </div>
           </nav>

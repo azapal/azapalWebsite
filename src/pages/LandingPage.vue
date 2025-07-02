@@ -15,7 +15,7 @@ import Footer from '../components/Footer.vue';
     <Feature />
     <HowItWorks></HowItWorks>
     <Security></Security>
-    <CTA />
+<!--    <CTA />-->
     <Footer></Footer>
 
   </div>

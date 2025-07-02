@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-vue": "^0.7.2",
     "@paystack/inline-js": "^2.22.2",
     "@tailwindcss/vite": "^4.1.2",
     "axios": "^1.6.2",
