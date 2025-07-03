@@ -1,6 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {baseRoute} from "./routes/base-routes.ts";
-import {RouteConstantUtil} from "../utils/constant/RouteConstantUtil.ts";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -22,25 +21,26 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
     // Check if auth is required on this route
     // (including nested router).
     console.log(routeFrom)
-    const authRequired = routeTo.matched.some(route => route.meta.authRequired);
+    console.log(routeTo)
+    // const authRequired = routeTo.matched.some(route => route.meta.authRequired);
 
     // If auth isn't required for the route, just continue.
-    if (!authRequired) return next();
+    return next();
 
     // console.log("userManagement getter info: "+StoreUtils.rootGetters(StoreUtils.getters.auth.getUserInfo))
-    if (localStorage.token != null) {
-        return redirectToApp()
-    }
-    redirectToLogin();
-    // eslint-disable-next-line no-unused-vars
-    function redirectToLogin() {
-        next({ name: RouteConstantUtil.auth.login, query: { redirectFrom: routeTo.fullPath } });
-    }
-
-    function redirectToApp() {
-        next()
-        // next({ name: RouteConstantUtil.dashboard.homePage });
-    }
+    // if (localStorage.token != null) {
+    //     return redirectToApp()
+    // }
+    // redirectToLogin();
+    // // eslint-disable-next-line no-unused-vars
+    // function redirectToLogin() {
+    //     next({ name: RouteConstantUtil.auth.login, query: { redirectFrom: routeTo.fullPath } });
+    // }
+    //
+    // function redirectToApp() {
+    //     next()
+    //     // next({ name: RouteConstantUtil.dashboard.homePage });
+    // }
 });
 
 router.beforeResolve(async (routeTo:any, routeFrom:any, next:(...args: any[]) => void) =>  {

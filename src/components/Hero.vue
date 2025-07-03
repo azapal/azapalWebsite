@@ -1,15 +1,6 @@
 <script setup>
-import { ArrowRight, Shield, Users, Truck, CreditCard, SendToBack, PlusCircle, X } from "lucide-vue-next";
-import Button from "./ui/button.vue";
-import {ref, computed, onMounted} from 'vue';
-import Modal from "./Modal.vue";
+import {ref} from 'vue';
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
-
-const isDemo = ref(false)
-
-function close(value){
-  isDemo.value = value
-}
 
 
 </script>

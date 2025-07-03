@@ -1,6 +1,5 @@
 import stores from "../store";
 import { computed } from "vue";
-console.log(stores)
 
 const storeInstance:any = stores
 
