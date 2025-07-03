@@ -1,4 +1,3 @@
-import {authRoute} from "./auth-routes.ts";
 import {pagesRoute} from "./pages-routes.ts";
 import { appRoute } from "./app-routes.ts";
 
@@ -21,4 +20,4 @@ type Meta = {
 
 // Variable initialRoute implicitly has type any[] in some locations where its type cannot be determined.
 const initialRoute:any = []
-export const baseRoute = initialRoute.concat(authRoute,pagesRoute,appRoute)
+export const baseRoute = initialRoute.concat(appRoute,pagesRoute)

@@ -7,7 +7,7 @@ export const pagesRoute: BaseRouteProps[] = [
         component:() => import(/* webpackChunkName: "about" */ "../../pages/NoPageFoundView.vue"),
         meta: {
             authRequired: false,
-            layout:'dashboard',
+            layout:'app',
             sub_title:'No Page matched'
         }
     }

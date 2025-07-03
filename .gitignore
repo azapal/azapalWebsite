@@ -8,7 +8,17 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+src
+public
+firebase.js
+index.html
+package.json
+README.md
+tailwind.config.ts
+tsconfig.app.json
+tsconfig.json
+vite.config.ts
+yarn.lock
 dist-ssr
 *.local
 
