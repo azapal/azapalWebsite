@@ -23,8 +23,8 @@ function close(value){
       <div class="flex flex-col lg:flex-row items-center justify-around w-full">
         <div class="flex flex-col space-y-8 max-w-xl">
           <div class="space-y-4 animate-fade-in">
-            <h1 class="text-4xl lg:text-3xl font-bold leading-tight">
-              We are building the future of <br /> <del class="delete">E- Commerce</del> <span class="bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text">Social Commerce</span>
+            <h1 class="text-3xl font-bold leading-tight">
+              We are building the future of <br /> <del class="delete">ECommerce</del> <span class="bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text">Social Commerce</span>
             </h1>
             <p class="text-md md:text-md text-gray-600 mt-3">
               Azapal connects buyers, vendors, and logistics services in one secured platform. Buy and Sell with confidence,
@@ -32,9 +32,9 @@ function close(value){
             </p>
             <div class="flex  gap-3 mt-5">
               <router-link to="/create-account">
-                <button class="bg-[#F97316]/90 shadow-sm text-sm hover:bg-[#F97316] text-white rounded-[8px] px-8 py-3">
+                <p class="bg-[#F97316]/90 shadow-sm text-sm hover:bg-[#F97316] text-white rounded-[8px] px-8 py-3">
                   Create a free account
-                </button>
+                </p>
               </router-link>
               <router-link to="/signup">
                 <button class="text-sm text-[#F97316] p-4">
@@ -45,11 +45,11 @@ function close(value){
           </div>
           <div class="flex flex-col gap-3">
 
-            <p class=" leading-tight">Trusted Logistics Partners</p>
+            <p class="leading-tight text-sm">Building with trusted logistics partners</p>
             <div class="flex gap-5">
-              <img src="../../src/assets/images/spoonel_service_men_logo.jpeg" class="w-18" alt="logistic-logo"/>
-              <img src="../../src/assets/images/spoonel_service_men_logo.jpeg" class="w-18" alt="logistic-logo"/>
-              <img src="../../src/assets/images/spoonel_service_men_logo.jpeg" class="w-18" alt="logistic-logo"/>
+              <img src="../../src/assets/images/spoonel_service_men_logo.jpeg" class="w-12" alt="logistic-logo"/>
+              <img src="../../src/assets/images/spoonel_service_men_logo.jpeg" class="w-12" alt="logistic-logo"/>
+              <img src="../../src/assets/images/spoonel_service_men_logo.jpeg" class="w-12" alt="logistic-logo"/>
             </div>
           </div>
         </div>
