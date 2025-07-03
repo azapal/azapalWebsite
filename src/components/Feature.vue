@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { CreditCard, Shield, Truck, Users, BarChart, AlertCircle, ChevronRightCircle } from "lucide-vue-next";
 import {ref} from "vue";
 
-const useType = ref('business')
+const useType:string = ref('business')
 
-const businessFeatures = [
+const businessFeatures:[] = [
   {
     icon: Shield,
     title: "Secure Payments",
@@ -48,7 +48,7 @@ const businessFeatures = [
   // }
 ];
 
-const personalFeatures = [
+const personalFeatures:[] = [
   {
     icon: Shield,
     title: "Secured Escrow Payments",
@@ -79,8 +79,9 @@ const personalFeatures = [
 ];
 
 </script>
+
 <template>
-    <section id="features" class="py-20 relative bg-gray-50 mx-auto px-4 md:px-6">
+    <section id="features" class="py-20 relative bg-[white] mx-auto px-4 md:px-6">
       <div class="flex justify-center">
         <nav
             class="flex overflow-x-auto items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600  bg-gradient-to-br from-[#F97316] to-[#2563EB] rounded-xl ">

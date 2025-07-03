@@ -1,5 +1,4 @@
-<script setup>
-import {ref} from 'vue';
+<script setup lang="ts">
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 
@@ -53,21 +52,5 @@ import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 </template>
 
 <style scoped>
-svg {
-  width: 100vw;
-  height: 100vh;
-  display: block;
-}
-.pin {
-  fill: red;
-  stroke: white;
-  stroke-width: 1;
-  r: 0;
-  opacity: 0;
-  transition: all 0.6s ease-out;
-}
-.pin.active {
-  r: 5;
-  opacity: 1;
-}
+
 </style>

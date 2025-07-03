@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { X, Menu } from "lucide-vue-next";
 import Button from './ui/button.vue';
 
-let isScrolled= ref(false);
+let isScrolled:boolean = ref(false);
 
-let isMobileMenuOpen = ref(false);
+let isMobileMenuOpen:boolean = ref(false);
 
 onMounted(() => {
     const handleScroll = () => {
@@ -61,11 +61,11 @@ onMounted(() => {
         <div v-if="isMobileMenuOpen" class="md:hidden ">
           <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
             <div class="flex flex-col space-y-2 pt-2">
-              <Link to="/create-account" class="w-full">
+              <router-link to="/create-account" class="w-full">
                 <p class="bg-[#F97316] hover:bg-[#F97316]-dark text-white w-full">
                   Sign Up
                 </p>
-              </Link>
+              </router-link>
             </div>
           </div>
         </div>

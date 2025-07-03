@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-vue-next";
 
 </script>
 <template>
-  <footer class="bg-gray-50 py-16 px-6">
+  <footer class="bg-white py-16 px-6">
     <!-- Try Azapal Section -->
     <div class="container mx-auto mb-16">
       <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
