@@ -20,4 +20,4 @@ type Meta = {
 
 // Variable initialRoute implicitly has type any[] in some locations where its type cannot be determined.
 const initialRoute:any = []
-export const baseRoute = initialRoute.concat(pagesRoute,appRoute)
+export const baseRoute = initialRoute.concat(appRoute,pagesRoute)

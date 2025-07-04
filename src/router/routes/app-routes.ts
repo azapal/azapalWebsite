@@ -8,4 +8,18 @@ export const appRoute: BaseRouteProps[] = [
     meta: {authRequired:RouteConstantUtil.app.authRequired,sub_title:'',layout:RouteConstantUtil.layout.app
     }
   },
+  {
+    name: RouteConstantUtil.app.automatedLogisticsPage,
+    path: '/automated-logistics',
+    component: () => import("../../pages/AutomatedLogisticsPage.vue"),
+    meta: {authRequired:RouteConstantUtil.app.authRequired,sub_title:'',layout:RouteConstantUtil.layout.app
+    }
+  },
+  {
+    name: RouteConstantUtil.app.safetyFirstPage,
+    path: '/safety-first',
+    component: () => import("../../pages/SafetyFirstPage.vue"),
+    meta: {authRequired:RouteConstantUtil.app.authRequired,sub_title:'',layout:RouteConstantUtil.layout.app
+    }
+  },
 ]

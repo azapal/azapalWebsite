@@ -5,6 +5,8 @@ export const RouteConstantUtil = {
     },
     app: {
         landingPage: "LandingPage",
+        automatedLogisticsPage: "AutomatedLogisticsPage",
+        safetyFirstPage: "SafetyFirstPage",
         authRequired: false
     },
     page: {
