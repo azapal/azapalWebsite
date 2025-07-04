@@ -3,7 +3,7 @@ import { CreditCard, Shield, Truck, Users, BarChart, AlertCircle, ChevronRightCi
 import {ref} from "vue";
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
-const useType = ref<string>('business')
+const useType = ref('business')
 
 const businessFeatures = [
   {

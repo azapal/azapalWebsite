@@ -2,9 +2,9 @@
 import { ref, onMounted } from 'vue';
 import { X, Menu } from "lucide-vue-next";
 
-let isScrolled = ref<boolean>(false);
+let isScrolled = ref(false);
 
-let isMobileMenuOpen = ref<boolean>(false);
+let isMobileMenuOpen = ref(false);
 
 onMounted(() => {
     const handleScroll = () => {
