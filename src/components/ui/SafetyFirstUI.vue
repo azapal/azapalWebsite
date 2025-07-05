@@ -27,13 +27,13 @@ const howItWorks = [
           v-for="(feature, index) in howItWorks"
           :key="index"
           :class="[
-      'flex flex-col-reverse items-center gap-8 mb-16',
+      'flex flex-col-reverse items-center gap-8 mb-16 max-w-7xl mx-auto',
       index % 2 === 0 ? 'lg:flex-row-reverse' : 'lg:flex-row'
     ]"
       >
         <!-- Text Block -->
         <div class="w-full lg:w-1/2 text-left px-4 md:px-6">
-          <h3 class="text-xl text-gray-400 font-semibold mb-2">Step 0{{ index + 1 }}</h3>
+          <h3 class="text-xl text-gray-400 font-semibold mb-2">0{{ index + 1 }}</h3>
           <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             {{ feature.title }}
           </h2>

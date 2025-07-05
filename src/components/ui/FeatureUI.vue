@@ -7,7 +7,7 @@ const useType = ref('business')
 
 const businessFeatures = [
   {
-    title:"Selling as an online Vendors",
+    title:"selling as an online vendor",
     supports:[
       {
         icon: Shield,
@@ -54,11 +54,11 @@ const businessFeatures = [
   },
 
   {
-    title:"Payment as an online vendors",
+    title:"paying as an online vendor",
     supports:[
       {
         icon: Shield,
-        title: "Secure Payments",
+        title: "Secure / Protected Payments",
         description: "Your money is held securely until you confirm receipt and satisfaction with your order."
       },
 
@@ -68,11 +68,6 @@ const businessFeatures = [
         description: "Multiple payment options including credit cards, bank transfers, and mobile money."
       },
 
-      {
-        icon: BarChart,
-        title: "E-Invoice / Automated Receipts",
-        description: "Vendors get powerful tools to track sales, payments, and delivery performance."
-      },
 
     ]
   }
@@ -81,11 +76,11 @@ const businessFeatures = [
 
 const personalFeatures = [
   {
-    title:"Online Purchase",
+    title:"buying or paying vendors online",
     supports:[
       {
         icon: Shield,
-        title: "Secure Payments",
+        title: "Secure / Protected Payments",
         description: "Your money is held securely until you confirm receipt and satisfaction with your order."
       },
       // {
@@ -234,7 +229,7 @@ const personalFeatures = [
 
       <!-- security section !-->
       <div class="flex flex-col-reverse lg:flex-row justify-between items-center">
-        <div class="text-left lg:w-[50%] max-w-3xl mx-auto mb-16 px-4 md:px-6">
+        <div class="text-left max-w-3xl mx-auto mb-16 px-4 md:px-6">
           <div class="mt-12 mb-12">
             <h2 class="text-2xl md:text-3xl font-bold mb-8">
               Your Security Is Our <span class="bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text">Priority</span>
