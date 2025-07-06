@@ -5,7 +5,7 @@ import Video1 from "../assets/online-shopping-young-woman-shops-on-smartphone-SB
 import {ref, onMounted} from 'vue'
 import StoreUtils from "../utils/storeUtils.ts";
 const store = StoreUtils
-const videoElement = ref(null);
+const videoElement = ref<any>(null);
 
 onMounted(() => {
   // Optional: auto-play on load
