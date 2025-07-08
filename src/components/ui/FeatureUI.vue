@@ -1,13 +1,15 @@
 <script setup>
 import { CreditCard, Shield, Truck, Users, BarChart, AlertCircle, ChevronRightCircle, CheckCircle } from "lucide-vue-next";
-import {ref} from "vue";
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
+import StoreUtils from "../../utils/storeUtils.js";
 
-const useType = ref('business')
+const store = StoreUtils
+
+const useType = store.get('global', 'getUseType')
 
 const businessFeatures = [
   {
-    title:"selling as an online vendor",
+    title:"Selling As An Online Vendor",
     supports:[
       {
         icon: Shield,
@@ -45,23 +47,42 @@ const businessFeatures = [
         title: "POS",
         description: "Vendors get powerful tools to track sales, payments, and delivery performance."
       },
-      // {
-      //   icon: AlertCircle,
-      //   title: "Dispute Resolution",
-      //   description: "Fair and transparent process for handling disputes between buyers and sellers."
-      // }
+      {
+        icon: AlertCircle,
+        title: "Dispute Resolution",
+        description: "Fair and transparent process for handling disputes between buyers and sellers."
+      }
     ]
   },
 
   {
-    title:"paying as an online vendor",
+    title:"Buying Or Paying Other Vendors Online",
     supports:[
       {
         icon: Shield,
         title: "Secure / Protected Payments",
         description: "Your money is held securely until you confirm receipt and satisfaction with your order."
       },
-
+      {
+        icon: Users,
+        title: "Vendor Verification",
+        description: "We verify all vendors on our platform to ensure legitimacy and build trust."
+      },
+      {
+        icon: BarChart,
+        title: "E-Invoice / Automated Receipts",
+        description: "Vendors get powerful tools to track sales, payments, and delivery performance."
+      },
+      {
+        icon: Truck,
+        title: "Delivery Partnership / Tracking",
+        description: "Seamlessly connect with dispatch riders and track your delivery in real-time."
+      },
+      {
+        icon: AlertCircle,
+        title: "Dispute Resolution",
+        description: "Fair and transparent process for handling disputes between buyers and sellers."
+      },
       {
         icon: CreditCard,
         title: "Flexible Payments",
@@ -76,18 +97,18 @@ const businessFeatures = [
 
 const personalFeatures = [
   {
-    title:"buying or paying vendors online",
+    title:"Buying Or Paying Vendors Online",
     supports:[
       {
         icon: Shield,
         title: "Secure / Protected Payments",
         description: "Your money is held securely until you confirm receipt and satisfaction with your order."
       },
-      // {
-      //   icon: Users,
-      //   title: "Vendor Verification",
-      //   description: "We verify all vendors on our platform to ensure legitimacy and build trust."
-      // },
+      {
+        icon: Users,
+        title: "Vendor Verification",
+        description: "We verify all vendors on our platform to ensure legitimacy and build trust."
+      },
       {
         icon: Truck,
         title: "Delivery Integration / Tracking",
@@ -103,12 +124,11 @@ const personalFeatures = [
         title: "Expense Tracker",
         description: "Vendors get powerful tools to track sales, payments, and delivery performance."
       },
-
-      // {
-      //   icon: AlertCircle,
-      //   title: "Dispute Resolution",
-      //   description: "Fair and transparent process for handling disputes between buyers and sellers."
-      // }
+      {
+        icon: AlertCircle,
+        title: "Dispute Resolution",
+        description: "Fair and transparent process for handling disputes between buyers and sellers."
+      }
     ]
   },
 
@@ -121,13 +141,13 @@ const personalFeatures = [
       <div class="flex justify-center py-5">
         <nav
             class="flex overflow-x-auto items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600  bg-gradient-to-br from-[#F97316] to-[#2563EB] rounded-xl">
-          <button role="tab" @click="useType = 'business'" type="button"
+          <button role="tab" @click="store.commit('global', 'useType', 'business')" type="button"
                   :class="`flex cursor-pointer  whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none text-white ${useType === 'business' && ('bg-[#F97316]') }`"
                   aria-selected="">
             For Business Use
           </button>
 
-          <button @click="useType = 'personal'" role="tab" type="button"
+          <button @click="store.commit('global', 'useType', 'personal')" role="tab" type="button"
                   :class="`flex cursor-pointer whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none text-white ${useType === 'personal' && ('bg-[#F97316]') }`">
             For Personal Use
           </button>

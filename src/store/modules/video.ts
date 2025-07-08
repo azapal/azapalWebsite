@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
-import {ref} from "vue";
 
 
 export const useVideoStore = defineStore("videoStore", {
 
     state: () => ({
         isPaused: true,
-        heroVideoRef:ref<any>(null),
+        heroVideoRef:null as any,
 
     }),
 
@@ -18,12 +17,12 @@ export const useVideoStore = defineStore("videoStore", {
     actions: {
 
         pausePlay(){
-            if (this.heroVideoRef.value) {
-                if (this.heroVideoRef.value.paused) {
-                    this.heroVideoRef.value.play();
+            if (this.heroVideoRef) {
+                if (this.heroVideoRef.paused) {
+                    this.heroVideoRef.play();
                     this.isPaused = false;
                 } else {
-                    this.heroVideoRef.value.pause();
+                    this.heroVideoRef.pause();
                     this.isPaused = true;
                 }
             }
