@@ -8,7 +8,7 @@
 
     <div class="mx-auto px-4 flex items-center h-full">
 
-      <div class="flex items-center relative justify-start lg:ml-[100px] w-full">
+      <div class="flex items-center relative justify-center w-full">
         <slot name="content" />
       </div>
     </div>

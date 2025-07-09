@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
         </div>
       </button>
 
-      <div class="flex flex-col">
+      <div class="flex flex-col  w-full items-center">
         <div class="justify-center w-full bg-cover bg-center space-y-8 lg:min-h-[260px] min-h-[280px] max-w-xl">
           <div class="animate-fade-in">
             <div class="relative">
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
               <transition name="fade">
                 <h1
                     v-if="showLine1"
-                    class="text-5xl lg:text-[48px] font-bold leading-tight text-white"
+                    class="text-5xl text-center lg:text-[48px] font-bold leading-tight text-white"
                 >
                   {{ typedLine1 }}
                   <template v-if="showDeleted">
@@ -227,7 +227,7 @@ onBeforeUnmount(() => {
               <transition name="fade">
                 <h1
                     v-if="showLine2"
-                    class="text-5xl lg:text-[52px] font-bold leading-tight text-white"
+                    class="text-5xl text-center lg:text-[52px] font-bold leading-tight text-white"
                 >
                   {{ typedLine2Start }}
                   <span class="bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text">
