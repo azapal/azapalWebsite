@@ -136,23 +136,7 @@ const personalFeatures = [
 </script>
 
 <template>
-    <section id="features" class="relative bg-[white] mx-auto px-4 md:px-6">
-      <!-- tab section !-->
-      <div class="flex justify-center py-5">
-        <nav
-            class="flex overflow-x-auto items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600  bg-gradient-to-br from-[#F97316] to-[#2563EB] rounded-xl">
-          <button role="tab" @click="store.commit('global', 'useType', 'business')" type="button"
-                  :class="`flex cursor-pointer  whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none text-white ${useType === 'business' && ('bg-[#F97316]') }`"
-                  aria-selected="">
-            For Business Use
-          </button>
-
-          <button @click="store.commit('global', 'useType', 'personal')" role="tab" type="button"
-                  :class="`flex cursor-pointer whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none text-white ${useType === 'personal' && ('bg-[#F97316]') }`">
-            For Personal Use
-          </button>
-        </nav>
-      </div>
+    <section id="features" class="relative bg-[white] mx-auto px-4 md:px-6 pt-3">
 
       <div v-if="useType==='business'" class="my-[24px] flex items-center justify-center">
         <div class="flex flex-col-reverse  lg:flex-row-reverse justify-between items-center">
@@ -195,10 +179,46 @@ const personalFeatures = [
             </div>
           </div>
 
-          <div class="grid place-items-center">
-            <img class="rounded-[18px] w-[90%] lg:w-[50%] shadow-sm" src="../../assets/images/Joyful_market_day.jpg" alt="ksksk" />
-  <!--          <img class="hidden md:block lg:block rounded-[18px] w-[90%] shadow-sm" src="../../src/assets/images/StockCake-Barista.jpg" alt="ksksk" />-->
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+<!--            <img-->
+<!--                class="col-span-1 rounded-[18px] shadow-sm object-cover w-full h-full aspect-[4/3]"-->
+<!--                src="../../assets/images/Joyful_market_day.jpg"-->
+<!--                alt="img1"-->
+<!--            />-->
+<!--            <img-->
+<!--                class="col-span-1 rounded-[18px] shadow-sm object-cover w-full h-full aspect-[4/3]"-->
+<!--                src="../../assets/images/woman_market.png"-->
+<!--                alt="img2"-->
+<!--            />-->
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group">
+              <img src="../../assets/images/online-shopping-4532460_1280.jpg" alt="img2" class="w-full hidden md:block h-48 object-cover">
+<!--              <div-->
+<!--                  class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">-->
+<!--                <div class="absolute bottom-0 left-0 right-0 p-4">-->
+<!--                  <h4 class="text-xl font-bold text-white">Culinary Delights</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+            </div>
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group">
+              <img src="../../assets/images/woman_market.png" alt="img3" class="w-full  hidden md:block h-48 object-cover">
+<!--              <div-->
+<!--                  class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">-->
+<!--                <div class="absolute bottom-0 left-0 right-0 p-4">-->
+<!--                  <h4 class="text-xl font-bold text-white">Tech Innovations</h4>-->
+<!--                </div>-->
+<!--              </div>-->
+            </div>
+
+            <div class="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-2xl shadow-lg group">
+              <img
+                  class="w-full h-full object-cover"
+                  src="../../assets/images/young-man-selling-clothes-accessories-online-by-smartphone-live-streaming-business-online-e-commerce-home_35076-4879.avif"
+                  alt="img3"
+              />
+            </div>
+
           </div>
+
         </div>
       </div>
       <div v-if="useType==='personal'" class="my-[24px] flex items-center justify-center">
@@ -242,7 +262,11 @@ const personalFeatures = [
           </div>
 
           <div class="grid place-items-center">
-            <img class="rounded-[18px] w-[90%] lg:w-[50%] shadow-sm" src="../../assets/images/Joyful_market_day.jpg" alt="ksksk" />
+            <img
+                class="rounded-[18px] shadow-sm object-cover w-full h-full aspect-[3/2]"
+                src="../../assets/images/social_files/uri_ifs___M_qyzdC_772yytZyVrCiwS2lHPLPRbDqhHsTM8zRV4Kxk.jpg"
+                alt="img3"
+            />
           </div>
         </div>
       </div>

@@ -6,6 +6,11 @@ import {ref, onMounted} from 'vue'
 import StoreUtils from "../utils/storeUtils.ts";
 const store = StoreUtils
 const videoElement = ref<any>(null);
+const getVideoState = store.get('video', 'getIsPaused');
+
+function pauseOrPlay() {
+  store.dispatch('video', 'pausePlay');
+}
 
 onMounted(() => {
   // Optional: auto-play on load
@@ -24,9 +29,20 @@ onMounted(() => {
         muted
         loop
         playsinline
-        class="fixed top-[-10px] inset-0 w-screen h-screen object-cover"
+        class="fixed top-0 inset-0 w-screen h-screen object-cover"
         style="z-index: -2"
     />
+    <!-- Video control button -->
+    <button
+        @click="pauseOrPlay"
+        class="absolute z-40 flex items-center bottom-5 right-5 md:bottom-10 md:right-10 justify-center"
+        aria-label="Toggle video playback"
+    >
+      <div class="bg-white cursor-pointer shadow-md hover:scale-105 text-black w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300">
+        <span v-if="getVideoState" aria-hidden="true">▶</span>
+        <span v-else aria-hidden="true">❚❚</span>
+      </div>
+    </button>
 
     <div class="fixed w-full h-screen bg-black/90 top-0 left-0 right-0 bottom-0" style="z-index: -1"></div>
     <div class="absolute inset-0 overflow-hidden pointer-events-none" style="z-index: -1">

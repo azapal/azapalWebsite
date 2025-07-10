@@ -7,7 +7,6 @@ import StoreUtils from "../utils/storeUtils.js";
 import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
 
 const store = StoreUtils;
-const getVideoState = store.get('video', 'getIsPaused');
 const useType = store.get('global', 'getUseType');
 
 // Animation control
@@ -29,7 +28,7 @@ const content = computed(() => {
       start: isBusinessType ? "Automating" : "Worry Less",
       middle: isBusinessType ? "Logistics" : "When",
       end: isBusinessType ? " For Your " : "You Are",
-      final: isBusinessType ? "Online Business." : "Buying Or Selling Online"
+      final: isBusinessType ? "Online Business." : "Buying Or Selling Online Anywhere In Africa"
     }
   };
 });
@@ -50,10 +49,6 @@ const showLine2 = ref(false);
 // Animation constants
 const TYPING_SPEED = 60;
 const TRANSITION_DELAY = 800;
-
-function pauseOrPlay() {
-  store.dispatch('video', 'pausePlay');
-}
 
 function clearAllIntervals() {
   intervals.forEach(interval => clearInterval(interval));
@@ -186,27 +181,33 @@ onBeforeUnmount(() => {
 <template>
   <Layout v-slot:body>
     <HeroBasicUi v-slot:content>
-      <!-- Video control button -->
-      <button
-          @click="pauseOrPlay"
-          class="absolute z-40 flex items-center bottom-[-60px] lg:right-20 right-0 justify-center"
-          aria-label="Toggle video playback"
-      >
-        <div class="bg-white cursor-pointer shadow-md hover:scale-105 text-black w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300">
-          <span v-if="getVideoState" aria-hidden="true">▶</span>
-          <span v-else aria-hidden="true">❚❚</span>
-        </div>
-      </button>
 
-      <div class="flex flex-col  w-full items-center">
-        <div class="justify-center w-full bg-cover bg-center space-y-8 lg:min-h-[260px] min-h-[280px] max-w-xl">
+
+      <div class="flex flex-col  w-full items-center ">
+        <!-- tab section !-->
+        <div class="flex justify-center py-5 mb-8">
+          <nav
+              class="flex overflow-x-auto items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600  bg-gradient-to-br from-[#F97316] to-[#2563EB] rounded-xl">
+            <button role="tab" @click="store.commit('global', 'useType', 'business')" type="button"
+                    :class="`flex cursor-pointer  whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none text-white ${useType === 'business' && ('bg-[#F97316]') }`"
+                    aria-selected="">
+              For Business Use
+            </button>
+
+            <button @click="store.commit('global', 'useType', 'personal')" role="tab" type="button"
+                    :class="`flex cursor-pointer whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none text-white ${useType === 'personal' && ('bg-[#F97316]') }`">
+              For Personal Use
+            </button>
+          </nav>
+        </div>
+        <div class="justify-center w-full bg-cover bg-center mb-8 space-y-8 max-w-xl">
           <div class="animate-fade-in">
             <div class="relative">
               <!-- Line 1 -->
               <transition name="fade">
                 <h1
                     v-if="showLine1"
-                    class="text-5xl text-center lg:text-[48px] font-bold leading-tight text-white"
+                    class="text-4xl text-center lg:text-5xl font-bold leading-tight text-white"
                 >
                   {{ typedLine1 }}
                   <template v-if="showDeleted">
@@ -227,7 +228,7 @@ onBeforeUnmount(() => {
               <transition name="fade">
                 <h1
                     v-if="showLine2"
-                    class="text-5xl text-center lg:text-[52px] font-bold leading-tight text-white"
+                    class="text-4xl text-center lg:text-5xl font-bold leading-tight text-white"
                 >
                   {{ typedLine2Start }}
                   <span class="bg-gradient-to-r from-[#F97316] to-[#2563EB] text-transparent bg-clip-text">
