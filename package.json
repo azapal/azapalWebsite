@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:cpanel": "read -p \"Enter commit message: \" msg && yarn build && git add . && git commit -m \"$msg\" && git push cpanel",
+    "deploy:git": "read -p \"Enter commit message: \" msg && git add . && git commit -m \"$msg\" &&  git push origin"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-vue": "^0.7.2",
